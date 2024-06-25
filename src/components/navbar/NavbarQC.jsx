@@ -1,6 +1,6 @@
 import { Box, Button, Container, MenuItem, styled } from "@mui/material";
 import ArrowRight from "@mui/icons-material/ArrowRight";
-import {ArrowLeft, ChevronLeft, ChevronRight, KeyboardArrowDown} from "@mui/icons-material";
+import { ArrowLeft, KeyboardArrowDown } from "@mui/icons-material";
 import BazaarCard from "components/BazaarCard";
 import { FlexBox } from "components/flex-box";
 import NavLink from "components/nav-link/NavLink";
@@ -9,9 +9,6 @@ import MegaMenu2 from "./MegaMenu2";
 import useSettings from "hooks/useSettings";
 import navbarNavigations from "data/navbarNavigations"; // NavList props interface
 import { useEffect, useState } from "react";
-import CategoryMenu from "../categories/CategoryMenu";
-import Category from "../icons/Category";
-import {Paragraph} from "../Typography";
 
 // const common css style
 const navLinkStyle = {
@@ -46,14 +43,6 @@ const ParentNavItem = styled(Box)(({ theme }) => ({
         right: "100%",
         left: "auto",
         paddingRight: 8,
-    },
-}));
-const CategoryMenuButton = styled(Button)(({ theme }) => ({
-    width: "278px",
-    height: "40px",
-    backgroundColor: theme.palette.grey[100],
-    "&:hover": {
-        backgroundColor: "#FFFFFF",
     },
 }));
 const NavBarWrapper = styled(BazaarCard)(({ theme, border }) => ({
@@ -237,36 +226,8 @@ const NavbarQC = ({ navListOpen, hideCategories, elevation, border }) => {
             elevation={elevation}
             border={border}
         >
-            {hideCategories ? (
+            {!hideCategories ? (
                 <InnerContainer>
-                    {/* Category megamenu */}
-                    <CategoryMenu open={navListOpen}>
-                        <CategoryMenuButton variant="text">
-                            <Category fontSize="small" />
-                            <Paragraph
-                                fontWeight="600"
-                                textAlign="left"
-                                flex="1 1 0"
-                                ml={1.25}
-                                color="grey.600"
-                            >
-                                Categories
-                            </Paragraph>
-
-                            {settings.direction === "ltr" ? (
-                                <ChevronRight
-                                    className="dropdown-icon"
-                                    fontSize="small"
-                                />
-                            ) : (
-                                <ChevronLeft
-                                    className="dropdown-icon"
-                                    fontSize="small"
-                                />
-                            )}
-                        </CategoryMenuButton>
-                    </CategoryMenu>
-
                     {/* Horizontal menu */}
                     <FlexBox gap={4}>
                         {renderNestedNav(navbarNavigations, true)}
