@@ -26,7 +26,9 @@ export default function CreateProduct() {
     costPrice: "",
     goldType: "",
     collection: "",
+    isJewel: "",
     isGem: "",
+    isActive: "",
     typeId: "",
   };
   const validationSchema = yup.object().shape({
@@ -41,7 +43,9 @@ export default function CreateProduct() {
     costPrice: yup.number().required("required"),
     goldType: yup.string().required("required"),
     collection: yup.number().required("required"),
+    isJewel: yup.number().required("required"),
     isGem: yup.number().required("required"),
+    isActive: yup.number().required("required"),
     typeId: yup.number().required("required"),
   });
 
@@ -87,7 +91,9 @@ export default function CreateProduct() {
       ratioPrice: values.ratioPrice,
       stonePrice: values.stonePrice,
       costPrice: values.costPrice,
+      isJewel: values.isJewel,
       isGem: values.isGem,
+      isActive: values.isActive,
       image: outputString,
       quantityInStock: values.quantity,
       description: values.description,
