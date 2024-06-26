@@ -1,21 +1,21 @@
 import Link from "next/link";
-import {Box, Button, Divider, Grid, TextField, Typography} from "@mui/material";
+import { Box, Button, Divider, Grid, TextField, Typography } from "@mui/material";
 import SEO from "components/SEO";
-import { FlexBetween} from "components/flex-box";
+import { FlexBetween } from "components/flex-box";
 import ProductCard7 from "components/product-cards/ProductCard7";
 import { useAppContext } from "contexts/AppContext";
-import { currency } from "lib";
 import Card1 from "../src/components/Card1";
-import {SearchOutlinedIcon} from "../src/components/search-box/styled";
-import {H5} from "../src/components/Typography";
-import {useRouter} from "next/router";
-import {useState} from "react";
+import { SearchOutlinedIcon } from "../src/components/search-box/styled";
+import { H5 } from "../src/components/Typography";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import axios from "axios";
-import {Formik} from "formik";
+import { Formik } from "formik";
 import * as yup from "yup";
-import SaleLayout from "../src/components/layouts/SaleLayout";
+import QCLayout from "../src/components/layouts/QCLayout";
 
-const Cart = () => {
+
+const Buyback = () => {
     const { state } = useAppContext();
     const cartList = state.cart;
     const router = useRouter();
@@ -74,10 +74,35 @@ const Cart = () => {
         fetchSearchCustomInfo();
     };
     return (
-        <SaleLayout>
-            <SEO title="Cart" />
+        <QCLayout>
+            <SEO title="Buy Back" />
             <Grid container spacing={3}>
-                <Grid item md={12} xs={12}>
+                <Grid item xs={12} md={7} sx={{ mb: 3 }}>
+                    <Box className="searchBox" sx={{ width: '90%', margin: '0 auto' }}>
+                        <TextField
+                            placeholder="Searching customer by phone number"
+                            fullWidth
+                            InputProps={{
+                                sx: {
+                                    height: 50,
+                                    paddingRight: 0,
+                                    color: "grey.700",
+                                    background: "#fff",
+                                    borderRadius: "20px",
+                                    mb: 2,
+                                    mt: 3,
+                                    "& fieldset": {
+                                        border: "none",
+                                    },
+                                },
+                                endAdornment: SEARCH_BUTTON,
+                                startAdornment: <SearchOutlinedIcon fontSize="small" />,
+                            }}
+                            onChange={(e) => setDataNumSearch(e.target.value)}
+                        />
+                    </Box>
+                </Grid>
+                <Grid item xs={12} md={5} sx={{ mb: 3, mt: 3 }}>
                     <Formik
                         initialValues={initialValues}
                         validationSchema={checkoutSchema}
@@ -93,102 +118,50 @@ const Cart = () => {
                               setFieldValue,
                           }) => (
                             <form onSubmit={handleSubmit}>
-                                <Box className="searchBox">
-                                    <TextField
-                                        placeholder="Searching customer by phone number"
-                                        fullWidth
-                                        InputProps={{
-                                            sx: {
-                                                height: 50,
-                                                paddingRight: 0,
-                                                color: "grey.700",
-                                                background: "#fff",
-                                                borderRadius: "20px",
-                                                mb: 2,
-                                                "& fieldset": {
-                                                    border: "none",
-                                                },
-                                            },
-                                            endAdornment: SEARCH_BUTTON,
-                                            startAdornment: <SearchOutlinedIcon fontSize="small"/>,
-                                        }}
-                                        onChange={(e) => setDataNumSearch(e.target.value)}
-                                    />
-                                </Box>
-                                <Card1
-                                    sx={{
-                                        mb: 4,
-                                    }}
-                                >
+                                <Card1 sx={{ width: '90%', margin: '0 auto' }}>
                                     <Typography fontWeight="600" mb={2}>
-                                        Customer Infomation
+                                        Customer Information
                                     </Typography>
-
-                                    <Grid container spacing={6}>
-                                        <Grid item sm={6} xs={12}>
-                                            <Grid sx={{
-                                                display: "flex",
-                                                marginBottom: "7px",
-                                            }}><H5 sx={{
-                                                marginRight: "10px",
-                                                marginTop: "1px",
-                                            }}>Full Name:</H5>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={12}>
+                                            <Grid sx={{ display: "flex", marginBottom: "7px" }}>
+                                                <H5 sx={{ marginRight: "10px", marginTop: "1px" }}>Full Name:</H5>
                                                 {customerInfo.name}
                                             </Grid>
-                                            <Grid sx={{
-                                                display: "flex",
-                                                marginBottom: "7px",
-                                            }}><H5 sx={{
-                                                marginRight: "10px",
-                                                marginTop: "1px",
-                                            }}>Phone Number:</H5>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Grid sx={{ display: "flex", marginBottom: "7px" }}>
+                                                <H5 sx={{ marginRight: "10px", marginTop: "1px" }}>Phone Number:</H5>
                                                 {customerInfo.phoneNumber}
                                             </Grid>
-                                            <Grid sx={{
-                                                display: "flex",
-                                                marginBottom: "7px",
-                                            }}><H5 sx={{
-                                                marginRight: "10px",
-                                                marginTop: "1px",
-                                            }}>Address:</H5>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Grid sx={{ display: "flex", marginBottom: "7px" }}>
+                                                <H5 sx={{ marginRight: "10px", marginTop: "1px" }}>Address:</H5>
                                                 {customerInfo.address}
                                             </Grid>
                                         </Grid>
-
-                                        <Grid item sm={6} xs={12}>
-                                            <Grid sx={{
-                                                display: "flex",
-                                                marginBottom: "7px",
-                                            }}><H5 sx={{
-                                                marginRight: "10px",
-                                                marginTop: "1px",
-                                            }}>Email:</H5>
+                                        <Grid item xs={12}>
+                                            <Grid sx={{ display: "flex", marginBottom: "7px" }}>
+                                                <H5 sx={{ marginRight: "10px", marginTop: "1px" }}>Email:</H5>
                                                 {customerInfo.email}
                                             </Grid>
-                                            <Grid sx={{
-                                                display: "flex",
-                                                marginBottom: "7px",
-                                            }}><H5 sx={{
-                                                marginRight: "10px",
-                                                marginTop: "1px",
-                                            }}>Gender:</H5>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Grid sx={{ display: "flex", marginBottom: "7px" }}>
+                                                <H5 sx={{ marginRight: "10px", marginTop: "1px" }}>Gender:</H5>
                                                 {customerInfo.gender}
                                             </Grid>
-
                                         </Grid>
                                     </Grid>
                                 </Card1>
-                                <Divider
-                                    sx={{
-                                        mb: "1rem",
-                                    }}
-                                />
+                                <Divider sx={{ mb: "1rem" }} />
                             </form>
                         )}
                     </Formik>
                 </Grid>
             </Grid>
-        </SaleLayout>
+        </QCLayout>
     );
 };
 const initialValues = {
@@ -201,4 +174,4 @@ const initialValues = {
 const checkoutSchema = yup.object().shape({
 
 });
-export default Cart;
+export default Buyback;

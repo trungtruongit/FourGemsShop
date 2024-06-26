@@ -226,7 +226,7 @@ const NavbarQC = ({ navListOpen, hideCategories, elevation, border }) => {
             elevation={elevation}
             border={border}
         >
-            {!hideCategories ? (
+            {hideCategories ? (
                 <InnerContainer>
                     {/* Horizontal menu */}
                     <FlexBox gap={4}>
