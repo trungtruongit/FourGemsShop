@@ -4,8 +4,6 @@ import { useRouter } from "next/router";
 import { H3 } from "components/Typography";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import { OrderDetails } from "pages-sections/admin";
-import api from "utils/__api__/dashboard";
-import {jwtDecode} from "jwt-decode";
 import axios from "axios"; // =============================================================================
 
 OrderEdit.getLayout = function getLayout(page) {

@@ -1,8 +1,5 @@
-import Link from "next/link";
 import { Box, Button, Divider, Grid, TextField, Typography } from "@mui/material";
 import SEO from "components/SEO";
-import { FlexBetween } from "components/flex-box";
-import ProductCard7 from "components/product-cards/ProductCard7";
 import { useAppContext } from "contexts/AppContext";
 import Card1 from "../src/components/Card1";
 import { SearchOutlinedIcon } from "../src/components/search-box/styled";
@@ -13,7 +10,7 @@ import axios from "axios";
 import { Formik } from "formik";
 import * as yup from "yup";
 import QCLayout from "../src/components/layouts/QCLayout";
-
+import BuyBackList from "./buyback"; // Ensure to use the correct path to OrderList component
 
 const Buyback = () => {
     const { state } = useAppContext();
@@ -77,7 +74,7 @@ const Buyback = () => {
         <QCLayout>
             <SEO title="Buy Back" />
             <Grid container spacing={3}>
-                <Grid item xs={12} md={7} sx={{ mb: 3 }}>
+                <Grid item xs={12} md={12} sx={{ mb: 3 }}>
                     <Box className="searchBox" sx={{ width: '90%', margin: '0 auto' }}>
                         <TextField
                             placeholder="Searching customer by phone number"
@@ -89,7 +86,6 @@ const Buyback = () => {
                                     color: "grey.700",
                                     background: "#fff",
                                     borderRadius: "20px",
-                                    mb: 2,
                                     mt: 3,
                                     "& fieldset": {
                                         border: "none",
@@ -102,7 +98,7 @@ const Buyback = () => {
                         />
                     </Box>
                 </Grid>
-                <Grid item xs={12} md={5} sx={{ mb: 3, mt: 3 }}>
+                <Grid item xs={12} md={12} sx={{ mb: 2}}>
                     <Formik
                         initialValues={initialValues}
                         validationSchema={checkoutSchema}
@@ -160,10 +156,14 @@ const Buyback = () => {
                         )}
                     </Formik>
                 </Grid>
+                <Grid item xs={12}>
+                    <BuyBackList />
+                </Grid>
             </Grid>
         </QCLayout>
     );
 };
+
 const initialValues = {
     custom_fullname: "",
     custom_phoneNum: "",
@@ -171,7 +171,7 @@ const initialValues = {
     custom_gender: "",
     shipping_address2: "",
 };
-const checkoutSchema = yup.object().shape({
 
-});
+const checkoutSchema = yup.object().shape({});
+
 export default Buyback;

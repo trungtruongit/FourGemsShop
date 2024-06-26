@@ -86,7 +86,7 @@ export default function OrderList({ orders }) {
         fetchOrderInfo();
     }, []);
     console.log(orderInfo);
-    const filteredOrders = orderInfo.map((order) => ({
+    const filteredOrders = orderInfo?.map((order) => ({
         orderId: order?.orderId,
         customerName: order?.customerName,
         orderDate: order?.orderDate,
@@ -115,8 +115,6 @@ export default function OrderList({ orders }) {
 
             <SearchOrder
                 handleSearch={() => {}}
-                buttonText="Create Order"
-                handleBtnClick={() => {}}
                 searchPlaceholder="Search Order..."
             />
 
