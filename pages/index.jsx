@@ -23,7 +23,25 @@ const Market = (props) => {
     const [showEarringProduct, setShowEarringProduct] = useState([]);
     const [showNecklaceProduct, setShowNecklaceProduct] = useState([]);
     const [showCharmProduct, setShowCharmProduct] = useState([]);
-
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                router.push("/login");
+                return;
+            }
+            const decoded = jwtDecode(token);
+            localStorage.setItem("role", decoded.role);
+            localStorage.setItem("counterId", decoded?.counterId);
+            if (decoded?.role === "staff") {
+                router.push("/");
+            } else if (decoded?.role === "QC") {
+                router.push("/qcpage");
+            } else {
+                router.push("/vendor/dashboard");
+            }
+        }
+    }, []);
     useEffect(() => {
         const fetchProductBracelet = async () => {
             const token = localStorage.getItem("token");
@@ -38,7 +56,6 @@ const Market = (props) => {
                     }
                 );
                 setShowBraceletProduct(resBraceletProduct?.data?.data);
-                // console.log(resBraceletProduct.data.data);
             } catch (e) {
                 console.log(e);
             }
@@ -130,44 +147,11 @@ const Market = (props) => {
         fetchProductCharm();
     }, []);
 
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-            const token = localStorage.getItem("token");
-            // const dataShow = Api.getProduct(token)
-            if (!token) {
-                // No token found, redirect to login page
-                router.push("/login");
-                return; // Exit early
-            }
-
-            // Attempt to decode the token
-            const decoded = jwtDecode(token);
-            localStorage.setItem("role", decoded.role);
-            localStorage.setItem("counterId", decoded?.counterId);
-            const counterId = localStorage.getItem("counterId");
-            if (decoded?.role === "staff") {
-                // Redirect to home page for staff
-                router.push("/");
-            } else if (decoded?.role === "QC") {
-                router.push("/qcpage");
-            } else {
-                router.push("/vendor/dashboard");
-            }
-        }
-    }, []);
 
     return (
         <ShopLayout1 topbarBgColor={theme.palette.grey[900]}>
             <SEO title="FourGemsShop" />
             <Box bgcolor="#FFFFFF">
-                {/* HERO SLIDER AND GRID */}
-                {/* <Section1 carouselData={props?.mainCarouselData} /> */}
-
-                {/* SERVICE CARDS */}
-                {/* <Section2 serviceList={props?.serviceList} /> */}
-
-                {/* CATEGORIES AND ANIMATED OFFER BANNER */}
-                {/* <Section3 categories={props?.categories} /> */}
 
                 {/* Necklaces */}
                 <Section5 products={showNecklaceProduct} />
@@ -201,7 +185,6 @@ const Market = (props) => {
 };
 
 export const getStaticProps = async () => {
-    const brands = await api?.getBrands();
     const products = await api?.getProducts();
     const serviceList = await api?.getServices();
     const categories = await api?.getCategories();
@@ -211,7 +194,6 @@ export const getStaticProps = async () => {
     const womenFashionProducts = await api?.getWomenFashionProducts();
     return {
         props: {
-            brands,
             products,
             categories,
             serviceList,

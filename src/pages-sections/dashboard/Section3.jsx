@@ -1,3 +1,4 @@
+//Dashboard - Weekly Sales/ Total Orders of the Week
 import dynamic from "next/dynamic";
 import {Box, Grid, useTheme} from "@mui/material";
 import Card2 from "./Card2";
@@ -20,7 +21,6 @@ const Section3 = () => {
         const token = localStorage.getItem("token");
         const fetchData7 = async () => {
             try {
-                //http://localhost:8080/order/get-money-by-date?countId=1&startDate=2021-05-29&endDate=2024-05-29
                 const resTotal7 = await axios.get(`https://four-gems-api-c21adc436e90.herokuapp.com/order/get-money-by-date?countId=1&startDate=${startDate7}&endDate=${endDate7}`, {
                     headers: {
                         Authorization: 'Bearer ' + token //the token is a variable which holds the token
@@ -37,7 +37,6 @@ const Section3 = () => {
     useEffect(() => {
         const fetchDataEach7 = async () => {
             try {
-                //http://localhost:8080/order/get-money-by-date?countId=1&startDate=2021-05-29&endDate=2024-05-29
                 const resEach7 = await axios.get(`https://four-gems-api-c21adc436e90.herokuapp.com/order/get-money-each-day?countId=1&startDate=${startDate7}&endDate=${endDate7}`, {
                     headers: {
                         Authorization: 'Bearer ' + token //the token is a variable which holds the token
@@ -45,8 +44,8 @@ const Section3 = () => {
                 });
                 const apiData = resEach7.data.data;
                 const dataArray = Object.values(apiData);
-                //console.log(dataArray); // Kiểm tra xem dữ liệu
-                setEach7Day(dataArray); // Cập nhật state với dataArray
+                //console.log(dataArray);
+                setEach7Day(dataArray);
             } catch (e) {
                 console.log(e)
             }
@@ -69,7 +68,6 @@ const Section3 = () => {
     useEffect(() => {
         const fetchOrder7 = async () => {
             try {
-                //http://localhost:8080/user/get-user-information?userId=4
                 const resOrder7 = await axios.get(`https://four-gems-api-c21adc436e90.herokuapp.com/order/get-number-order-by-date?countId=1&startDate=${startDate7}&endDate=${endDate7}`, {
                     headers: {
                         Authorization: 'Bearer ' + token //the token is a variable which holds the token
@@ -86,7 +84,6 @@ const Section3 = () => {
     useEffect(() => {
         const fetchOrderEach7 = async () => {
             try {
-                //http://localhost:8080/order/get-money-by-date?countId=1&startDate=2021-05-29&endDate=2024-05-29
                 const resEach7 = await axios.get(`https://four-gems-api-c21adc436e90.herokuapp.com/order/get-money-each-day?countId=1&startDate=${startDate7}&endDate=${endDate7}`, {
                     headers: {
                         Authorization: 'Bearer ' + token //the token is a variable which holds the token
@@ -169,21 +166,6 @@ const Section3 = () => {
                     </Card2>
                 </Grid>
 
-                {/* MARKET SHARE CHART */}
-                {/*<Grid item xl={3} lg={3} md={6} xs={12}>*/}
-                {/*  <Card2*/}
-                {/*    title="Market Share"*/}
-                {/*    percentage="2.65%"*/}
-                {/*    amount={currency(14260, 0)}*/}
-                {/*  >*/}
-                {/*    <ReactApexChart*/}
-                {/*      height={130}*/}
-                {/*      type="radialBar"*/}
-                {/*      series={[44, 55, 67]}*/}
-                {/*      options={options.marketShareChartOptions(theme)}*/}
-                {/*    />*/}
-                {/*  </Card2>*/}
-                {/*</Grid>*/}
             </Grid>
         </Box>
     );
