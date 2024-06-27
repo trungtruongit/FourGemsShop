@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {collection, addDoc } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 import {
     Button,
     Card,
@@ -97,53 +97,18 @@ const ProductForm = (props) => {
                             <Grid item sm={12} xs={12}>
                                 <TextField
                                     fullWidth
-                                    name="name"
+                                    name="productName"
                                     label="Name of Product"
                                     color="info"
                                     size="medium"
                                     placeholder="Name"
-                                    value={values.name}
+                                    value={values.productName}
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    error={!!touched.name && !!errors.name}
-                                    helperText={touched.name && errors.name}
+                                    error={!!touched.productName && !!errors.productName}
+                                    helperText={touched.productName && errors.productName}
                                 />
                             </Grid>
-                            <Grid item sm={12} xs={12}>
-                                <TextField
-                                    fullWidth
-                                    type="number"
-                                    name="barcode"
-                                    label="Barcode"
-                                    color="info"
-                                    size="medium"
-                                    placeholder="Barcode"
-                                    value={values.barcode}
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    error={
-                                        !!touched.barcode && !!errors.barcode
-                                    }
-                                    helperText={
-                                        touched.barcode && errors.barcode
-                                    }
-                                />
-                            </Grid>
-
-                            {/*<Grid item xs={12}>*/}
-                            {/*    <DropZone onChange={(files) => handleChangeDropZone(files)}/>*/}
-
-                            {/*    <FlexBox flexDirection="row" mt={2} flexWrap="wrap" gap={1}>*/}
-                            {/*        {files.map((file, index) => (*/}
-                            {/*            <UploadImageBox key={index}>*/}
-                            {/*                <BazaarImage src={file.preview} width="100%"/>*/}
-                            {/*                <StyledClear onClick={() => handleFileDelete(file)}/>*/}
-
-                            {/*            </UploadImageBox>*/}
-                            {/*        ))}*/}
-
-                            {/*    </FlexBox>*/}
-                            {/*</Grid>*/}
 
                             <Grid item xs={12}>
                                 <DropZone
@@ -202,19 +167,19 @@ const ProductForm = (props) => {
                                 <TextField
                                     fullWidth
                                     type="number"
-                                    name="quantity"
+                                    name="quantityInStock"
                                     color="info"
                                     size="medium"
                                     label="Quantity"
                                     placeholder="Quantity"
                                     onBlur={handleBlur}
-                                    value={values.quantity}
+                                    value={values.quantityInStock}
                                     onChange={handleChange}
                                     error={
-                                        !!touched.quantity && !!errors.quantity
+                                        !!touched.quantityInStock && !!errors.quantityInStock
                                     }
                                     helperText={
-                                        touched.quantity && errors.quantity
+                                        touched.quantityInStock && errors.quantityInStock
                                     }
                                 />
                             </Grid>
@@ -237,21 +202,21 @@ const ProductForm = (props) => {
                             <Grid item sm={6} xs={12}>
                                 <TextField
                                     fullWidth
-                                    name="laborPrice"
+                                    name="laborCost"
                                     color="info"
                                     size="medium"
                                     type="number"
                                     onBlur={handleBlur}
-                                    value={values.laborPrice}
+                                    value={values.laborCost}
                                     label="Labor Cost"
                                     onChange={handleChange}
                                     placeholder="Labor Cost"
                                     error={
-                                        !!touched.laborPrice &&
-                                        !!errors.laborPrice
+                                        !!touched.laborCost &&
+                                        !!errors.laborCost
                                     }
                                     helperText={
-                                        touched.laborPrice && errors.laborPrice
+                                        touched.laborCost && errors.laborCost
                                     }
                                 />
                             </Grid>
@@ -297,39 +262,24 @@ const ProductForm = (props) => {
                                     }
                                 />
                             </Grid>
-                            {/* <Grid item sm={6} xs={12}>
-                <TextField
-                  fullWidth
-                  color="info"
-                  size="medium"
-                  type="number"
-                  name="costPrice"
-                  label="Gold Price"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  placeholder="Gold Price"
-                  value={values.costPrice}
-                  error={!!touched.costPrice && !!errors.costPrice}
-                  helperText={touched.costPrice && errors.costPrice}
-                />
-              </Grid> */}
+
                             <Grid item sm={6} xs={12}>
                                 <TextField
                                     select
                                     fullWidth
                                     color="info"
                                     size="medium"
-                                    name="goldType"
+                                    name="goldId"
                                     onBlur={handleBlur}
                                     placeholder="Type of Gold"
                                     onChange={handleChange}
-                                    value={values.goldType}
+                                    value={values.goldId}
                                     label="Type of Gold"
                                     error={
-                                        !!touched.goldType && !!errors.goldType
+                                        !!touched.goldId && !!errors.goldId
                                     }
                                     helperText={
-                                        touched.goldType && errors.goldType
+                                        touched.goldId && errors.goldId
                                     }
                                 >
                                     <MenuItem value="50">Gold 10K</MenuItem>
@@ -349,18 +299,18 @@ const ProductForm = (props) => {
                                     fullWidth
                                     color="info"
                                     size="medium"
-                                    name="collection"
+                                    name="collectionId"
                                     onBlur={handleBlur}
                                     placeholder="Collection"
                                     onChange={handleChange}
-                                    value={values.gold_type}
+                                    value={values.collectionId}
                                     label="Collection"
                                     error={
-                                        !!touched.collection &&
-                                        !!errors.collection
+                                        !!touched.collectionId &&
+                                        !!errors.collectionId
                                     }
                                     helperText={
-                                        touched.collection && errors.collection
+                                        touched.collectionId && errors.collectionId
                                     }
                                 >
                                     <MenuItem value="1">Spring</MenuItem>
@@ -380,10 +330,34 @@ const ProductForm = (props) => {
                                     onBlur={handleBlur}
                                     placeholder="Gem"
                                     onChange={handleChange}
-                                    value={values.product_type}
+                                    value={values.isGem}
                                     label="Is Gem"
                                     error={!!touched.isGem && !!errors.isGem}
                                     helperText={touched.isGem && errors.isGem}
+                                >
+                                    <MenuItem value="1">True</MenuItem>
+                                    <MenuItem value="0">False</MenuItem>
+                                </TextField>
+                            </Grid>
+
+                            <Grid item sm={6} xs={12}>
+                                <TextField
+                                    select
+                                    fullWidth
+                                    color="info"
+                                    size="medium"
+                                    name="isActive"
+                                    onBlur={handleBlur}
+                                    placeholder="Active"
+                                    onChange={handleChange}
+                                    value={values.isActive}
+                                    label="Is Activity"
+                                    error={
+                                        !!touched.isActive && !!errors.isActive
+                                    }
+                                    helperText={
+                                        touched.isActive && errors.isActive
+                                    }
                                 >
                                     <MenuItem value="1">True</MenuItem>
                                     <MenuItem value="0">False</MenuItem>
@@ -400,10 +374,16 @@ const ProductForm = (props) => {
                                     onBlur={handleBlur}
                                     placeholder="Type of Product"
                                     onChange={handleChange}
-                                    value={values.product_type}
+                                    value={values.typeId}
                                     label="Type of Product"
-                                    error={!!touched.typeId && !!errors.typeId}
-                                    helperText={touched.typeId && errors.typeId}
+                                    error={
+                                        !!touched.typeId &&
+                                        !!errors.typeId
+                                    }
+                                    helperText={
+                                        touched.typeId &&
+                                        errors.typeId
+                                    }
                                 >
                                     <MenuItem value="30">Bracelet</MenuItem>
                                     <MenuItem value="31">Earring</MenuItem>
