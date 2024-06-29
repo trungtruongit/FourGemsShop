@@ -6,32 +6,33 @@ import { storage } from "../firebase/firebase"; // Correct import path
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const DropZone = ({
+    imgUrl,
+    setImgUrl,
     onChange,
     title = "Drag & drop product image here",
     imageSize = "Upload 280*280 image",
 }) => {
-    const [uploadedImageUrls, setUploadedImageUrls] = useState([]);
-
     const onDrop = useCallback(
         async (acceptedFiles) => {
-            const uploadPromises = acceptedFiles.map(async (file) => {
-                const storageRef = ref(storage, `images/${file.name}`);
-                await uploadBytes(storageRef, file);
-                const url = await getDownloadURL(storageRef);
-                return url;
-            });
-
-            const urls = await Promise.all(uploadPromises);
-            setUploadedImageUrls((prevUrls) => [...prevUrls, ...urls]);
-            onChange(urls);
+            if (acceptedFiles.length > 0) {
+                try {
+                    const file = acceptedFiles[0];
+                    const storageRef = ref(storage, `images/${file.name}`);
+                    await uploadBytes(storageRef, file);
+                    const url = await getDownloadURL(storageRef);
+                    setImgUrl(url);
+                    onChange(url);
+                } catch (error) {
+                    console.error("Error uploading file: ", error);
+                }
+            }
         },
         [onChange]
     );
-
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
-        maxFiles: 10,
-        multiple: true,
+        maxFiles: 1,
+        multiple: false,
         accept: {
             "image/*": [".png", ".gif", ".jpeg", ".jpg"],
         },
@@ -61,7 +62,10 @@ const DropZone = ({
                 </H5>
                 <Divider
                     sx={{
-                        "::before, ::after": { borderColor: "grey.300", width: 70 },
+                        "::before, ::after": {
+                            borderColor: "grey.300",
+                            width: 70,
+                        },
                     }}
                 >
                     <Small color="text.disabled" px={1}>
@@ -78,17 +82,21 @@ const DropZone = ({
                 </Button>
                 <Small color="grey.600">{imageSize}</Small>
             </Box>
-            <Grid container spacing={2} mt={2}>
-                {uploadedImageUrls.map((url, index) => (
-                    <Grid item xs={4} key={index}>
+            {imgUrl && (
+                <Grid container spacing={2} mt={2}>
+                    <Grid item xs={12}>
                         <img
-                            src={url}
-                            alt={`Uploaded ${index}`}
-                            style={{ width: "100%", height: "auto", borderRadius: "10px" }}
+                            src={imgUrl}
+                            alt="Uploaded"
+                            style={{
+                                width: "100%",
+                                height: "auto",
+                                borderRadius: "10px",
+                            }}
                         />
                     </Grid>
-                ))}
-            </Grid>
+                </Grid>
+            )}
         </Box>
     );
 };

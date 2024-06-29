@@ -13,7 +13,7 @@ CreateProduct.getLayout = function getLayout(page) {
 export default function CreateProduct() {
     const [productPublish, setProductPublish] = useState(1);
     const [files, setFiles] = useState([]); // Files will now contain URLs
-
+    const [imgUrl, setImgUrl] = useState("");
     const INITIAL_VALUES = {
         productName: "",
         description: "",
@@ -59,7 +59,7 @@ export default function CreateProduct() {
             isJewel: values.isJewel,
             isGem: values.isGem,
             isActive: values.isActive,
-            image: imageUrls[0], // Assuming single image for simplicity
+            image: imgUrl, // Assuming single image for simplicity
             quantityInStock: values.quantityInStock,
             description: values.description,
             goldId: values.goldId,
@@ -88,6 +88,8 @@ export default function CreateProduct() {
             <H3 mb={2}>Add New Product</H3>
 
             <ProductForm
+                imgUrl={imgUrl}
+                setImgUrl={setImgUrl}
                 files={files}
                 setFiles={setFiles}
                 setProductPublish={setProductPublish}

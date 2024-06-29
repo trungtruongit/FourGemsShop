@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { collection, addDoc } from "firebase/firestore";
 import {
     Button,
     Card,
@@ -44,6 +43,8 @@ const ProductForm = (props) => {
         handleFormSubmit,
         files,
         setFiles,
+        imgUrl,
+        setImgUrl,
     } = props;
 
     const handleChangeDropZone = (incomingFiles) => {
@@ -72,7 +73,7 @@ const ProductForm = (props) => {
             files.filter((item) => item.file.name !== fileToDelete.file.name)
         );
     };
-
+    console.log(imgUrl);
     return (
         <Card
             sx={{
@@ -105,13 +106,21 @@ const ProductForm = (props) => {
                                     value={values.productName}
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    error={!!touched.productName && !!errors.productName}
-                                    helperText={touched.productName && errors.productName}
+                                    error={
+                                        !!touched.productName &&
+                                        !!errors.productName
+                                    }
+                                    helperText={
+                                        touched.productName &&
+                                        errors.productName
+                                    }
                                 />
                             </Grid>
 
                             <Grid item xs={12}>
                                 <DropZone
+                                    setImgUrl={setImgUrl}
+                                    imgUrl={imgUrl}
                                     accept="image/jpeg"
                                     onChange={(files) =>
                                         handleChangeDropZone(files)
@@ -176,10 +185,12 @@ const ProductForm = (props) => {
                                     value={values.quantityInStock}
                                     onChange={handleChange}
                                     error={
-                                        !!touched.quantityInStock && !!errors.quantityInStock
+                                        !!touched.quantityInStock &&
+                                        !!errors.quantityInStock
                                     }
                                     helperText={
-                                        touched.quantityInStock && errors.quantityInStock
+                                        touched.quantityInStock &&
+                                        errors.quantityInStock
                                     }
                                 />
                             </Grid>
@@ -275,12 +286,8 @@ const ProductForm = (props) => {
                                     onChange={handleChange}
                                     value={values.goldId}
                                     label="Type of Gold"
-                                    error={
-                                        !!touched.goldId && !!errors.goldId
-                                    }
-                                    helperText={
-                                        touched.goldId && errors.goldId
-                                    }
+                                    error={!!touched.goldId && !!errors.goldId}
+                                    helperText={touched.goldId && errors.goldId}
                                 >
                                     <MenuItem value="50">Gold 10K</MenuItem>
                                     <MenuItem value="53">Gold 14K</MenuItem>
@@ -310,7 +317,8 @@ const ProductForm = (props) => {
                                         !!errors.collectionId
                                     }
                                     helperText={
-                                        touched.collectionId && errors.collectionId
+                                        touched.collectionId &&
+                                        errors.collectionId
                                     }
                                 >
                                     <MenuItem value="1">Spring</MenuItem>
@@ -376,14 +384,8 @@ const ProductForm = (props) => {
                                     onChange={handleChange}
                                     value={values.typeId}
                                     label="Type of Product"
-                                    error={
-                                        !!touched.typeId &&
-                                        !!errors.typeId
-                                    }
-                                    helperText={
-                                        touched.typeId &&
-                                        errors.typeId
-                                    }
+                                    error={!!touched.typeId && !!errors.typeId}
+                                    helperText={touched.typeId && errors.typeId}
                                 >
                                     <MenuItem value="30">Bracelet</MenuItem>
                                     <MenuItem value="31">Earring</MenuItem>
