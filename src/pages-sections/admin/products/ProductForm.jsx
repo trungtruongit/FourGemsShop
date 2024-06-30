@@ -48,11 +48,7 @@ const ProductForm = (props) => {
     } = props;
 
     const handleChangeDropZone = (incomingFiles) => {
-        const jpegFiles = incomingFiles.filter(
-            (file) => file.type === "image/jpeg"
-        );
-
-        jpegFiles.forEach((file) => {
+        incomingFiles.forEach((file) => {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setFiles((prevFiles) => [
@@ -60,7 +56,6 @@ const ProductForm = (props) => {
                     {
                         file,
                         preview: URL.createObjectURL(file),
-                        base64: reader.result,
                     },
                 ]);
             };
@@ -328,6 +323,29 @@ const ProductForm = (props) => {
                                 </TextField>
                             </Grid>
 
+                            <Grid item sm={6} xs={12}>
+                                <TextField
+                                    select
+                                    fullWidth
+                                    color="info"
+                                    size="medium"
+                                    name="isJewel"
+                                    onBlur={handleBlur}
+                                    placeholder="Jewelry"
+                                    onChange={handleChange}
+                                    value={values.isJewel}
+                                    label="Is Jewelry"
+                                    error={
+                                        !!touched.isJewel && !!errors.isJewel
+                                    }
+                                    helperText={
+                                        touched.isJewel && errors.isJewel
+                                    }
+                                >
+                                    <MenuItem value="1">True</MenuItem>
+                                    <MenuItem value="0">False</MenuItem>
+                                </TextField>
+                            </Grid>
                             <Grid item sm={6} xs={12}>
                                 <TextField
                                     select

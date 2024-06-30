@@ -1,9 +1,14 @@
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { Box, Button, Divider, Grid } from "@mui/material";
+import { Box, Button, Divider, Grid, CircularProgress } from "@mui/material";
 import { H5, Small } from "./Typography";
-import { storage } from "../firebase/firebase"; // Correct import path
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../firebase/firebase";
+import {
+    ref,
+    uploadBytes,
+    getDownloadURL,
+    deleteObject,
+} from "firebase/storage";
 
 const DropZone = ({
     imgUrl,
@@ -12,23 +17,49 @@ const DropZone = ({
     title = "Drag & drop product image here",
     imageSize = "Upload 280*280 image",
 }) => {
+    const [loading, setLoading] = useState(false);
+
     const onDrop = useCallback(
         async (acceptedFiles) => {
             if (acceptedFiles.length > 0) {
                 try {
                     const file = acceptedFiles[0];
                     const storageRef = ref(storage, `images/${file.name}`);
+                    setLoading(true);
                     await uploadBytes(storageRef, file);
                     const url = await getDownloadURL(storageRef);
                     setImgUrl(url);
                     onChange(url);
                 } catch (error) {
                     console.error("Error uploading file: ", error);
+                } finally {
+                    setLoading(false);
                 }
             }
         },
-        [onChange]
+        [onChange, setImgUrl]
     );
+
+    const handleDelete = async () => {
+        if (!imgUrl) return;
+
+        // Extract the file name from the URL
+        const fileName = decodeURIComponent(
+            imgUrl.split("/o/")[1].split("?")[0]
+        );
+        const storageRef = ref(storage, fileName);
+        setLoading(true);
+        try {
+            await deleteObject(storageRef);
+            setImgUrl(null);
+            onChange(null);
+        } catch (error) {
+            console.error("Error deleting file: ", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         maxFiles: 1,
@@ -82,6 +113,7 @@ const DropZone = ({
                 </Button>
                 <Small color="grey.600">{imageSize}</Small>
             </Box>
+            {loading && <CircularProgress />}
             {imgUrl && (
                 <Grid container spacing={2} mt={2}>
                     <Grid item xs={12}>
@@ -94,6 +126,13 @@ const DropZone = ({
                                 borderRadius: "10px",
                             }}
                         />
+                        <Button
+                            variant="outlined"
+                            color="error"
+                            onClick={handleDelete}
+                        >
+                            Delete
+                        </Button>
                     </Grid>
                 </Grid>
             )}

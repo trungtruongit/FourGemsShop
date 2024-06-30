@@ -64,7 +64,6 @@ const ProductRow = ({ product }) => {
         console.log(productId);
         try {
             const response = await axios.put(
-                console.log(productId),
                 `https://four-gems-api-c21adc436e90.herokuapp.com/product/update-product=${productId}`,
                 {
                     productId: productId,

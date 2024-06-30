@@ -45,17 +45,16 @@ export default function CreateProduct() {
         isActive: yup.number().required("required"),
         typeId: yup.number().required("required"),
     });
-
+    console.log(imgUrl);
     const handleFormSubmit = async (values) => {
         const imageUrls = files; // Image URLs from Firebase
 
         const productNew = {
-            productName: values.name,
+            productName: values.productName,
             weight: values.weight,
             laborCost: values.laborCost,
             ratioPrice: values.ratioPrice,
             stonePrice: values.stonePrice,
-            costPrice: values.costPrice,
             isJewel: values.isJewel,
             isGem: values.isGem,
             isActive: values.isActive,
@@ -70,7 +69,7 @@ export default function CreateProduct() {
         try {
             const token = localStorage.getItem("token");
             await axios.post(
-                "https://four-gems-api-c21adc436e90.herokuapp.com/product/create-product",
+                `https://four-gems-api-c21adc436e90.herokuapp.com/product/create-product`,
                 productNew,
                 {
                     headers: {
