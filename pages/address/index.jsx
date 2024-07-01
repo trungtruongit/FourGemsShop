@@ -15,8 +15,8 @@ import { H5 } from "../../src/components/Typography";
 const AddressList = ({ addressList }) => {
     const [allAddress, setAllAddress] = useState(addressList);
     const [loading, setLoading] = useState(false);
-    const [buybackCus, setBuybackCus] = useState();
-    const [customerInfo, setCustomerInfo] = useState("");
+    const [buybackCus, setBuybackCus] = useState([]);
+    const [customerInfo, setCustomerInfo] = useState(null);
     const [dataNumSearch, setDataNumSearch] = useState("");
     const router = useRouter();
     let token = "";
@@ -29,50 +29,49 @@ const AddressList = ({ addressList }) => {
         console.log("Web Storage is not supported in this environment.");
     }
 
-    useEffect(() => {
-        const fetchOrderBuyBack = async () => {
-            setLoading(true);
-            try {
-                const responseOrderToBuyBack = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/order/get-order-to-buy-back`,
-                    {
-                        headers: {
-                            Authorization: "Bearer " + token,
-                        },
+    const fetchOrderBuyBack = async (phoneNumber) => {
+        setLoading(true);
+        try {
+            const responseOrderToBuyBack = await axios.get(
+                `https://four-gems-api-c21adc436e90.herokuapp.com/order/get-order-to-buy-back?customerPhoneNumber=${phoneNumber}`,
+                {
+                    headers: {
+                        Authorization: "Bearer " + token,
+                    },
+                }
+            );
+            setBuybackCus(responseOrderToBuyBack.data.data);
+            console.log(responseOrderToBuyBack.data.data);
+        } catch (error) {
+            console.error("Failed to fetch order buy back:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchCustomerInfo = async (phoneNumber) => {
+        try {
+            const resCusInfo = await axios.get(
+                `https://four-gems-api-c21adc436e90.herokuapp.com/customers?phoneNumber=${phoneNumber}`,
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + token
                     }
-                );
-                setBuybackCus(responseOrderToBuyBack.data.data);
-                console.log(responseOrderToBuyBack.data.data);
-            } catch (error) {
-                console.error("Failed to fetch order buy back:", error);
-            } finally {
-                setLoading(false);
+                });
+            if (resCusInfo.data.data.length === 0) {
+                await router.push("/admin/customerInfo/create");
+            } else {
+                setCustomerInfo(resCusInfo.data.data[0]);
             }
-        };
-        fetchOrderBuyBack();
-    }, []);
+            console.log(resCusInfo.data.data[0]);
+        } catch (error) {
+            console.error("Failed to fetch customer:", error);
+        }
+    };
 
     const handleBtnSearch = async () => {
-        const fetchSearchCustomInfo = async () => {
-            try {
-                const resCusInfo = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/customers?phoneNumber=${dataNumSearch}`,
-                    {
-                        headers: {
-                            Authorization: 'Bearer ' + token
-                        }
-                    });
-                if (resCusInfo.data.data.length === 0) {
-                    await router.push("/admin/customerInfo/create");
-                } else {
-                    setCustomerInfo(resCusInfo.data.data[0]);
-                }
-                console.log(resCusInfo.data.data[0]);
-            } catch (error) {
-                console.error("Failed to fetch customer:", error);
-            }
-        };
-        fetchSearchCustomInfo();
+        await fetchCustomerInfo(dataNumSearch);
+        await fetchOrderBuyBack(dataNumSearch);
     };
 
     const SEARCH_BUTTON = (
@@ -80,7 +79,7 @@ const AddressList = ({ addressList }) => {
             color="primary"
             disableElevation
             variant="contained"
-            onClick={() => handleBtnSearch()}
+            onClick={handleBtnSearch}
             sx={{
                 px: "2rem",
                 height: "100%",
