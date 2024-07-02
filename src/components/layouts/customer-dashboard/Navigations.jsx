@@ -105,9 +105,9 @@ const linkList = [
         count: 3,
       },
       {
-        href: "/address",
-        title: "Addresses",
-        icon: Place,
+        href: "/buy-back",
+        title: "Buy Back",
+        icon: ShoppingBagOutlined,
         count: 16,
       },
       {

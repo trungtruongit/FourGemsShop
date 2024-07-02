@@ -7,7 +7,6 @@ import { FlexBox } from "components/flex-box";
 import CustomerDashboardLayout from "components/layouts/customer-dashboard";
 import axios from "axios";
 import { useRouter } from "next/router";
-import api from "utils/__api__/address";
 import { SearchOutlinedIcon } from "../../src/components/search-box/styled";
 import Card1 from "../../src/components/Card1";
 import { H5 } from "../../src/components/Typography";
@@ -74,6 +73,12 @@ const AddressList = ({ addressList }) => {
         await fetchOrderBuyBack(dataNumSearch);
     };
 
+    const handleViewOrderDetail = async (orderId) => {
+        router.push(`/profile/${orderId}`);
+        localStorage.setItem("orderId", orderId);
+        localStorage.setItem("customerId", customerInfo.id);
+    };
+
     const SEARCH_BUTTON = (
         <Button
             color="primary"
@@ -89,10 +94,6 @@ const AddressList = ({ addressList }) => {
             Search
         </Button>
     );
-
-    const handleAddressDelete = () => {
-        // Implement address delete functionality
-    };
 
     return (
         <CustomerDashboardLayout>
@@ -126,7 +127,7 @@ const AddressList = ({ addressList }) => {
                             Customer Information
                         </Typography>
                         <Grid container spacing={2}>
-                            <Grid item xs={12}>
+                            <Grid item xs={6}>
                                 <Grid sx={{ display: "flex", marginBottom: "7px" }}>
                                     <H5 sx={{ marginRight: "10px", marginTop: "1px" }}>Full Name:</H5>
                                     {customerInfo.name}
@@ -144,76 +145,50 @@ const AddressList = ({ addressList }) => {
                                     {customerInfo.email}
                                 </Grid>
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={6}>
                                 <Grid sx={{ display: "flex", marginBottom: "7px" }}>
                                     <H5 sx={{ marginRight: "10px", marginTop: "1px" }}>Address:</H5>
                                     {customerInfo.address}
                                 </Grid>
                             </Grid>
-                            <Grid item xs={12}>
-                                <Grid sx={{ display: "flex", marginBottom: "7px" }}>
-                                    <H5 sx={{ marginRight: "10px", marginTop: "1px" }}>Gender:</H5>
-                                    {customerInfo.gender}
-                                </Grid>
-                            </Grid>
                         </Grid>
                     </Card1>
 
-                    {buybackCus?.map((buybackCus) => (
+                    {buybackCus?.map((order) => (
                         <TableRow
                             sx={{
                                 mb: 2,
                                 padding: "6px 18px",
                             }}
-                            key={buybackCus.orderId}
+                            key={order.orderId}
                         >
                             <Typography whiteSpace="pre" m={0.75} textAlign="left">
-                                {buybackCus.orderId}
+                                {order.orderId}
                             </Typography>
 
                             <Typography flex="1 1 260px !important" m={0.75} textAlign="left">
-                                {buybackCus.customerName}
+                                {order.customerName}
                             </Typography>
 
                             <Typography whiteSpace="pre" m={0.75} textAlign="left">
-                                {buybackCus.orderDate}
+                                {order.orderDate}
                             </Typography>
 
                             <Typography whiteSpace="pre" textAlign="center" color="grey.600">
-                                <Link href={`/address/${buybackCus.orderId}`} passHref>
-                                    <IconButton>
-                                        <RemoveRedEye fontSize="small" color="inherit" />
-                                    </IconButton>
-                                </Link>
-
-                                <IconButton
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleAddressDelete(buybackCus.orderId);
-                                    }}
-                                >
-                                    <Delete fontSize="small" color="inherit" />
+                                <IconButton onClick={() => handleViewOrderDetail(order.orderId)}>
+                                    <RemoveRedEye fontSize="small" color="inherit" />
                                 </IconButton>
                             </Typography>
                         </TableRow>
                     ))}
 
-                    <FlexBox justifyContent="center" mt={5}>
-                        <Pagination count={5} onChange={(data) => console.log(data)} />
-                    </FlexBox>
+                    {/*<FlexBox justifyContent="center" mt={5}>*/}
+                    {/*    <Pagination count={5} onChange={(data) => console.log(data)} />*/}
+                    {/*</FlexBox>*/}
                 </>
             )}
         </CustomerDashboardLayout>
     );
-};
-
-export const getStaticProps = async () => {
-    const addressList = await api.getAddressList();
-    return {
-        props: {
-            addressList,
-        },
-    };
 };
 
 export default AddressList;

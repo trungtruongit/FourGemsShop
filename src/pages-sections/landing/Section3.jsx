@@ -498,13 +498,13 @@ const customerPageList = [
   },
   {
     imgUrl: "/assets/images/landing/customer/my-addresses.jpg",
-    previewUrl: "/address",
+    previewUrl: "/buy-back",
     title: "My Addresses",
     page: "user",
   },
   {
     imgUrl: "/assets/images/landing/customer/add-new-addresses.jpg",
-    previewUrl: "/address/512474",
+    previewUrl: "/buy-back/512474",
     title: "Add Addresses",
     page: "user",
   },
