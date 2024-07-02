@@ -45,10 +45,10 @@ const ProductRow = ({ product }) => {
         useState(quantityInStock);
     const [newStonePrice, setNewStonePrice] = useState(stonePrice);
     const [newDescription, setNewDescription] = useState(description);
-    const [newGem, setNewGem] = useState(gem);
+    const [newGem, setNewGem] = useState(gem ? 1 : 0);
     const [newImage, setNewImage] = useState(image);
     const [newCategoryName, setNewCategoryName] = useState(categoryName);
-    const [newActive, setNewActive] = useState(active);
+    const [newActive, setNewActive] = useState(active ? 1 : 0);
     const [newGoldId, setNewGoldId] = useState(goldId);
 
     let token = "";
@@ -64,7 +64,7 @@ const ProductRow = ({ product }) => {
         console.log(productId);
         try {
             const response = await axios.put(
-                `https://four-gems-api-c21adc436e90.herokuapp.com/product/update-product=${productId}`,
+                `https://four-gems-system-790aeec3afd8.herokuapp.com/product/update-product=${productId}`,
                 {
                     productId: productId,
                     productName: newProductName,
@@ -235,26 +235,25 @@ const ProductRow = ({ product }) => {
                     goldId
                 )}
             </StyledTableCell>
+
             <StyledTableCell align="left">
                 {edit ? (
-                    <TextField
-                        value={newGem}
-                        onChange={(e) => setNewGem(e.target.value)}
+                    <BazaarSwitch
+                        checked={newGem === 1}
+                        onChange={(e) => setNewGem(e.target.checked ? 1 : 0)}
                     />
-                ) : gem ? (
-                    "Yes"
                 ) : (
-                    "No"
+                    <BazaarSwitch checked={newGem === 1} />
                 )}
             </StyledTableCell>
             <StyledTableCell align="left">
                 {edit ? (
                     <BazaarSwitch
-                        checked={newActive}
-                        onChange={(e) => setNewActive(e.target.checked)}
+                        checked={newActive === 1}
+                        onChange={(e) => setNewActive(e.target.checked ? 1 : 0)}
                     />
                 ) : (
-                    <BazaarSwitch checked={newActive} />
+                    <BazaarSwitch checked={newActive === 1} />
                 )}
             </StyledTableCell>
             <StyledTableCell align="center">

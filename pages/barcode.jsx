@@ -57,7 +57,7 @@ const BarCodeTest = () => {
             if (barCode !== "No Product") {
                 try {
                     const resGetByBarCode = await axios.get(
-                        `https://four-gems-api-c21adc436e90.herokuapp.com/product/get-product-by-barcode?countId=${counterId}&barcode=${barCode}`,
+                        `https://four-gems-system-790aeec3afd8.herokuapp.com/product/get-product-by-barcode?countId=${counterId}&barcode=${barCode}`,
                         {
                             headers: {
                                 Authorization: `Bearer ${token}`,

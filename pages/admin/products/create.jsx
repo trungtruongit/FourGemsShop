@@ -69,7 +69,7 @@ export default function CreateProduct() {
         try {
             const token = localStorage.getItem("token");
             await axios.post(
-                `https://four-gems-api-c21adc436e90.herokuapp.com/product/create-product`,
+                `https://four-gems-system-790aeec3afd8.herokuapp.com/product/create-product`,
                 productNew,
                 {
                     headers: {

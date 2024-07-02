@@ -68,7 +68,7 @@ export default function BuyBackList({ orders }) {
             setLoading(true);
             try {
                 const responeOrderToBuyBack = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/order/get-order-to-buy-back`,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-order-to-buy-back`,
                     {
                         headers: {
                             Authorization: "Bearer " + token,
@@ -110,10 +110,12 @@ export default function BuyBackList({ orders }) {
         defaultOrder: "desc",
     });
     return (
-        <Box sx={{
-            pl: 11,
-            pr: 11,
-        }}>
+        <Box
+            sx={{
+                pl: 11,
+                pr: 11,
+            }}
+        >
             <Card>
                 <Scrollbar>
                     <TableContainer

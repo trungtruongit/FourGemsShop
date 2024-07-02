@@ -48,7 +48,7 @@ const Market = (props) => {
             const counterId = localStorage.getItem("counterId");
             try {
                 const resBraceletProduct = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=productId&sortType=ASC&categoryName=bracelet&searchKeyword= `,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=productId&sortType=ASC&categoryName=bracelet&searchKeyword= `,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
@@ -69,7 +69,7 @@ const Market = (props) => {
             const counterId = localStorage.getItem("counterId");
             try {
                 const resRingProduct = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=price&sortType= &categoryName=ring&searchKeyword= `,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=price&sortType= &categoryName=ring&searchKeyword= `,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
@@ -90,7 +90,7 @@ const Market = (props) => {
             const counterId = localStorage.getItem("counterId");
             try {
                 const resEarringProduct = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=price&sortType= &categoryName=earring&searchKeyword= `,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=price&sortType= &categoryName=earring&searchKeyword= `,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
@@ -111,7 +111,7 @@ const Market = (props) => {
             const counterId = localStorage.getItem("counterId");
             try {
                 const resNecklacesProduct = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=price&sortType= &categoryName=necklace&searchKeyword= `,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=price&sortType= &categoryName=necklace&searchKeyword= `,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
@@ -132,7 +132,7 @@ const Market = (props) => {
             const counterId = localStorage.getItem("counterId");
             try {
                 const resCharmProduct = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=productId&sortType=ASC&categoryName=charm&searchKeyword= `,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=productId&sortType=ASC&categoryName=charm&searchKeyword= `,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token

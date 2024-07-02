@@ -35,7 +35,7 @@ const Otp = () => {
     const handleFormSubmit = async (values) => {
         try {
             const response = await axios.post(
-                `https://four-gems-api-c21adc436e90.herokuapp.com/user/verify-code?username=${email}&otp=${otp}`,
+                `https://four-gems-system-790aeec3afd8.herokuapp.com/user/verify-code?username=${email}&otp=${otp}`,
                 {
                     username: email,
                     otp: otp,
