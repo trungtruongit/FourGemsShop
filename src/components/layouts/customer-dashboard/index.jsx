@@ -7,7 +7,7 @@ import ShopLayout1 from "components/layouts/ShopLayout1";
  *  2. buy-back and buy-back-details page
  *  3. orders and order-details page
  *  4. payment-methods and payment-method-details page
- *  5. profile and edit profile page
+ *  5. buyback-profile and edit buyback-profile page
  *  6. support-tickets page
  */
 // ======================================================

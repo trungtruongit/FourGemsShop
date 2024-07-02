@@ -99,7 +99,7 @@ const linkList = [
     title: "ACCOUNT SETTINGS",
     list: [
       {
-        href: "/profile",
+        href: "/buyback-profile",
         title: "Profile Info",
         icon: Person,
         count: 3,

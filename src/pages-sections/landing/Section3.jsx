@@ -473,14 +473,14 @@ const vendorPageList = [
 ];
 const customerPageList = [
   {
-    imgUrl: "/assets/images/landing/customer/profile.jpg",
-    previewUrl: "/profile",
+    imgUrl: "/assets/images/landing/customer/buyback-profile.jpg",
+    previewUrl: "/buyback-profile",
     title: "Profile",
     page: "user",
   },
   {
-    imgUrl: "/assets/images/landing/customer/edit-profile.jpg",
-    previewUrl: "/profile/edit",
+    imgUrl: "/assets/images/landing/customer/edit-buyback-profile.jpg",
+    previewUrl: "/buyback-profile/edit",
     title: "Edit Profile",
     page: "user",
   },

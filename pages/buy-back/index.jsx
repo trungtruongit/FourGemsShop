@@ -74,7 +74,7 @@ const AddressList = ({ addressList }) => {
     };
 
     const handleViewOrderDetail = async (orderId) => {
-        router.push(`/profile/${orderId}`);
+        router.push(`/buyback-profile/${orderId}`);
         localStorage.setItem("orderId", orderId);
         localStorage.setItem("customerId", customerInfo.id);
     };
