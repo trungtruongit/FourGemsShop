@@ -33,7 +33,7 @@ const AddressList = ({ addressList }) => {
         setLoading(true);
         try {
             const responseOrderToBuyBack = await axios.get(
-                `https://four-gems-api-c21adc436e90.herokuapp.com/order/get-order-to-buy-back?customerPhoneNumber=${phoneNumber}`,
+                `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-order-to-buy-back?customerPhoneNumber=${phoneNumber}`,
                 {
                     headers: {
                         Authorization: "Bearer " + token,
@@ -52,7 +52,7 @@ const AddressList = ({ addressList }) => {
     const fetchCustomerInfo = async (phoneNumber) => {
         try {
             const resCusInfo = await axios.get(
-                `https://four-gems-api-c21adc436e90.herokuapp.com/customers?phoneNumber=${phoneNumber}`,
+                `https://four-gems-system-790aeec3afd8.herokuapp.com/customers?phoneNumber=${phoneNumber}`,
                 {
                     headers: {
                         Authorization: 'Bearer ' + token
