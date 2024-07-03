@@ -28,6 +28,7 @@ const SearchBox = () => {
 
     const handleSearch = async (e) => {
         startTransition(async () => {
+            const counterId = localStorage.getItem("counterId");
             const value = e.target?.value;
             const token = localStorage.getItem("token");
             let type = "";
@@ -38,7 +39,7 @@ const SearchBox = () => {
             }
             try {
                 const response = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=1&pageSize=100&page=0&sortKeyword=price&sortType= &categoryName=${type}&searchKeyword=${value}`,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=price&sortType= &categoryName=${type}&searchKeyword=${value}`,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
@@ -49,7 +50,10 @@ const SearchBox = () => {
                 if (!value) setResultList([]);
                 else
                     setResultList(
-                        response.data.data.map((name) => name.productName)
+                        response.data.data.map((product) => ({
+                            productName: product.productName,
+                            productId: product.productId,
+                        }))
                     );
             } catch (e) {
                 console.log(e);
@@ -94,6 +98,7 @@ const SearchBox = () => {
             ))}
         </BazaarMenu>
     );
+    console.log(resultList);
     return (
         <Box
             position="relative"
@@ -130,11 +135,13 @@ const SearchBox = () => {
                 <SearchResultCard elevation={2}>
                     {resultList.map((item) => (
                         <Link
-                            href={`/product/search/${item}`}
-                            key={item}
+                            href={`/product/${item.productId}`}
+                            key={item.productId}
                             passHref
                         >
-                            <MenuItem key={item}>{item}</MenuItem>
+                            <MenuItem key={item.productId}>
+                                {item.productName}
+                            </MenuItem>
                         </Link>
                     ))}
                 </SearchResultCard>

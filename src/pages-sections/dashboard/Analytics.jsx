@@ -56,9 +56,10 @@ const Analytics = () => {
     const [profit12Month, setProfit12Month] = useState();
     useEffect(() => {
         const fetchProfit12Mounth = async () => {
+            const counterId = localStorage.getItem("counterId");
             try {
                 const resProfit12Mounth = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/order/total-profit-each-month?countId=1&year=2024`,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/order/total-profit-each-month?countId=${counterId}&year=2024`,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
@@ -78,9 +79,10 @@ const Analytics = () => {
     const [income12Month, setIncome12Month] = useState();
     useEffect(() => {
         const fetchIncome12Mounth = async () => {
+            const counterId = localStorage.getItem("counterId");
             try {
                 const resIncome12Mounth = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/order/total-money-each-month?countId=1&year=2024`,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/order/total-money-each-month?countId=${counterId}&year=2024`,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
