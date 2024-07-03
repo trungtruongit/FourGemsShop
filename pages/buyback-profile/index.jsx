@@ -2,7 +2,6 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { Person } from "@mui/icons-material";
 import {
-  Avatar,
   Box,
   Button,
   Card,
@@ -16,58 +15,117 @@ import { FlexBetween, FlexBox } from "components/flex-box";
 import UserDashboardHeader from "components/header/UserDashboardHeader";
 import CustomerDashboardLayout from "components/layouts/customer-dashboard";
 import CustomerDashboardNavigation from "components/layouts/customer-dashboard/Navigations";
-import { currency } from "lib";
 import api from "utils/__api__/users";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {currency} from "../../src/lib";
 
 // ============================================================
 const Profile = ({ user }) => {
-  const downMd = useMediaQuery((theme) => theme.breakpoints.down("md")); // SECTION TITLE HEADER LINK
+    const downMd = useMediaQuery((theme) => theme.breakpoints.down("md")); // SECTION TITLE HEADER LINK
+    const [customerShowInfo, setCustomerShowInfo] = useState("");
+    const [product, setProduct] = useState({});
+    let token = "";
+    if (typeof localStorage !== "undefined") {
+        token = localStorage.getItem("token");
+    } else if (typeof sessionStorage !== "undefined") {
+        // Fallback to sessionStorage if localStorage is not supported
+        token = localStorage.getItem("token");
+    } else {
+        // If neither localStorage nor sessionStorage is supported
+        console.log("Web Storage is not supported in this environment.");
+    }
+    useEffect(() => {
+        const customerId = localStorage.getItem("customerId");
+        const fetchGetCusById = async () => {
+            if (!customerId) return;
+            console.log("Fetching customer info for ID:", customerId);
+            try {
+                const responeGetCus = await axios.get(
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/customers/${customerId}`,
+                    {
+                        headers: {
+                            Authorization: "Bearer " + token, //the token is a variable which holds the token
+                        },
+                    }
+                );
+                setCustomerShowInfo(responeGetCus.data.data);
+                console.log(responeGetCus.data.data);
+            } catch (error) {
+                console.error("Failed to search customers:", error);
+            }
+        };
+        fetchGetCusById();
+    }, []);
+    useEffect(() => {
+        const fetchData = async () => {
+            const productId = localStorage.getItem("productId");
+            try {
+                if (token) {
+                    const response = await axios.get(
+                        `https://four-gems-system-790aeec3afd8.herokuapp.com/product/get-product-by-id?productId=${productId}&countId=1`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ` + token,
+                            },
+                        }
+                    );
+                    // Làm tròn lên giá product.price
+                    const roundedPrice = Math.ceil(response.data.data.price);
+                    setProduct({ ...response.data.data, price: roundedPrice });
+                    console.log(response.data.data);
+                } else {
+                    console.warn(
+                        "Token is missing. Please ensure it's properly set."
+                    );
+                }
+            } catch (error) {
+                console.error("Failed to fetch products:", error);
+            }
+        };
+        fetchData();
+    }, []);
 
-  const HEADER_LINK = (
-    <Link href={`/profile/${user.id}`} passHref>
-      <Button
-        color="primary"
-        sx={{
-          px: 4,
-          bgcolor: "primary.light",
-        }}
-      >
-        Edit Profile
-      </Button>
-    </Link>
-  );
-  const infoList = [
-    {
-      title: "16",
-      subtitle: "All Orders",
-    },
-    {
-      title: "02",
-      subtitle: "Awaiting Payments",
-    },
-    {
-      title: "00",
-      subtitle: "Awaiting Shipment",
-    },
-    {
-      title: "01",
-      subtitle: "Awaiting Delivery",
-    },
-  ];
+    const getBuyBackPrice = product.price * 0.7;
+    const handleSubmitBuyBack = async () => {
+        const productId = localStorage.getItem("productId");
+        const orderId = localStorage.getItem("orderId");
+        const userId = localStorage.getItem("userId");
+
+        try {
+            if (token) {
+                const responeFormBuyBack = await axios.post(
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/buyback?orderId=${orderId}&userId=${userId}&productId=${productId}`,
+                    {},  // Add any data payload if required
+                    {
+                        headers: {
+                            Authorization: `Bearer ` + token,
+                        },
+                    }
+                );
+                console.log(responeFormBuyBack.data.data);
+            } else {
+                console.warn(
+                    "Token is missing. Please ensure it's properly set."
+                );
+            }
+        } catch (error) {
+            console.error("Failed to create form buy back:", error);
+        }
+    };
   return (
     <CustomerDashboardLayout>
       {/* TITLE HEADER AREA */}
       <UserDashboardHeader
         icon={Person}
-        title="My Profile"
-        button={HEADER_LINK}
+        title="Buy Back Confirm"
         navigation={<CustomerDashboardNavigation />}
       />
 
       {/* USER PROFILE INFO */}
       <Box mb={4}>
         <Grid container spacing={3}>
-          <Grid item md={6} xs={12}>
+          <Grid item md={12} xs={12}>
             <Card
               sx={{
                 display: "flex",
@@ -76,82 +134,72 @@ const Profile = ({ user }) => {
                 alignItems: "center",
               }}
             >
-              <Avatar
-                src={user.avatar}
-                sx={{
-                  height: 64,
-                  width: 64,
-                }}
-              />
 
               <Box ml={1.5} flex="1 1 0">
-                <FlexBetween flexWrap="wrap">
-                  <div>
-                    <H5 my="0px">{`${user.name.firstName} ${user.name.lastName}`}</H5>
-                    <FlexBox alignItems="center">
-                      <Typography color="grey.600">Balance:</Typography>
-                      <Typography ml={0.5} color="primary.main">
-                        {currency(500)}
+                  <FlexBetween flexWrap="wrap">
+                      <div>
+                          <Grid container alignItems="center">
+                              <Grid item xs>
+                                  <H5 my="0px">{customerShowInfo.name}</H5>
+                              </Grid>
+                              <Grid item sx={{ml: 27}}>
+                                  <Typography color="grey.600">Loyalty Point:</Typography>
+                              </Grid>
+                              <Grid item>
+                                  <Typography ml={0.5} color="primary.main">
+                                      {customerShowInfo.loyaltyPoints}
+                                  </Typography>
+                              </Grid>
+                          </Grid>
+                          <Grid container alignItems="center" color="grey.600">
+                              <Grid item>
+                                  <Typography>{customerShowInfo.phoneNumber}</Typography>
+                              </Grid>
+                              <Grid item sx={{ml: 25}}>
+                                  <Typography>{customerShowInfo.email}</Typography>
+                              </Grid>
+                          </Grid>
+                      </div>
+                      <Typography color="grey.600" letterSpacing="0.2em">
+                          {customerShowInfo.memberShipTier?.toUpperCase()} USER
                       </Typography>
-                    </FlexBox>
-                  </div>
-
-                  <Typography color="grey.600" letterSpacing="0.2em">
-                    SILVER USER
-                  </Typography>
-                </FlexBetween>
+                  </FlexBetween>
               </Box>
             </Card>
-          </Grid>
-
-          <Grid item md={6} xs={12}>
-            <Grid container spacing={4}>
-              {infoList.map((item) => (
-                <Grid item lg={3} sm={6} xs={6} key={item.subtitle}>
-                  <Card
-                    sx={{
-                      height: "100%",
-                      display: "flex",
-                      p: "1rem 1.25rem",
-                      alignItems: "center",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <H3 color="primary.main" my={0} fontWeight={600}>
-                      {item.title}
-                    </H3>
-
-                    <Small color="grey.600" textAlign="center">
-                      {item.subtitle}
-                    </Small>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
           </Grid>
         </Grid>
       </Box>
 
-      <TableRow
-        sx={{
-          cursor: "auto",
-          p: "0.75rem 1.5rem",
-          ...(downMd && {
-            alignItems: "start",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-          }),
-        }}
-      >
-        <TableRowItem title="First Name" value={user.name.firstName} />
-        <TableRowItem title="Last Name" value={user.name.lastName} />
-        <TableRowItem title="Email" value={user.email} />
-        <TableRowItem title="Phone" value={user.phone} />
-        <TableRowItem
-          title="Birth date"
-          value={format(new Date(user.dateOfBirth), "dd MMM, yyyy")}
-        />
-      </TableRow>
+        <TableRow
+            sx={{
+                cursor: "auto",
+                p: "0.75rem 1.5rem",
+                ...(downMd && {
+                    alignItems: "start",
+                    flexDirection: "column",
+                    justifyContent: "flex-start",
+                }),
+            }}
+        >
+            <TableRowItem title="Product Id" value={product.productId}/>
+            <TableRowItem title="Last Name" value={product.productName}/>
+            <TableRowItem title="Product Price" value={product.price}/>
+            <TableRowItem title="Buy Back Price" value={getBuyBackPrice}/>
+        </TableRow>
+        <Button
+            color="primary"
+            variant="contained"
+            sx={{
+                mt: 3,
+                mb: 4.5,
+                px: "1.75rem",
+                height: 40,
+                padding: 2,
+            }}
+            onClick={() => handleSubmitBuyBack()}
+        >
+            Submit
+        </Button>
     </CustomerDashboardLayout>
   );
 };
@@ -167,12 +215,4 @@ const TableRowItem = ({ title, value }) => {
   );
 };
 
-export const getStaticProps = async () => {
-  const user = await api.getUser();
-  return {
-    props: {
-      user,
-    },
-  };
-};
 export default Profile;

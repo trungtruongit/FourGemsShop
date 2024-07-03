@@ -82,6 +82,11 @@ const linkList = [
         count: 5,
       },
       {
+        href: "/buy-back",
+        title: "Buy Back",
+        icon: ShoppingBagOutlined,
+      },
+      {
         href: "/wish-list",
         title: "Wishlist",
         icon: FavoriteBorder,
@@ -92,29 +97,6 @@ const linkList = [
         title: "Support Tickets",
         icon: CustomerService,
         count: 1,
-      },
-    ],
-  },
-  {
-    title: "ACCOUNT SETTINGS",
-    list: [
-      {
-        href: "/buyback-profile",
-        title: "Profile Info",
-        icon: Person,
-        count: 3,
-      },
-      {
-        href: "/buy-back",
-        title: "Buy Back",
-        icon: ShoppingBagOutlined,
-        count: 16,
-      },
-      {
-        href: "/payment-methods",
-        title: "Payment Methods",
-        icon: CreditCard,
-        count: 4,
       },
     ],
   },
