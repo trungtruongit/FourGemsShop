@@ -38,8 +38,8 @@ const Navigations = () => {
   const { pathname, router } = useRouter();
 
   const handleLogOut = () => {
+    router?.push("/login");
     localStorage.clear();
-    router.push("/login");
   };
 
   return (
