@@ -10,9 +10,9 @@ import { useRouter } from "next/router";
 import { SearchOutlinedIcon } from "../../src/components/search-box/styled";
 import Card1 from "../../src/components/Card1";
 import { H5 } from "../../src/components/Typography";
+import QCDashboardLayout from "../../src/components/layouts/customer-dashboard/QCPage";
 
-const AddressList = ({ addressList }) => {
-    const [allAddress, setAllAddress] = useState(addressList);
+const AddressList = () => {
     const [loading, setLoading] = useState(false);
     const [buybackCus, setBuybackCus] = useState([]);
     const [customerInfo, setCustomerInfo] = useState(null);
@@ -96,7 +96,7 @@ const AddressList = ({ addressList }) => {
     );
 
     return (
-        <CustomerDashboardLayout>
+        <QCDashboardLayout>
             <Box className="searchBox" sx={{ width: '100%', margin: '0 auto', mb: 3 }}>
                 <TextField
                     placeholder="Searching customer by phone number"
@@ -187,7 +187,7 @@ const AddressList = ({ addressList }) => {
                     {/*</FlexBox>*/}
                 </>
             )}
-        </CustomerDashboardLayout>
+        </QCDashboardLayout>
     );
 };
 

@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ProductCardBuyBack1List from "../../src/components/products/ProductCardBuyBack1List";
 import ProductCardBuyBack2List from "../../src/components/products/ProductCardBuyBack2List";
+import QCDashboardLayout from "../../src/components/layouts/customer-dashboard/QCPage";
 
 // ===========================================================
 const CartBuyBack = () => {
@@ -47,7 +48,7 @@ const CartBuyBack = () => {
     }
 
     return (
-        <CustomerDashboardLayout>
+        <QCDashboardLayout>
             {/* TITLE HEADER AREA */}
             <UserDashboardHeader
                 icon={Person}
@@ -80,7 +81,7 @@ const CartBuyBack = () => {
                     </div>
                 ))}
             </div>
-        </CustomerDashboardLayout>
+        </QCDashboardLayout>
     );
 };
 

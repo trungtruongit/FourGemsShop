@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { format } from "date-fns";
 import { Person } from "@mui/icons-material";
 import {
   Box,
@@ -13,12 +11,10 @@ import TableRow from "components/TableRow";
 import { H3, H5, Small } from "components/Typography";
 import { FlexBetween, FlexBox } from "components/flex-box";
 import UserDashboardHeader from "components/header/UserDashboardHeader";
-import CustomerDashboardLayout from "components/layouts/customer-dashboard";
 import CustomerDashboardNavigation from "components/layouts/customer-dashboard/Navigations";
-import api from "utils/__api__/users";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {currency} from "../../src/lib";
+import QCDashboardLayout from "../../src/components/layouts/customer-dashboard/QCPage";
 
 // ============================================================
 const Profile = ({ user }) => {
@@ -91,7 +87,7 @@ const Profile = ({ user }) => {
         const productId = localStorage.getItem("productId");
         const orderId = localStorage.getItem("orderId");
         const userId = localStorage.getItem("userId");
-
+        console.log(productId, orderId, userId)
         try {
             if (token) {
                 const responeFormBuyBack = await axios.post(
@@ -114,7 +110,7 @@ const Profile = ({ user }) => {
         }
     };
   return (
-    <CustomerDashboardLayout>
+    <QCDashboardLayout>
       {/* TITLE HEADER AREA */}
       <UserDashboardHeader
         icon={Person}
@@ -200,7 +196,7 @@ const Profile = ({ user }) => {
         >
             Submit
         </Button>
-    </CustomerDashboardLayout>
+    </QCDashboardLayout>
   );
 };
 

@@ -1,10 +1,7 @@
 import { Fragment } from "react";
 import { useRouter } from "next/router";
 import { Card, styled, Typography } from "@mui/material";
-import { CreditCard, FavoriteBorder, Person, Place } from "@mui/icons-material";
-import ShoppingBagOutlined from "@mui/icons-material/ShoppingBagOutlined";
 import { FlexBox } from "components/flex-box";
-import CustomerService from "components/icons/CustomerService";
 import NavLink from "components/nav-link/NavLink"; // custom styled components
 
 const MainContainer = styled(Card)(({ theme }) => ({
@@ -15,8 +12,8 @@ const MainContainer = styled(Card)(({ theme }) => ({
     height: "calc(100vh - 64px)",
   },
 }));
-const StyledNavLink = styled(({ children, isCurrentPath, ...rest }) => (
-  <NavLink {...rest}>{children}</NavLink>
+const StyledNavLink = styled(({ children, isCurrentPath, onClick, ...rest }) => (
+    <NavLink onClick={onClick} {...rest}>{children}</NavLink>
 ))(({ theme, isCurrentPath }) => ({
   display: "flex",
   alignItems: "center",
@@ -38,36 +35,36 @@ const StyledNavLink = styled(({ children, isCurrentPath, ...rest }) => (
 }));
 
 const Navigations = () => {
-  const { pathname } = useRouter();
+  const { pathname, router } = useRouter();
+
+  const handleLogOut = () => {
+    localStorage.clear();
+    router.push("/login");
+  };
+
   return (
-    <MainContainer>
-      {linkList.map((item) => (
-        <Fragment key={item.title}>
-          <Typography p="26px 30px 1rem" color="grey.600" fontSize="12px">
-            {item.title}
-          </Typography>
+      <MainContainer>
+        {linkList.map((item) => (
+            <Fragment key={item.title}>
+              <Typography p="26px 30px 1rem" color="grey.600" fontSize="12px">
+                {item.title}
+              </Typography>
 
-          {item.list.map((item) => (
-            <StyledNavLink
-              href={item.href}
-              key={item.title}
-              isCurrentPath={pathname.includes(item.href)}
-            >
-              <FlexBox alignItems="center" gap={1}>
-                <item.icon
-                  color="inherit"
-                  fontSize="small"
-                  className="nav-icon"
-                />
-                <span>{item.title}</span>
-              </FlexBox>
-
-              <span>{item.count}</span>
-            </StyledNavLink>
-          ))}
-        </Fragment>
-      ))}
-    </MainContainer>
+              {item.list.map((item) => (
+                  <StyledNavLink
+                      href={item.href}
+                      key={item.title}
+                      isCurrentPath={pathname.includes(item.href)}
+                      onClick={item.title === "Logout" ? handleLogOut : undefined}
+                  >
+                    <FlexBox alignItems="center" gap={1}>
+                      <span>{item.title}</span>
+                    </FlexBox>
+                  </StyledNavLink>
+              ))}
+            </Fragment>
+        ))}
+      </MainContainer>
   );
 };
 
@@ -76,27 +73,20 @@ const linkList = [
     title: "DASHBOARD",
     list: [
       {
-        href: "/orders",
-        title: "Orders",
-        icon: ShoppingBagOutlined,
-        count: 5,
+        href: "/support-tickets",
+        title: "Support Tickets",
       },
       {
         href: "/buy-back",
         title: "Buy Back",
-        icon: ShoppingBagOutlined,
       },
       {
         href: "/wish-list",
-        title: "Wishlist",
-        icon: FavoriteBorder,
-        count: 19,
+        title: "Warranty",
       },
       {
-        href: "/support-tickets",
-        title: "Support Tickets",
-        icon: CustomerService,
-        count: 1,
+        href: "/login",
+        title: "Logout",
       },
     ],
   },
