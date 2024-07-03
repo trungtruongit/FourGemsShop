@@ -43,10 +43,11 @@ const ProductDetails = (props) => {
     }
     useEffect(() => {
         const fetchData = async () => {
+            const counterId = localStorage.getItem("counterId");
             try {
                 if (token) {
                     const response = await axios.get(
-                        `https://four-gems-system-790aeec3afd8.herokuapp.com/product/get-product-by-id?productId=${id}&countId=1`,
+                        `https://four-gems-system-790aeec3afd8.herokuapp.com/product/get-product-by-id?productId=${id}&countId=${counterId}`,
                         {
                             headers: {
                                 Authorization: `Bearer ` + token,
