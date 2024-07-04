@@ -4,7 +4,6 @@ import { FlexBetween } from "components/flex-box";
 import ProductCard1 from "components/product-cards/ProductCard1";
 import { Span } from "components/Typography";
 
-// ========================================================
 const ProductCard1List = ({ products }) => {
     return (
         <Fragment>

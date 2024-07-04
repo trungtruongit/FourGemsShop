@@ -50,7 +50,9 @@ const SearchBox = () => {
                 if (!value) setResultList([]);
                 else
                     setResultList(
-                        response.data.data.map((product) => ({
+                        response.data.data.map.filter(
+                            (res) => res.active === true
+                        )((product) => ({
                             productName: product.productName,
                             productId: product.productId,
                         }))
