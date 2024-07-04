@@ -53,18 +53,6 @@ const ProductCardRotateGoodsDetail = ({ id, name, qty, price, imgUrl, slug }) =>
                 src={imgUrl || "/assets/images/products/iphone-xi.png"}
             />
 
-            <IconButton
-                size="small"
-                onClick={handleCartAmountChange(0)}
-                sx={{
-                    position: "absolute",
-                    right: 15,
-                    top: 15,
-                }}
-            >
-                <Close fontSize="small" />
-            </IconButton>
-
             <FlexBox p={2} rowGap={2} width="100%" flexDirection="column">
                 <Link href={`/product/${slug}`}>
                     <a>

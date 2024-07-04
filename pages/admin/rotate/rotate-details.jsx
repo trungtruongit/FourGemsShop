@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Box, Button, Divider, Grid, MenuItem, TextField, Typography } from "@mui/material";
+import { Box, Button, Divider, Grid, MenuItem, TextField, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import SEO from "components/SEO";
 import { useAppContext } from "contexts/AppContext";
 import { useRouter } from "next/router";
@@ -19,45 +19,68 @@ const RotateDetails = () => {
     const [customerInfo, setCustomerInfo] = useState("");
     const [rotateId, setRotateId] = useState({ counterId: "" });
     const [counterInfo, setCounterInfo] = useState();
+    const [popupOpen, setPopupOpen] = useState(false);
+    const [confirmPopup, setConfirmPopup] = useState(false); // State for confirmation popup
     let token = '';
     if (typeof localStorage !== 'undefined') {
         token = localStorage.getItem('token');
     } else if (typeof sessionStorage !== 'undefined') {
-        // Fallback to sessionStorage if localStorage is not supported
         token = localStorage.getItem('token');
     } else {
-        // If neither localStorage nor sessionStorage is supported
         console.log('Web Storage is not supported in this environment.');
     }
     const counterId = localStorage.getItem("counterId");
+    const productRotateGoods = cartList?.map((item) => ({
+        productId: item?.id,
+        quantity: item?.qty,
+    }));
+    console.log(productRotateGoods);
     const handleFormSubmit = async (values) => {
         setRotateId(values);
-        console.log(values.counterId);
+        if (counterId === values.counterId) {
+            setPopupOpen(true);
+        } else {
+            setConfirmPopup(true); // Show confirmation popup
+        }
+    };
+    const validationSchema = yup.object().shape({
+        counterId: yup.string().required("required"),
+    });
+    const handleClosePopup = () => {
+        setPopupOpen(false);
+    };
+    const handleConfirmTransfer = () => {
+        setConfirmPopup(false); // Hide confirmation popup
         const fetchCounterInfo = async () => {
             try {
-                const resCounterInfo = await axios.get(`https://four-gems-system-790aeec3afd8.herokuapp.com/counter/${values.counterId}`,
+                const resCounterInfo = await axios.get(`https://four-gems-system-790aeec3afd8.herokuapp.com/counter/${rotateId.counterId}`,
                     {
                         headers: {
-                            Authorization: 'Bearer ' + token //the token is a variable which holds the token
+                            Authorization: 'Bearer ' + token
                         }
                     });
-                console.log(resCounterInfo.data.data)
-                setCounterInfo(resCounterInfo.data.data)
+                console.log(resCounterInfo.data.data);
+                setCounterInfo(resCounterInfo.data.data);
             } catch (error) {
                 console.error("Failed to fetch counter info:", error);
             }
         };
         fetchCounterInfo();
-        // router.push("/payment");
+        const RotateRequest = {
+            fromCounterId: counterId,
+            toCounterId: values.counterId,
+            productTransferRequestList: productRotateGoods,
+        }
+        console.log(RotateRequest)
+        // setTimeout(() => {
+        //     router.push("/checkout");
+        // }, 3000);
     };
-    const validationSchema = yup.object().shape({
-        counterId: yup.string().required("required"),
-    });
+
     return (
         <VendorDashboardLayout>
             <SEO title="Rotate Goods" />
             <Grid container spacing={3} sx={{ mt: 3 }}>
-                {/* CART PRODUCT LIST */}
                 <Grid item md={8} xs={12}>
                     <Grid container spacing={3}>
                         {cartList.map((item) => (
@@ -82,11 +105,7 @@ const RotateDetails = () => {
                               handleSubmit,
                           }) => (
                             <form onSubmit={handleSubmit}>
-                                <Card1
-                                    sx={{
-                                        mb: 4,
-                                    }}
-                                >
+                                <Card1 sx={{ mb: 4 }}>
                                     <Grid item sm={12} xs={12} mb={3}>
                                         <TextField
                                             select
@@ -113,19 +132,8 @@ const RotateDetails = () => {
 
                                     <Grid container spacing={6}>
                                         <Grid item sm={2} xs={12}>
-                                            <Grid
-                                                sx={{
-                                                    display: "flex",
-                                                    flexDirection: "column",
-                                                    marginBottom: "7px",
-                                                }}
-                                            >
-                                                <H5
-                                                    sx={{
-                                                        marginRight: "10px",
-                                                        marginTop: "1px",
-                                                    }}
-                                                >
+                                            <Grid sx={{ display: "flex", flexDirection: "column", marginBottom: "7px" }}>
+                                                <H5 sx={{ marginRight: "10px", marginTop: "1px" }}>
                                                     Id
                                                 </H5>
                                                 <Typography>{counterInfo?.counterId}</Typography>
@@ -133,26 +141,15 @@ const RotateDetails = () => {
                                         </Grid>
 
                                         <Grid item sm={10} xs={12}>
-                                            <Grid
-                                                sx={{
-                                                    display: "flex",
-                                                    flexDirection: "column",
-                                                    marginBottom: "7px",
-                                                }}
-                                            >
-                                                <H5
-                                                    sx={{
-                                                        marginRight: "10px",
-                                                        marginTop: "1px",
-                                                    }}
-                                                >
+                                            <Grid sx={{ display: "flex", flexDirection: "column", marginBottom: "7px" }}>
+                                                <H5 sx={{ marginRight: "10px", marginTop: "1px" }}>
                                                     Manager Name
                                                 </H5>
                                                 <Typography>{counterInfo?.managerName}</Typography>
                                             </Grid>
                                         </Grid>
                                     </Grid>
-                                    <Grid container spacing={6} sx={{mt: 1}}>
+                                    <Grid container spacing={6} sx={{ mt: 1 }}>
                                         <Grid item sm={12} xs={12}>
                                             <Link href="/admin/rotate/rotate-request" passHref>
                                                 <Button
@@ -166,7 +163,7 @@ const RotateDetails = () => {
                                             </Link>
                                         </Grid>
                                     </Grid>
-                                    <Button type="submit" variant="contained" color="primary" fullWidth sx={{mt:1}}>
+                                    <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 1 }}>
                                         Submit
                                     </Button>
                                 </Card1>
@@ -175,6 +172,46 @@ const RotateDetails = () => {
                     </Formik>
                 </Grid>
             </Grid>
+            <Dialog
+                open={popupOpen}
+                onClose={handleClosePopup}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"This is your counter"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        The counter ID you have entered matches your counter ID.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClosePopup} color="primary" autoFocus>
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            {/* Confirmation Dialog */}
+            <Dialog
+                open={confirmPopup}
+                onClose={() => setConfirmPopup(false)}
+                aria-labelledby="confirm-dialog-title"
+                aria-describedby="confirm-dialog-description"
+            >
+                <DialogTitle id="confirm-dialog-title">Confirm Rotate Goods</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="confirm-dialog-description">
+                        Are you sure you want to send rotate request?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setConfirmPopup(false)} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleConfirmTransfer} color="primary" autoFocus>
+                        OK
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </VendorDashboardLayout>
     );
 };
