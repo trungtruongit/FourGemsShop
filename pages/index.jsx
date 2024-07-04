@@ -55,7 +55,12 @@ const Market = (props) => {
                         },
                     }
                 );
-                setShowBraceletProduct(resBraceletProduct?.data?.data);
+
+                setShowBraceletProduct(
+                    resBraceletProduct?.data?.data.filter(
+                        (res) => res.active === true
+                    )
+                );
             } catch (e) {
                 console.log(e);
             }
@@ -76,7 +81,11 @@ const Market = (props) => {
                         },
                     }
                 );
-                setShowRingProduct(resRingProduct?.data?.data);
+                setShowRingProduct(
+                    resRingProduct?.data?.data.filter(
+                        (res) => res.active === true
+                    )
+                );
             } catch (e) {
                 console.log(e);
             }
@@ -97,7 +106,11 @@ const Market = (props) => {
                         },
                     }
                 );
-                setShowEarringProduct(resEarringProduct?.data?.data);
+                setShowEarringProduct(
+                    resEarringProduct?.data?.data.filter(
+                        (res) => res.active === true
+                    )
+                );
             } catch (e) {
                 console.log(e);
             }
@@ -118,7 +131,11 @@ const Market = (props) => {
                         },
                     }
                 );
-                setShowNecklaceProduct(resNecklacesProduct?.data?.data);
+                setShowNecklaceProduct(
+                    resNecklacesProduct?.data?.data.filter(
+                        (res) => res.active === true
+                    )
+                );
             } catch (e) {
                 console.log(e);
             }
@@ -139,7 +156,11 @@ const Market = (props) => {
                         },
                     }
                 );
-                setShowCharmProduct(resCharmProduct?.data?.data);
+                setShowCharmProduct(
+                    resCharmProduct?.data?.data.filter(
+                        (res) => res.active === true
+                    )
+                );
             } catch (e) {
                 console.log(e);
             }
@@ -147,12 +168,10 @@ const Market = (props) => {
         fetchProductCharm();
     }, []);
 
-
     return (
         <ShopLayout1 topbarBgColor={theme.palette.grey[900]}>
             <SEO title="FourGemsShop" />
             <Box bgcolor="#FFFFFF">
-
                 {/* Necklaces */}
                 <Section5 products={showNecklaceProduct} />
 

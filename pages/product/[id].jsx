@@ -66,7 +66,7 @@ const ProductDetails = (props) => {
             }
         };
         fetchData();
-    }, []);
+    }, [id]);
     console.log(product);
     return (
         <ShopLayout1>

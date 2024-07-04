@@ -1,7 +1,16 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { Edit } from "@mui/icons-material";
-import { Avatar, Box, Button, MenuItem, TextField } from "@mui/material";
+import {
+    Avatar,
+    Box,
+    Button,
+    MenuItem,
+    TextField,
+    Select,
+    FormControl,
+    InputLabel,
+} from "@mui/material";
 import { FlexBox } from "components/flex-box";
 import BazaarSwitch from "components/BazaarSwitch";
 import { currency } from "lib";
@@ -15,6 +24,15 @@ import axios from "axios";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import DropZone from "../../../components/DropZone";
+
+// Define category options
+const categoryOptions = [
+    { id: 30, name: "bracelet" },
+    { id: 31, name: "earring" },
+    { id: 32, name: "ring" },
+    { id: 33, name: "necklace" },
+    { id: 34, name: "charm" },
+];
 
 // ========================================================================
 const ProductRow = ({ product }) => {
@@ -33,6 +51,8 @@ const ProductRow = ({ product }) => {
         stonePrice,
         active,
         goldId,
+        typeId,
+        collectionId,
     } = product;
     const router = useRouter();
     const [update, setUpdate] = useState();
@@ -48,8 +68,10 @@ const ProductRow = ({ product }) => {
     const [newGem, setNewGem] = useState(gem ? 1 : 0);
     const [newImage, setNewImage] = useState(image);
     const [newCategoryName, setNewCategoryName] = useState(categoryName);
+    const [newCategoryId, setNewCategoryId] = useState(typeId);
     const [newActive, setNewActive] = useState(active ? 1 : 0);
     const [newGoldId, setNewGoldId] = useState(goldId);
+    const [newCollectionId, setNewCollectionId] = useState(collectionId);
 
     let token = "";
     if (typeof localStorage !== "undefined") {
@@ -62,24 +84,25 @@ const ProductRow = ({ product }) => {
 
     const handleUpdateProduct = async () => {
         console.log(productId);
+        console.log(product);
         try {
             const response = await axios.put(
-                `https://four-gems-system-790aeec3afd8.herokuapp.com/product/update-product=${productId}`,
+                `https://four-gems-system-790aeec3afd8.herokuapp.com/product/update-product`,
                 {
                     productId: productId,
                     productName: newProductName,
                     weight: newWeight,
-                    price: price,
                     laborCost: newLaborCost,
                     ratioPrice: newRatioPrice,
                     stonePrice: newStonePrice,
+                    isGem: newGem,
+                    isActive: newActive,
+                    image: newImage,
                     quantityInStock: newQuantityInStock,
                     description: newDescription,
                     goldId: newGoldId,
-                    isGem: newGem,
-                    image: newImage,
-                    active: newActive,
-                    categoryName: newCategoryName,
+                    typeId: newCategoryId,
+                    collectionId: newCollectionId,
                 },
                 {
                     headers: {
@@ -142,10 +165,29 @@ const ProductRow = ({ product }) => {
             </StyledTableCell>
             <StyledTableCell align="left">
                 {edit ? (
-                    <TextField
-                        value={newCategoryName}
-                        onChange={(e) => setNewCategoryName(e.target.value)}
-                    />
+                    <FormControl fullWidth>
+                        <InputLabel>Category</InputLabel>
+                        <Select
+                            value={newCategoryName}
+                            onChange={(e) => {
+                                const selectedCategory = categoryOptions.find(
+                                    (option) => option.name === e.target.value
+                                );
+                                setNewCategoryName(e.target.value);
+                                setNewCategoryId(selectedCategory.id);
+                            }}
+                            label="Category"
+                        >
+                            {categoryOptions.map((category) => (
+                                <MenuItem
+                                    key={category.id}
+                                    value={category.name}
+                                >
+                                    {category.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                 ) : (
                     categoryName
                 )}

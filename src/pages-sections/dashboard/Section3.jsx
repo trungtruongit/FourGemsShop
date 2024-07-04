@@ -20,9 +20,10 @@ const Section3 = () => {
     useEffect(() => {
         const token = localStorage.getItem("token");
         const fetchData7 = async () => {
+            const counterId = localStorage.getItem("counterId");
             try {
                 const resTotal7 = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-money-by-date?countId=1&startDate=${startDate7}&endDate=${endDate7}`,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-money-by-date?countId=${counterId}&startDate=${startDate7}&endDate=${endDate7}`,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
@@ -39,9 +40,10 @@ const Section3 = () => {
     }, []);
     useEffect(() => {
         const fetchDataEach7 = async () => {
+            const counterId = localStorage.getItem("counterId");
             try {
                 const resEach7 = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-money-each-day?countId=1&startDate=${startDate7}&endDate=${endDate7}`,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-money-each-day?countId=${counterId}&startDate=${startDate7}&endDate=${endDate7}`,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
@@ -73,9 +75,10 @@ const Section3 = () => {
     }
     useEffect(() => {
         const fetchOrder7 = async () => {
+            const counterId = localStorage.getItem("counterId");
             try {
                 const resOrder7 = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-number-order-by-date?countId=1&startDate=${startDate7}&endDate=${endDate7}`,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-number-order-by-date?countId=${counterId}&startDate=${startDate7}&endDate=${endDate7}`,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
@@ -92,9 +95,10 @@ const Section3 = () => {
     }, []);
     useEffect(() => {
         const fetchOrderEach7 = async () => {
+            const counterId = localStorage.getItem("counterId");
             try {
                 const resEach7 = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-money-each-day?countId=1&startDate=${startDate7}&endDate=${endDate7}`,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-money-each-day?countId=${counterId}&startDate=${startDate7}&endDate=${endDate7}`,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
@@ -114,10 +118,11 @@ const Section3 = () => {
     const [orderEachDay7, setOrderEachDay7] = useState();
     useEffect(() => {
         const fetchEachDayOrder7 = async () => {
+            const counterId = localStorage.getItem("counterId");
             try {
                 //http://localhost:8080/user/get-user-information?userId=4
                 const resEachDayOrder7 = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-total-order-each-day?countId=1&startDate=${startDate7}&endDate=${endDate7}`,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-total-order-each-day?countId=${counterId}&startDate=${startDate7}&endDate=${endDate7}`,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
