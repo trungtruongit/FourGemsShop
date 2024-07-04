@@ -1,28 +1,24 @@
 import Link from "next/link";
-import {Box, Button, Divider, Grid, MenuItem, TextField, Typography} from "@mui/material";
+import { Box, Button, Divider, Grid, MenuItem, TextField, Typography } from "@mui/material";
 import SEO from "components/SEO";
 import { useAppContext } from "contexts/AppContext";
-import {useRouter} from "next/router";
-import {useState} from "react";
-import {Formik} from "formik";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { Formik } from "formik";
 import * as yup from "yup";
 import VendorDashboardLayout from "../../../src/components/layouts/vendor-dashboard";
 import Card1 from "../../../src/components/Card1";
-import {H5} from "../../../src/components/Typography";
+import { H5 } from "../../../src/components/Typography";
 import ProductCardRotateGoodsDetail from "../../../src/components/product-cards/ProductCardRotateGoodsDetail";
+import axios from "axios";
 
 const RotateDetails = () => {
     const { state } = useAppContext();
     const cartList = state.cart;
     const router = useRouter();
-    const getTotalPrice = () =>
-        cartList.reduce((accum, item) => accum + item.price * item.qty, 0);
-    const tax = getTotalPrice() * 0.08;
     const [customerInfo, setCustomerInfo] = useState("");
-    const handleFormSubmit = async (values) => {
-        router.push("/payment");
-    };
-    const [dataNumSearch, setDataNumSearch] = useState("");
+    const [rotateId, setRotateId] = useState({ counterId: "" });
+    const [counterInfo, setCounterInfo] = useState();
     let token = '';
     if (typeof localStorage !== 'undefined') {
         token = localStorage.getItem('token');
@@ -33,10 +29,34 @@ const RotateDetails = () => {
         // If neither localStorage nor sessionStorage is supported
         console.log('Web Storage is not supported in this environment.');
     }
+    const handleFormSubmit = async (values) => {
+        setRotateId(values);
+        console.log(values.counterId);
+        const fetchCounterInfo = async () => {
+            try {
+                const resCounterInfo = await axios.get(`https://four-gems-system-790aeec3afd8.herokuapp.com/counter/${values.counterId}`,
+                    {
+                        headers: {
+                            Authorization: 'Bearer ' + token //the token is a variable which holds the token
+                        }
+                    });
+                console.log(resCounterInfo.data.data)
+                setCounterInfo(resCounterInfo.data.data)
+            } catch (error) {
+                console.error("Failed to fetch counter info:", error);
+            }
+        };
+        fetchCounterInfo();
+        // router.push("/payment");
+    };
+
+    const validationSchema = yup.object().shape({
+        counterId: yup.string().required("required"),
+    });
     return (
         <VendorDashboardLayout>
             <SEO title="Rotate Goods" />
-            <Grid container spacing={3} sx={{mt: 3}}>
+            <Grid container spacing={3} sx={{ mt: 3 }}>
                 {/* CART PRODUCT LIST */}
                 <Grid item md={8} xs={12}>
                     <Grid container spacing={3}>
@@ -61,11 +81,13 @@ const RotateDetails = () => {
                         </Grid>
 
                         <Grid item sm={6} xs={12}>
-                            <Link href={`/checkout?customerId=${customerInfo.id}`}  passHref>
-                                <Button variant="outlined"
-                                        color="primary"
-                                        type="button"
-                                        fullWidth>
+                            <Link href={`/checkout?customerId=${customerInfo.id}`} passHref>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    type="button"
+                                    fullWidth
+                                >
                                     Confirm
                                 </Button>
                             </Link>
@@ -74,8 +96,8 @@ const RotateDetails = () => {
                 </Grid>
                 <Grid item md={4} xs={12}>
                     <Formik
-                        initialValues={initialValues}
-                        validationSchema={checkoutSchema}
+                        initialValues={rotateId}
+                        validationSchema={validationSchema}
                         onSubmit={handleFormSubmit}
                     >
                         {({
@@ -85,7 +107,6 @@ const RotateDetails = () => {
                               handleChange,
                               handleBlur,
                               handleSubmit,
-                              setFieldValue,
                           }) => (
                             <form onSubmit={handleSubmit}>
                                 <Card1
@@ -114,34 +135,53 @@ const RotateDetails = () => {
                                         </TextField>
                                     </Grid>
                                     <Typography fontWeight="600" mb={2}>
-                                        Counter Infomation
+                                        Counter Information
                                     </Typography>
 
                                     <Grid container spacing={6}>
-                                        <Grid item sm={4} xs={12}>
-                                            <Grid sx={{
-                                                display: "flex",
-                                                marginBottom: "7px",
-                                            }}><H5 sx={{
-                                                marginRight: "10px",
-                                                marginTop: "1px",
-                                            }}>Id:</H5>
-                                                {customerInfo.name}
+                                        <Grid item sm={2} xs={12}>
+                                            <Grid
+                                                sx={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    marginBottom: "7px",
+                                                }}
+                                            >
+                                                <H5
+                                                    sx={{
+                                                        marginRight: "10px",
+                                                        marginTop: "1px",
+                                                    }}
+                                                >
+                                                    Id
+                                                </H5>
+                                                <Typography>{counterInfo.counterId}</Typography>
                                             </Grid>
                                         </Grid>
 
-                                        <Grid item sm={8} xs={12}>
-                                            <Grid sx={{
-                                                display: "flex",
-                                                marginBottom: "7px",
-                                            }}><H5 sx={{
-                                                marginRight: "10px",
-                                                marginTop: "1px",
-                                            }}>Manager Name:</H5>
-                                                {customerInfo.email}
+                                        <Grid item sm={10} xs={12}>
+                                            <Grid
+                                                sx={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    marginBottom: "7px",
+                                                }}
+                                            >
+                                                <H5
+                                                    sx={{
+                                                        marginRight: "10px",
+                                                        marginTop: "1px",
+                                                    }}
+                                                >
+                                                    Manager Name
+                                                </H5>
+                                                <Typography>{counterInfo.managerName}</Typography>
                                             </Grid>
                                         </Grid>
                                     </Grid>
+                                    <Button type="submit" variant="contained" color="primary" fullWidth sx={{mt:2}}>
+                                        Check Counter
+                                    </Button>
                                 </Card1>
                             </form>
                         )}
@@ -151,14 +191,5 @@ const RotateDetails = () => {
         </VendorDashboardLayout>
     );
 };
-const initialValues = {
-    custom_fullname: "",
-    custom_phoneNum: "",
-    custom_email: "",
-    custom_gender: "",
-    shipping_address2: "",
-};
-const checkoutSchema = yup.object().shape({
 
-});
 export default RotateDetails;
