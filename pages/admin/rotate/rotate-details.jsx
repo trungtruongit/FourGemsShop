@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Box, Button, Divider, Grid, MenuItem, TextField, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { Button, Grid, MenuItem, TextField, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import SEO from "components/SEO";
 import { useAppContext } from "contexts/AppContext";
 import { useRouter } from "next/router";
@@ -11,12 +11,10 @@ import Card1 from "../../../src/components/Card1";
 import { H5 } from "../../../src/components/Typography";
 import ProductCardRotateGoodsDetail from "../../../src/components/product-cards/ProductCardRotateGoodsDetail";
 import axios from "axios";
-
 const RotateDetails = () => {
     const { state } = useAppContext();
     const cartList = state.cart;
     const router = useRouter();
-    const [customerInfo, setCustomerInfo] = useState("");
     const [rotateId, setRotateId] = useState({ counterId: "" });
     const [counterInfo, setCounterInfo] = useState();
     const [popupOpen, setPopupOpen] = useState(false);
@@ -29,7 +27,7 @@ const RotateDetails = () => {
     } else {
         console.log('Web Storage is not supported in this environment.');
     }
-    const counterId = localStorage.getItem("counterId");
+    const counterId = localStorage?.getItem("counterId");
     const productRotateGoods = cartList?.map((item) => ({
         productId: item?.id,
         quantity: item?.qty,
@@ -49,11 +47,11 @@ const RotateDetails = () => {
     const handleClosePopup = () => {
         setPopupOpen(false);
     };
-    const handleConfirmTransfer = () => {
-        setConfirmPopup(false); // Hide confirmation popup
+    const handleConfirmTransfer = async (values) => { // Accept values as parameter
+        setConfirmPopup(false);
         const fetchCounterInfo = async () => {
             try {
-                const resCounterInfo = await axios.get(`https://four-gems-system-790aeec3afd8.herokuapp.com/counter/${rotateId.counterId}`,
+                const resCounterInfo = await axios.get(`https://four-gems-system-790aeec3afd8.herokuapp.com/counter/${values.counterId}`,
                     {
                         headers: {
                             Authorization: 'Bearer ' + token
@@ -67,11 +65,25 @@ const RotateDetails = () => {
         };
         fetchCounterInfo();
         const RotateRequest = {
-            fromCounterId: counterId,
-            toCounterId: values.counterId,
+            fromCounterId: parseInt(counterId),
+            toCounterId: parseInt(values.counterId),
             productTransferRequestList: productRotateGoods,
         }
         console.log(RotateRequest)
+        try {
+            const createRotateRequest = await axios.post(
+                `https://four-gems-system-790aeec3afd8.herokuapp.com/transfer-request`,
+                RotateRequest,
+                {
+                    headers: {
+                        Authorization: "Bearer " + token,
+                    },
+                }
+            );
+            console.log(createRotateRequest?.data?.data?.orderId);
+        } catch (error) {
+            console.error("Failed to request:", error);
+        }
         // setTimeout(() => {
         //     router.push("/checkout");
         // }, 3000);
@@ -207,7 +219,7 @@ const RotateDetails = () => {
                     <Button onClick={() => setConfirmPopup(false)} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleConfirmTransfer} color="primary" autoFocus>
+                    <Button onClick={() => handleConfirmTransfer(rotateId)} color="primary" autoFocus>
                         OK
                     </Button>
                 </DialogActions>

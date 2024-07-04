@@ -87,9 +87,9 @@ const ProductCardRotateGoods = (props) => {
                                         sx={{
                                             padding: "5px",
                                         }}
-                                        onClick={handleCartAmountChange(cartItem.qty + 1)}
+                                        onClick={handleCartAmountChange(cartItem.qty - 1)}
                                     >
-                                        <Add fontSize="small" />
+                                        <Remove fontSize="small" />
                                     </Button>
 
                                     <H5 fontWeight="600" fontSize="15px" mx={1.5}>
@@ -102,9 +102,9 @@ const ProductCardRotateGoods = (props) => {
                                         sx={{
                                             padding: "5px",
                                         }}
-                                        onClick={handleCartAmountChange(cartItem.qty - 1)}
+                                        onClick={handleCartAmountChange(cartItem.qty + 1)}
                                     >
-                                        <Remove fontSize="small" />
+                                        <Add fontSize="small" />
                                     </Button>
                                 </FlexBetween>
                             )}
