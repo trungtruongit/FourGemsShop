@@ -39,7 +39,7 @@ export const navigations = [
         children: [
             {
                 name: "Rotate Requests",
-                path: "/admin/rotate-request",
+                path: "/admin/rotate/rotate-request",
             },
             {
                 name: "Rotate List",

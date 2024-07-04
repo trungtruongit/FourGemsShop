@@ -1,7 +1,9 @@
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import ProductCardRotateGoodsList from "../../src/components/products/ProductCardRotateGoodsList";
+import ProductCardRotateGoodsList from "../../../src/components/products/ProductCardRotateGoodsList";
+import {Box, Button} from "@mui/material";
+import Link from "next/link";
 OrderList.getLayout = function getLayout(page) {
     return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
 };
@@ -54,6 +56,20 @@ export default function OrderList() {
                     </div>
                 ))}
             </div>
+            {/* VIEW CART BUTTON */}
+            <Box mt={2} display="flex" justifyContent="center">
+                <Link href="/admin/rotate/rotate-details" passHref>
+                    <Button
+                        color="primary"
+                        variant="outlined"
+                        sx={{
+                            height: 40,
+                        }}
+                    >
+                        Send Rotate Request
+                    </Button>
+                </Link>
+            </Box>
         </div>
     );
 }
