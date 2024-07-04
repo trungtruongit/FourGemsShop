@@ -34,6 +34,20 @@ export const navigations = [
         ],
     },
     {
+        name: "Rotate Goods",
+        icon: duotone.Products,
+        children: [
+            {
+                name: "Rotate Requests",
+                path: "/admin/rotate-request",
+            },
+            {
+                name: "Rotate List",
+                path: "/admin/product-reviews",
+            },
+        ],
+    },
+    {
         name: "Users Account",
         icon: duotone.Customers,
         path: "/admin/users-account",

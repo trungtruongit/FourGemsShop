@@ -20,7 +20,6 @@ const MiniCart = ({ toggleSidenav }) => {
   const { palette } = useTheme();
   const { state, dispatch } = useAppContext();
   const cartList = state.cart;
-
   const handleCartAmountChange = (amount, product) => () => {
     dispatch({
       type: "CHANGE_CART_AMOUNT",
