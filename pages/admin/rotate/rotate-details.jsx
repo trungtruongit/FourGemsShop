@@ -29,6 +29,7 @@ const RotateDetails = () => {
         // If neither localStorage nor sessionStorage is supported
         console.log('Web Storage is not supported in this environment.');
     }
+    const counterId = localStorage.getItem("counterId");
     const handleFormSubmit = async (values) => {
         setRotateId(values);
         console.log(values.counterId);
@@ -49,7 +50,6 @@ const RotateDetails = () => {
         fetchCounterInfo();
         // router.push("/payment");
     };
-
     const validationSchema = yup.object().shape({
         counterId: yup.string().required("required"),
     });
@@ -65,33 +65,6 @@ const RotateDetails = () => {
                                 <ProductCardRotateGoodsDetail {...item} />
                             </Grid>
                         ))}
-                    </Grid>
-                    <Grid container spacing={6}>
-                        <Grid item sm={6} xs={12}>
-                            <Link href="/admin/rotate/rotate-request" passHref>
-                                <Button
-                                    variant="outlined"
-                                    color="primary"
-                                    type="button"
-                                    fullWidth
-                                >
-                                    Back to Rotate Goods
-                                </Button>
-                            </Link>
-                        </Grid>
-
-                        <Grid item sm={6} xs={12}>
-                            <Link href={`/checkout?customerId=${customerInfo.id}`} passHref>
-                                <Button
-                                    variant="outlined"
-                                    color="primary"
-                                    type="button"
-                                    fullWidth
-                                >
-                                    Confirm
-                                </Button>
-                            </Link>
-                        </Grid>
                     </Grid>
                 </Grid>
                 <Grid item md={4} xs={12}>
@@ -155,7 +128,7 @@ const RotateDetails = () => {
                                                 >
                                                     Id
                                                 </H5>
-                                                <Typography>{counterInfo.counterId}</Typography>
+                                                <Typography>{counterInfo?.counterId}</Typography>
                                             </Grid>
                                         </Grid>
 
@@ -175,12 +148,26 @@ const RotateDetails = () => {
                                                 >
                                                     Manager Name
                                                 </H5>
-                                                <Typography>{counterInfo.managerName}</Typography>
+                                                <Typography>{counterInfo?.managerName}</Typography>
                                             </Grid>
                                         </Grid>
                                     </Grid>
-                                    <Button type="submit" variant="contained" color="primary" fullWidth sx={{mt:2}}>
-                                        Check Counter
+                                    <Grid container spacing={6} sx={{mt: 1}}>
+                                        <Grid item sm={12} xs={12}>
+                                            <Link href="/admin/rotate/rotate-request" passHref>
+                                                <Button
+                                                    variant="outlined"
+                                                    color="primary"
+                                                    type="button"
+                                                    fullWidth
+                                                >
+                                                    Back to Rotate Goods
+                                                </Button>
+                                            </Link>
+                                        </Grid>
+                                    </Grid>
+                                    <Button type="submit" variant="contained" color="primary" fullWidth sx={{mt:1}}>
+                                        Submit
                                     </Button>
                                 </Card1>
                             </form>
