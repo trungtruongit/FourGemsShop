@@ -71,8 +71,8 @@ const RotateDetails = () => {
         const counterId = localStorage.getItem("counterId");
         console.log(values.counterId);
         const RotateRequest = {
-            fromCounterId: parseInt(counterId),
-            toCounterId: parseInt(values.counterId),
+            fromCounterId: parseInt(values.counterId),
+            toCounterId: parseInt(counterId),
             productTransferRequestList: cartList.map((item) => ({
                 productId: item.id,
                 quantity: item.qty,
@@ -89,10 +89,14 @@ const RotateDetails = () => {
                     },
                 }
             );
-            console.log("Rotate request created:", createRotateRequest.data.data.orderId);
+            console.log("Rotate request created:", createRotateRequest.data.data);
         } catch (error) {
             console.error("Failed to create rotate request:", error);
         }
+        // Redirect user after successful request (optional)
+        // setTimeout(() => {
+        //   router.push("/checkout");
+        // }, 3000);
     }
     // Handle confirmation of rotate goods transfer
     const handleConfirmTransfer = async (values) => {
@@ -150,11 +154,6 @@ const RotateDetails = () => {
         await fetchCounterInfo();
         const productRotate = await fetchProductRotate();
         await fetchCounterRotate(productRotate);
-
-        // Redirect user after successful request (optional)
-        // setTimeout(() => {
-        //   router.push("/checkout");
-        // }, 3000);
     };
 
 
