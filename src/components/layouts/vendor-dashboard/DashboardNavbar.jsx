@@ -123,7 +123,7 @@ const DashboardNavbar = ({ handleDrawerToggle }) => {
                     <Box flexGrow={1} sx={{}} />
 
                     <FlexBox alignItems="center" gap={4}>
-                        <StyledInputBase
+                        {/* <StyledInputBase
                             placeholder="Search anything..."
                             startAdornment={
                                 <Search
@@ -133,7 +133,7 @@ const DashboardNavbar = ({ handleDrawerToggle }) => {
                                     }}
                                 />
                             }
-                        />
+                        /> */}
                         <AccountPopover />
                         <H3>{name}</H3>
                         <NotificationsPopover />
