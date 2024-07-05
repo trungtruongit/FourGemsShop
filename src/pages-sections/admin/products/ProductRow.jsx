@@ -33,8 +33,17 @@ const categoryOptions = [
     { id: 33, name: "necklace" },
     { id: 34, name: "charm" },
 ];
+const goldTypeOptions = [
+    { id: 50, name: "10k" },
+    { id: 53, name: "14k" },
+    { id: 54, name: "16k" },
+    { id: 51, name: "18k" },
+    { id: 55, name: "20k" },
+    { id: 56, name: "21k" },
+    { id: 57, name: "22k" },
+    { id: 52, name: "24k" },
+];
 
-// ========================================================================
 const ProductRow = ({ product }) => {
     const {
         productName,
@@ -52,10 +61,10 @@ const ProductRow = ({ product }) => {
         active,
         goldId,
         typeId,
+        goldTypeName,
         collectionId,
     } = product;
     const router = useRouter();
-    const [update, setUpdate] = useState();
     const [edit, setEdit] = useState(false);
     const [newProductName, setProductName] = useState(productName);
     const [newWeight, setNewWeight] = useState(weight);
@@ -71,6 +80,7 @@ const ProductRow = ({ product }) => {
     const [newCategoryId, setNewCategoryId] = useState(typeId);
     const [newActive, setNewActive] = useState(active ? 1 : 0);
     const [newGoldId, setNewGoldId] = useState(goldId);
+    const [newGoldTypeName, setNewGoldTypeName] = useState(goldTypeName);
     const [newCollectionId, setNewCollectionId] = useState(collectionId);
 
     let token = "";
@@ -83,8 +93,6 @@ const ProductRow = ({ product }) => {
     }
 
     const handleUpdateProduct = async () => {
-        console.log(productId);
-        console.log(product);
         try {
             const response = await axios.put(
                 `https://four-gems-system-790aeec3afd8.herokuapp.com/product/update-product`,
@@ -100,7 +108,7 @@ const ProductRow = ({ product }) => {
                     image: newImage,
                     quantityInStock: newQuantityInStock,
                     description: newDescription,
-                    goldId: newGoldId,
+                    goldId: newGoldId, // Update to use newGoldId instead of goldId
                     typeId: newCategoryId,
                     collectionId: newCollectionId,
                 },
@@ -110,9 +118,8 @@ const ProductRow = ({ product }) => {
                     },
                 }
             );
-            setUpdate(response.data);
-            setEdit(false);
             console.log(response.data);
+            setEdit(false);
         } catch (error) {
             console.error("There was an error!", error);
         }
@@ -120,10 +127,31 @@ const ProductRow = ({ product }) => {
 
     const handleEdit = () => {
         setEdit(true);
+        // Ensure the state reflects the current product values when entering edit mode
+        setNewGoldId(goldId);
+        setNewGoldTypeName(goldTypeName);
+        setNewCategoryId(typeId);
+        setNewCategoryName(categoryName);
     };
 
     const handleCancel = () => {
         setEdit(false);
+        // Revert the state to initial product values
+        setProductName(productName);
+        setNewWeight(weight);
+        setNewLaborCost(laborCost);
+        setNewRatioPrice(ratioPrice);
+        setNewQuantityInStock(quantityInStock);
+        setNewStonePrice(stonePrice);
+        setNewDescription(description);
+        setNewGem(gem ? 1 : 0);
+        setNewImage(image);
+        setNewCategoryName(categoryName);
+        setNewCategoryId(typeId);
+        setNewActive(active ? 1 : 0);
+        setNewGoldId(goldId);
+        setNewGoldTypeName(goldTypeName);
+        setNewCollectionId(collectionId);
     };
 
     return (
@@ -269,12 +297,28 @@ const ProductRow = ({ product }) => {
             </StyledTableCell>
             <StyledTableCell align="left">
                 {edit ? (
-                    <TextField
-                        value={newGoldId}
-                        onChange={(e) => setNewGoldId(e.target.value)}
-                    />
+                    <FormControl fullWidth>
+                        <InputLabel>Gold Type</InputLabel>
+                        <Select
+                            value={newGoldTypeName}
+                            onChange={(e) => {
+                                const selectedGold = goldTypeOptions.find(
+                                    (option) => option.name === e.target.value
+                                );
+                                setNewGoldTypeName(e.target.value); // Set newGoldTypeName to the name
+                                setNewGoldId(selectedGold.id); // Set newGoldId to the id
+                            }}
+                            label="Gold Type"
+                        >
+                            {goldTypeOptions.map((gold) => (
+                                <MenuItem key={gold.id} value={gold.name}>
+                                    {gold.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                 ) : (
-                    goldId
+                    goldTypeName
                 )}
             </StyledTableCell>
 
