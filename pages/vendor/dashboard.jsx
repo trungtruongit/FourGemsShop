@@ -102,7 +102,7 @@ export default function VendorDashboard(props) {
         const fetchOutStock = async () => {
             const counterId = localStorage.getItem("counterId");
             try {
-                //http://localhost:8080/user/get-user-information?userId=4
+                const counterId = localStorage.getItem("counterId");
                 const resOutStock = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/product/get-product-out-of-stock?countId=${counterId}`,
                     {
