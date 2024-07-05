@@ -66,50 +66,14 @@ const ProductCardRotateGoods = (props) => {
                         </FlexBox>
 
                         <FlexBox>
-                            {!cartItem?.qty && (
                                 <Button
-                                    color="primary"
                                     variant="contained"
                                     sx={{
                                         height: 32,
                                     }}
-                                    onClick={handleCartAmountChange(1)}
                                 >
                                     Add To Rotate
                                 </Button>
-                            )}
-
-                            {!!cartItem?.qty && (
-                                <FlexBetween>
-                                    <Button
-                                        color="primary"
-                                        variant="outlined"
-                                        sx={{
-                                            padding: "5px",
-                                        }}
-                                        onClick={handleCartAmountChange(cartItem.qty - 1)}
-                                    >
-                                        <Remove fontSize="small" />
-                                    </Button>
-
-                                    <H5 fontWeight="600" fontSize="15px" mx={1.5}>
-                                        {cartItem.qty}
-                                    </H5>
-
-                                    {cartItem.qty < stock && (
-                                        <Button
-                                            color="primary"
-                                            variant="outlined"
-                                            sx={{
-                                                padding: "5px",
-                                            }}
-                                            onClick={handleCartAmountChange(cartItem.qty + 1)}
-                                        >
-                                            <Add fontSize="small" />
-                                        </Button>
-                                    )}
-                                </FlexBetween>
-                            )}
                         </FlexBox>
                     </FlexBox>
                 </Grid>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
 import {
     Button,
@@ -13,25 +13,28 @@ import {
     DialogTitle,
     Box,
 } from "@mui/material";
-import { Formik } from "formik";
+import {Formik} from "formik";
 import * as yup from "yup";
 import Link from "next/link";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import ProductCardRotateGoodsList from "../../../src/components/products/ProductCardRotateGoodsList";
-import ProductCardRotateGoodsDetail from "../../../src/components/product-cards/ProductCardRotateGoodsDetail";
 import SEO from "components/SEO";
-import { useAppContext } from "contexts/AppContext";
+import {useAppContext} from "contexts/AppContext";
 import Card1 from "../../../src/components/Card1";
-import { H5 } from "../../../src/components/Typography";
+import {H5} from "../../../src/components/Typography";
+import ProductCardBuyBack2List from "../../../src/components/products/ProductCardBuyBack2List";
+import ProductCardBuyBack1List from "../../../src/components/products/ProductCardBuyBack1List";
+import ProductCardRotateGoodsList2 from "../../../src/components/products/ProductCardRotateGoodsList2";
 
 const RotateDetails = () => {
-    const { state } = useAppContext();
+    const {state} = useAppContext();
     const cartList = state.cart;
-    const [rotateId, setRotateId] = useState({ counterId: "" });
+    const [rotateId, setRotateId] = useState({counterId: ""});
     const [counterInfo, setCounterInfo] = useState(null);
     const [popupOpen, setPopupOpen] = useState(false);
     const [confirmPopup, setConfirmPopup] = useState(false);
     const [rotateGoods, setRotateGoods] = useState([]);
+    const [productRotate, setProductRotate] = useState([])
     const [loading, setLoading] = useState(true);
     let token = "";
 
@@ -44,29 +47,29 @@ const RotateDetails = () => {
         console.log("Web Storage is not supported in this environment.");
     }
 
-    // Fetch rotate goods data based on counterId
-    useEffect(() => {
-        const counterId = localStorage.getItem("counterId");
-        const fetchProductRotate = async () => {
-            try {
-                const response = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/get-product-quantity-less-than?counterid=${counterId}&quantity=20`,
-                    {
-                        headers: {
-                            Authorization: "Bearer " + token,
-                        },
-                    }
-                );
-                console.log("Full response:", response.data.data);
-                setRotateGoods(response.data.data);
-            } catch (error) {
-                console.error("Failed to fetch data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchProductRotate();
-    }, [token]);
+    // // Fetch rotate goods data based on counterId
+    // useEffect(() => {
+    //     const counterId = localStorage.getItem("counterId");
+    //     const fetchProductRotate = async () => {
+    //         try {
+    //             const response = await axios.get(
+    //                 `https://four-gems-system-790aeec3afd8.herokuapp.com/product/get-product-quantity-less-than?counterid=${counterId}&quantity=20`,
+    //                 {
+    //                     headers: {
+    //                         Authorization: "Bearer " + token,
+    //                     },
+    //                 }
+    //             );
+    //             console.log("Full response:", response.data.data);
+    //             setRotateGoods(response.data.data);
+    //         } catch (error) {
+    //             console.error("Failed to fetch data:", error);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+    //     fetchProductRotate();
+    // }, [token]);
 
     // Handle form submission for rotate details
     const handleFormSubmit = async (values) => {
@@ -78,7 +81,6 @@ const RotateDetails = () => {
             setConfirmPopup(true);
         }
     };
-
     // Validation schema for Formik form
     const validationSchema = yup.object().shape({
         counterId: yup.string().required("Counter ID is required"),
@@ -93,6 +95,59 @@ const RotateDetails = () => {
     const handleConfirmTransfer = async (values) => {
         setConfirmPopup(false);
         const counterId = localStorage.getItem("counterId");
+        const fetchCounterInfo = async () => {
+            try {
+                const resCounterInfo = await axios.get(`https://four-gems-system-790aeec3afd8.herokuapp.com/counter/${values.counterId}`,
+                    {
+                        headers: {
+                            Authorization: 'Bearer ' + token
+                        }
+                    });
+                setCounterInfo(resCounterInfo.data.data);
+            } catch (error) {
+                console.error("Failed to fetch counter info:", error);
+            }
+        };
+        fetchCounterInfo();
+        const fetchProductRotate = async () => {
+            try {
+                const response = await axios.get(
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/get-product-quantity-less-than?counterid=${counterId}&quantity=20`,
+                    {
+                        headers: {
+                            Authorization: "Bearer " + token,
+                        },
+                    }
+                );
+                setProductRotate(response.data.data.map(product => product.productId));
+            } catch (error) {
+                console.error("Failed to fetch data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProductRotate();
+        console.log(productRotate)
+        const stringRotate = JSON.stringify(productRotate)
+        console.log(stringRotate)
+        const fetchCounterRotate = async () => {
+            try {
+                const responseCounter = await axios.post(
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/get-product-check-request?counterId=${values.counterId}`,
+                    productRotate,
+                    {
+                        headers: {
+                            Authorization: "Bearer " + token,
+                        },
+                    }
+                );
+                setRotateGoods(responseCounter.data.data);
+                console.log(responseCounter.data.data)
+            } catch (error) {
+                console.error("Failed to fetch counter:", error);
+            }
+        };
+        fetchCounterRotate();
         const RotateRequest = {
             fromCounterId: parseInt(counterId),
             toCounterId: parseInt(values.counterId),
@@ -101,21 +156,22 @@ const RotateDetails = () => {
                 quantity: item.qty,
             })),
         };
-        try {
-            // Make API call to create rotate goods request
-            const createRotateRequest = await axios.post(
-                `https://four-gems-system-790aeec3afd8.herokuapp.com/transfer-request`,
-                RotateRequest,
-                {
-                    headers: {
-                        Authorization: "Bearer " + token,
-                    },
-                }
-            );
-            console.log("Rotate request created:", createRotateRequest.data.data.orderId);
-        } catch (error) {
-            console.error("Failed to create rotate request:", error);
-        }
+        // console.log(RotateRequest)
+        // try {
+        //     // Make API call to create rotate goods request
+        //     const createRotateRequest = await axios.post(
+        //         `https://four-gems-system-790aeec3afd8.herokuapp.com/transfer-request`,
+        //         RotateRequest,
+        //         {
+        //             headers: {
+        //                 Authorization: "Bearer " + token,
+        //             },
+        //         }
+        //     );
+        //     console.log("Rotate request created:", createRotateRequest.data.data.orderId);
+        // } catch (error) {
+        //     console.error("Failed to create rotate request:", error);
+        // }
         // Redirect user after successful request (optional)
         // setTimeout(() => {
         //   router.push("/checkout");
@@ -124,8 +180,8 @@ const RotateDetails = () => {
 
     return (
         <VendorDashboardLayout>
-            <SEO title="Rotate Goods" />
-            <Grid container spacing={3} sx={{ mt: 1 }}>
+            <SEO title="Rotate Goods"/>
+            <Grid container spacing={3} sx={{mt: 1}}>
                 {/* Order List Section */}
                 <Grid item xs={12} md={8}>
                     <Box>
@@ -135,7 +191,11 @@ const RotateDetails = () => {
                             ) : (
                                 rotateGoods.map((product, index) => (
                                     <div key={index}>
-                                        <ProductCardRotateGoodsList products={[product]} />
+                                        {product.availableRotate ? (
+                                            <ProductCardRotateGoodsList products={[product]} />
+                                        ) : (
+                                            <ProductCardRotateGoodsList2 products={[product]} />
+                                        )}
                                     </div>
                                 ))
                             )}
@@ -157,7 +217,7 @@ const RotateDetails = () => {
                               handleSubmit,
                           }) => (
                             <form onSubmit={handleSubmit}>
-                                <Card1 sx={{ mb: 4 }}>
+                                <Card1 sx={{mb: 4}}>
                                     <Grid item sm={12} xs={12} mb={3}>
                                         <TextField
                                             select
@@ -190,7 +250,7 @@ const RotateDetails = () => {
                                                     marginBottom: "7px",
                                                 }}
                                             >
-                                                <H5 sx={{ marginRight: "10px", marginTop: "1px" }}>
+                                                <H5 sx={{marginRight: "10px", marginTop: "1px"}}>
                                                     Id
                                                 </H5>
                                                 <Typography>{counterInfo?.counterId}</Typography>
@@ -204,25 +264,11 @@ const RotateDetails = () => {
                                                     marginBottom: "7px",
                                                 }}
                                             >
-                                                <H5 sx={{ marginRight: "10px", marginTop: "1px" }}>
+                                                <H5 sx={{marginRight: "10px", marginTop: "1px"}}>
                                                     Manager Name
                                                 </H5>
                                                 <Typography>{counterInfo?.managerName}</Typography>
                                             </Grid>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container spacing={6} sx={{ mt: 1 }}>
-                                        <Grid item sm={12} xs={12}>
-                                            <Link href="/admin/rotate/rotate-request" passHref>
-                                                <Button
-                                                    variant="outlined"
-                                                    color="primary"
-                                                    type="button"
-                                                    fullWidth
-                                                >
-                                                    Back to Rotate Goods
-                                                </Button>
-                                            </Link>
                                         </Grid>
                                     </Grid>
                                     <Button
@@ -230,9 +276,17 @@ const RotateDetails = () => {
                                         variant="contained"
                                         color="primary"
                                         fullWidth
-                                        sx={{ mt: 1 }}
+                                        sx={{mt: 1}}
                                     >
-                                        Submit
+                                        Search
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        fullWidth
+                                        sx={{mt: 1}}
+                                    >
+                                        Confirm Rotate
                                     </Button>
                                 </Card1>
                             </form>
