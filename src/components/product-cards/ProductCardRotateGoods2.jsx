@@ -23,7 +23,6 @@ const ProductCardRotateGoods = (props) => {
     const { imgUrl, title, price, id, stock, slug } = props;
     const { state, dispatch } = useAppContext();
     const cartItem = state.cart.find((item) => item.slug === slug);
-    console.log(cartItem)
     const handleCartAmountChange = (amount) => () => {
         dispatch({
             type: "CHANGE_CART_AMOUNT",
@@ -72,7 +71,7 @@ const ProductCardRotateGoods = (props) => {
                                         height: 32,
                                     }}
                                 >
-                                    Add To Rotate
+                                    Out of stock
                                 </Button>
                         </FlexBox>
                     </FlexBox>
