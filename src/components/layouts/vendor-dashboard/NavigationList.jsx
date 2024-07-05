@@ -48,6 +48,11 @@ export const navigations = [
         ],
     },
     {
+        name: "Import Goods",
+        icon: duotone.Products,
+        path: "admin/import-goods",
+    },
+    {
         name: "Users Account",
         icon: duotone.Customers,
         path: "/admin/users-account",
