@@ -44,7 +44,7 @@ const goldTypeOptions = [
     { id: 52, name: "24k" },
 ];
 
-const ProductRow = ({ product }) => {
+export const ProductRow = ({ product }) => {
     const {
         productName,
         price,
@@ -363,5 +363,3 @@ const ProductRow = ({ product }) => {
         </StyledTableRow>
     );
 };
-
-export default ProductRow;

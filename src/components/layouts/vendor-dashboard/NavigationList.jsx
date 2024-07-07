@@ -50,7 +50,16 @@ export const navigations = [
     {
         name: "Import Goods",
         icon: duotone.Products,
-        path: "admin/import-goods",
+        children: [
+            {
+                name: "Import Requests",
+                path: "/admin/import/import-goods",
+            },
+            {
+                name: "Quantity Counter List",
+                path: "/admin/import/counter-list",
+            },
+        ],
     },
     {
         name: "Users Account",

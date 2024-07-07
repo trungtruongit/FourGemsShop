@@ -95,7 +95,7 @@ export default function ProductList({ initialProducts }) {
             }
         };
         fetchData();
-    }, []);
+    }, [products]);
     console.log(filteredList.length);
     return (
         <Box py={4}>
