@@ -1,6 +1,5 @@
-import { Button, Box, Card, Stack, Table, TableContainer } from "@mui/material";
+import { Box, Card, Stack, Table, TableContainer } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
-import SearchArea from "components/dashboard/SearchArea";
 import TableHeader from "components/data-table/TableHeader";
 import TablePagination from "components/data-table/TablePagination";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
@@ -61,17 +60,17 @@ export default function ProductList({ initialProducts }) {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const counterId = localStorage.getItem("counterId");
             try {
                 if (token) {
                     const response = await axios.get(
-                        `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=200&page=0&sortKeyword=productId&sortType=DESC&categoryName=&searchKeyword=`,
+                        `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-all-product-with-quantity-counter`,
                         {
                             headers: {
                                 Authorization: `Bearer ` + token,
                             },
                         }
                     );
+                    console.log(response?.data?.data);
                     setProducts(response?.data?.data);
                 } else {
                     console.warn(
@@ -85,24 +84,17 @@ export default function ProductList({ initialProducts }) {
             }
         };
         fetchData();
-    }, [products]);
-    console.log(filteredList?.length);
+    }, []);
     return (
         <Box py={4}>
-            <H3>Product List</H3>
+            <H3 sx={{ mb: 2 }}>Product Quantity List</H3>
 
-            <SearchArea
-                handleSearch={() => {}}
-                buttonText="Add Product"
-                handleBtnClick={handleNav}
-                searchPlaceholder="Search Product..."
-            />
             <Card>
                 <Scrollbar autoHide={false}>
                     <TableContainer
                         sx={{
-                            minWidth: 3000, // Double the width
-                            width: 3000, // Double the width
+                            minWidth: 1200, // Double the width
+                            width: 1200, // Double the width
                         }}
                     >
                         <Table>
@@ -125,6 +117,9 @@ export default function ProductList({ initialProducts }) {
                                 {filteredList &&
                                     filteredList?.map((product) => (
                                         <ProductRowImport
+                                            quantityInCounter={
+                                                product.quantityInCounter
+                                            }
                                             product={product}
                                             key={product?.productId}
                                         />
