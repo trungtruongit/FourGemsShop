@@ -1,11 +1,5 @@
-    import { Add, Remove } from "@mui/icons-material";
-import {
-    Box,
-    Button,
-    Card,
-    Grid,
-    styled,
-} from "@mui/material";
+import { Add, Remove } from "@mui/icons-material";
+import { Box, Button, Card, Grid, styled } from "@mui/material";
 import Image from "components/BazaarImage";
 import { H5, Span } from "components/Typography";
 import { FlexBetween, FlexBox } from "components/flex-box";
@@ -19,7 +13,7 @@ const Wrapper = styled(Card)(() => ({
 })); // ===========================================================
 
 // ===========================================================
-const ProductCardRotateGoods = (props) => {
+const ProductCardImportGoods = (props) => {
     const { imgUrl, title, price, id, stock, slug } = props;
     const { state, dispatch } = useAppContext();
     const cartItem = state.cart.find((item) => item.slug === slug);
@@ -57,13 +51,6 @@ const ProductCardRotateGoods = (props) => {
                             {title}
                         </H5>
 
-                        <FlexBox mt={1} mb={2} alignItems="center">
-                            <Span>Quantity in stock: </Span>
-                            <H5 fontWeight={600} color="primary.main" ml={1}>
-                                {stock}
-                            </H5>
-                        </FlexBox>
-
                         <FlexBox>
                             {!cartItem?.qty && (
                                 <Button
@@ -86,23 +73,31 @@ const ProductCardRotateGoods = (props) => {
                                         sx={{
                                             padding: "5px",
                                         }}
-                                        onClick={handleCartAmountChange(cartItem.qty - 1)}
+                                        onClick={handleCartAmountChange(
+                                            cartItem.qty - 1
+                                        )}
                                     >
                                         <Remove fontSize="small" />
                                     </Button>
 
-                                    <H5 fontWeight="600" fontSize="15px" mx={1.5}>
+                                    <H5
+                                        fontWeight="600"
+                                        fontSize="15px"
+                                        mx={1.5}
+                                    >
                                         {cartItem.qty}
                                     </H5>
 
-                                    {cartItem.qty < stock && (
+                                    {!!cartItem.qty && (
                                         <Button
                                             color="primary"
                                             variant="outlined"
                                             sx={{
                                                 padding: "5px",
                                             }}
-                                            onClick={handleCartAmountChange(cartItem.qty + 1)}
+                                            onClick={handleCartAmountChange(
+                                                cartItem.qty + 1
+                                            )}
                                         >
                                             <Add fontSize="small" />
                                         </Button>
@@ -117,4 +112,4 @@ const ProductCardRotateGoods = (props) => {
     );
 };
 
-export default ProductCardRotateGoods;
+export default ProductCardImportGoods;

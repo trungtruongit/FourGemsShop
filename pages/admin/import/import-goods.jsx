@@ -16,12 +16,11 @@ import {
 import { Formik } from "formik";
 import * as yup from "yup";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
-import ProductCardRotateGoodsList from "../../../src/components/products/ProductCardRotateGoodsList";
+import { ProductCardImportGoodsList } from "../../../src/components/products/ProductCardImportGoodList";
 import SEO from "components/SEO";
 import { useAppContext } from "contexts/AppContext";
 import Card1 from "../../../src/components/Card1";
 import { H5 } from "../../../src/components/Typography";
-import ProductCardRotateGoodsList2 from "../../../src/components/products/ProductCardRotateGoodsList2";
 
 const ImportGoods = () => {
     const { state } = useAppContext();
@@ -33,7 +32,6 @@ const ImportGoods = () => {
     const [rotateGoods, setRotateGoods] = useState([]);
     const [loading, setLoading] = useState(true);
     const [rotateRequestPopup, setRotateRequestPopup] = useState(false);
-    const [importProduct, setImportProduct] = useState([]);
     const [counters, setCounters] = useState([]);
     let token = "";
 
@@ -176,15 +174,9 @@ const ImportGoods = () => {
                             ) : (
                                 rotateGoods.map((product, index) => (
                                     <div key={index}>
-                                        {product.availableRotate ? (
-                                            <ProductCardRotateGoodsList
-                                                products={[product]}
-                                            />
-                                        ) : (
-                                            <ProductCardRotateGoodsList2
-                                                products={[product]}
-                                            />
-                                        )}
+                                        <ProductCardImportGoodsList
+                                            products={[product]}
+                                        />
                                     </div>
                                 ))
                             )}
@@ -192,7 +184,7 @@ const ImportGoods = () => {
                     </Box>
                 </Grid>
                 <Grid item xs={12} md={4}>
-                    <Formik
+                    <Formik 
                         initialValues={rotateId}
                         validationSchema={validationSchema}
                         onSubmit={handleFormSubmit}
