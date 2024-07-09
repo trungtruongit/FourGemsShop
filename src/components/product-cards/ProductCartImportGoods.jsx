@@ -61,7 +61,7 @@ const ProductCardImportGoods = (props) => {
                                     }}
                                     onClick={handleCartAmountChange(1)}
                                 >
-                                    Add To Rotate
+                                    Add To Import
                                 </Button>
                             )}
 
