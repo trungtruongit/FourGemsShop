@@ -10,18 +10,9 @@ export const navigations = [
         path: "/vendor/dashboard",
     },
     {
-        name: "Products",
+        name: "Product List",
         icon: duotone.Products,
-        children: [
-            {
-                name: "Product List",
-                path: "/admin/products",
-            },
-            {
-                name: "Review",
-                path: "/admin/product-reviews",
-            },
-        ],
+        path: "/admin/products",
     },
     {
         name: "Orders",
