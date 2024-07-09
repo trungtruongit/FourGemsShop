@@ -15,7 +15,6 @@ import {
 } from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
-import Link from "next/link";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import ProductCardRotateGoodsList from "../../../src/components/products/ProductCardRotateGoodsList";
 import SEO from "components/SEO";
@@ -32,22 +31,40 @@ const ImportGoods = () => {
     const [popupOpen, setPopupOpen] = useState(false);
     const [confirmPopup, setConfirmPopup] = useState(false);
     const [rotateGoods, setRotateGoods] = useState([]);
-    const [productRotate, setProductRotate] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [rotateRequestPopup, setRotateRequestPopup] = useState(false); // New state for rotate request popup
+    const [rotateRequestPopup, setRotateRequestPopup] = useState(false);
     const [importProduct, setImportProduct] = useState([]);
+    const [counters, setCounters] = useState([]);
     let token = "";
 
-    // Retrieve token from local storage if available
     if (typeof localStorage !== "undefined") {
         token = localStorage.getItem("token");
     } else if (typeof sessionStorage !== "undefined") {
-        token = localStorage.getItem("token");
+        token = sessionStorage.getItem("token");
     } else {
         console.log("Web Storage is not supported in this environment.");
     }
 
-    // Handle form submission for rotate details
+    useEffect(() => {
+        const fetchCounters = async () => {
+            try {
+                const response = await axios.get(
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/counter`,
+                    {
+                        headers: {
+                            Authorization: "Bearer " + token,
+                        },
+                    }
+                );
+                setCounters(response.data.data);
+            } catch (error) {
+                console.error("Failed to fetch counters:", error);
+            }
+        };
+
+        fetchCounters();
+    }, [token]);
+
     const handleFormSubmit = async (values) => {
         setRotateId(values);
         const counterId = localStorage.getItem("counterId");
@@ -58,19 +75,17 @@ const ImportGoods = () => {
         }
     };
 
-    // Validation schema for Formik form
     const validationSchema = yup.object().shape({
         counterId: yup.string().required("Counter ID is required"),
     });
 
-    // Close popup dialog
     const handleClosePopup = () => {
         setPopupOpen(false);
     };
+
     const handleConfirmRotate = async (values) => {
         setRotateRequestPopup(false);
         const counterId = localStorage.getItem("counterId");
-        console.log(values.counterId);
         const RotateRequest = {
             fromCounterId: parseInt(values.counterId),
             toCounterId: parseInt(counterId),
@@ -79,7 +94,7 @@ const ImportGoods = () => {
                 quantity: item.qty,
             })),
         };
-        console.log(RotateRequest);
+
         try {
             const createRotateRequest = await axios.post(
                 `https://four-gems-system-790aeec3afd8.herokuapp.com/transfer-request`,
@@ -98,26 +113,27 @@ const ImportGoods = () => {
             console.error("Failed to create import request:", error);
         }
     };
-    // Handle confirmation of rotate goods transfer
+
     const handleConfirmTransfer = async (values) => {
         setConfirmPopup(false);
-        const counterId = localStorage.getItem("counterId");
+        const counterId = values.counterId; // Use the selected counterId from values
+
         const fetchCounterInfo = async () => {
             try {
                 const resCounterInfo = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/counter/${values.counterId}`,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/counter/${counterId}`,
                     {
                         headers: {
                             Authorization: "Bearer " + token,
                         },
                     }
                 );
-                console.log(resCounterInfo.data.data);
                 setCounterInfo(resCounterInfo.data.data);
             } catch (error) {
                 console.error("Failed to fetch counter info:", error);
             }
         };
+
         const fetchProductRotate = async () => {
             try {
                 const response = await axios.get(
@@ -128,44 +144,22 @@ const ImportGoods = () => {
                         },
                     }
                 );
-                setImportProduct(
-                    response.data.data.map((product) => product.productId)
-                );
+                setRotateGoods(response.data.data);
             } catch (error) {
                 console.error("Failed to fetch data:", error);
             } finally {
                 setLoading(false);
             }
         };
-        console.log(importProduct);
-        const fetchCounterRotate = async (productRotate) => {
-            try {
-                const responseCounter = await axios.post(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/get-product-check-request?counterId=${values.counterId}`,
-                    productRotate,
-                    {
-                        headers: {
-                            Authorization: "Bearer " + token,
-                        },
-                    }
-                );
-                setRotateGoods(responseCounter.data.data);
-                console.log(responseCounter.data.data);
-            } catch (error) {
-                console.error("Failed to fetch counter:", error);
-            }
-        };
+
         await fetchCounterInfo();
-        const productRotate = await fetchProductRotate();
-        await fetchCounterRotate(productRotate);
+        await fetchProductRotate();
     };
 
-    // Open rotate request popup
     const handleOpenRotateRequestPopup = () => {
         setRotateRequestPopup(true);
     };
 
-    // Close rotate request popup
     const handleCloseRotateRequestPopup = () => {
         setRotateRequestPopup(false);
     };
@@ -174,7 +168,6 @@ const ImportGoods = () => {
         <VendorDashboardLayout>
             <SEO title="Rotate Goods" />
             <Grid container spacing={3} sx={{ mt: 1 }}>
-                {/* Order List Section */}
                 <Grid item xs={12} md={8}>
                     <Box>
                         <div style={styles.gridContainer}>
@@ -235,15 +228,14 @@ const ImportGoods = () => {
                                                 errors.counterId
                                             }
                                         >
-                                            <MenuItem value="1">
-                                                123 Le Van Viet
-                                            </MenuItem>
-                                            <MenuItem value="2">
-                                                456 Xa Lo Ha Noi
-                                            </MenuItem>
-                                            <MenuItem value="3">
-                                                Masteri Thao Dien
-                                            </MenuItem>
+                                            {counters.map((counter) => (
+                                                <MenuItem
+                                                    key={counter.counterId}
+                                                    value={counter.counterId}
+                                                >
+                                                    Counter {counter.counterId}
+                                                </MenuItem>
+                                            ))}
                                         </TextField>
                                     </Grid>
                                     <Typography fontWeight="600" mb={2}>
@@ -371,7 +363,6 @@ const ImportGoods = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
-            {/* Rotate Request Confirmation Popup */}
             <Dialog
                 open={rotateRequestPopup}
                 onClose={handleCloseRotateRequestPopup}
