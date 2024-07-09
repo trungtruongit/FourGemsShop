@@ -15,14 +15,9 @@ export const navigations = [
         path: "/admin/products",
     },
     {
-        name: "Orders",
+        name: "Order List",
         icon: duotone.Order,
-        children: [
-            {
-                name: "Order List",
-                path: "/admin/orders",
-            },
-        ],
+        path: "/admin/orders",
     },
     {
         name: "Rotate Goods",
