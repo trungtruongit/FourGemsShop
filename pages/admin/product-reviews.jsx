@@ -33,6 +33,11 @@ const tableHeading = [
     align: "left",
   },
   {
+    id: "status",
+    label: "Status",
+    align: "left",
+  },
+  {
     id: "action",
     label: "Action",
     align: "center",
@@ -61,7 +66,7 @@ export default function ProductReviews({ reviews }) {
     const fetchRotateReq = async () => {
       try {
         const resRotateRes = await axios.get(
-            `https://four-gems-system-790aeec3afd8.herokuapp.com/transfer-request/get-in-counter?counterId=${counterId}`,
+            `https://four-gems-system-790aeec3afd8.herokuapp.com/transfer-request/get-in-counter?counterId=1`,
             {
               headers: {
                 Authorization: "Bearer " + token, //the token is a variable which holds the token
@@ -71,7 +76,7 @@ export default function ProductReviews({ reviews }) {
         console.log(resRotateRes.data.data);
         setShowRotate(resRotateRes.data.data);
       } catch (e) {
-        console.log("Can not fetcg rotate request" + e);
+        console.log("Can not fetch rotate request" + e);
       }
     };
     fetchRotateReq();
@@ -81,6 +86,7 @@ export default function ProductReviews({ reviews }) {
     fromCounter: item.fromCounter.address,
     toCounter: item.toCounter.address,
     totalQuantity: item.totalQuantity,
+    status: item.status
   }));
   console.log(filteredRotateReq)
   const {
