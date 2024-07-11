@@ -25,7 +25,7 @@ const ReviewRow = ({showRotate}) => {
         console.log('Web Storage is not supported in this environment.');
     }
     const decoded = jwtDecode(token);
-    const handleConfirmUser = async (id) => {
+    const handleConfirmRotate = async (id) => {
             const fetchConfirmRotate = async () => {
                 try {
                     const resConfirmRotate = await axios.put(
@@ -47,6 +47,29 @@ const ReviewRow = ({showRotate}) => {
                 }
             };
             fetchConfirmRotate();
+    }
+    const handleCancelRotate = async (id) => {
+        const fetchCancelRotate = async () => {
+            try {
+                const resCancelRotate = await axios.put(
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/transfer-request/cancel?userId=${decoded.id}&transferRequestId=${id}`,
+                    {
+                        userId: decoded.id,
+                        transferRequestId: id,
+                    },
+                    {
+                        headers: {
+                            Authorization: "Bearer " + token, //the token is a variable which holds the token
+                        },
+                    }
+                );
+                console.log(resCancelRotate.data.data);
+                window.location.reload();
+            } catch (e) {
+                console.log("Can not confirm rotate request" + e);
+            }
+        };
+        fetchCancelRotate();
     }
     return (
         <StyledTableRow tabIndex={-1} role="checkbox">
@@ -72,7 +95,7 @@ const ReviewRow = ({showRotate}) => {
                             }}
                             variant="contained"
                             color="info"
-                            onClick={() => handleConfirmUser(id)}
+                            onClick={() => handleConfirmRotate(id)}
                         >
                             Confirm
                         </Button>
@@ -84,7 +107,7 @@ const ReviewRow = ({showRotate}) => {
                             }}
                             variant="contained"
                             color="error"
-                            onClick={() => handleCancelUser()}
+                            onClick={() => handleCancelRotate(id)}
                         >
                             Cancel
                         </Button>

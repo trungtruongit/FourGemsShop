@@ -66,7 +66,7 @@ export default function ProductReviews({ reviews }) {
     const fetchRotateReq = async () => {
       try {
         const resRotateRes = await axios.get(
-            `https://four-gems-system-790aeec3afd8.herokuapp.com/transfer-request/get-in-counter?counterId=1`,
+            `https://four-gems-system-790aeec3afd8.herokuapp.com/transfer-request/get-in-counter?counterId=${counterId}`,
             {
               headers: {
                 Authorization: "Bearer " + token, //the token is a variable which holds the token

@@ -45,7 +45,7 @@ const StatusWrapper = styled(Box)(({ theme, status }) => {
     backgroundColor = theme.palette.success[100];
   }
 
-  if (status === "Rejected" || status === "Urgent" || status === "Cancelled" || status === "Cancel") {
+  if (status === "Rejected" || status === "Urgent" || status === "Cancelled" || status === "Cancel" || status === "CANCEL") {
     color = theme.palette.error.main;
     backgroundColor = theme.palette.error[100];
   }
