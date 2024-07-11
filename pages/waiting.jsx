@@ -1,9 +1,10 @@
-import { CircularProgress, Typography } from "@mui/material";
+import { Button, CircularProgress, Typography } from "@mui/material";
 import axios from "axios";
 import SEO from "components/SEO";
-import { FlexRowCenter } from "components/flex-box";
+import { FlexBox, FlexRowCenter } from "components/flex-box";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const Waiting = () => {
     const router = useRouter();
@@ -56,6 +57,20 @@ const Waiting = () => {
             </Typography>
 
             <CircularProgress color="primary" sx={{ mt: 3 }} />
+            <FlexBox flexWrap="wrap">
+                <Link href="/" passHref legacyBehavior>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        sx={{
+                            m: 1,
+                            mt: 5,
+                        }}
+                    >
+                        Go to Home
+                    </Button>
+                </Link>
+            </FlexBox>
         </FlexRowCenter>
     );
 };
