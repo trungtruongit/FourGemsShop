@@ -15,6 +15,11 @@ export const navigations = [
         path: "/admin/products",
     },
     {
+        name: "Category List",
+        icon: duotone.Products,
+        path: "/admin/categories",
+    },
+    {
         name: "Orders",
         icon: duotone.Order,
         children: [
