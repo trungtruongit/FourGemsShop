@@ -4,7 +4,6 @@ import { Edit } from "@mui/icons-material";
 import {
     Avatar,
     Box,
-    Button,
     MenuItem,
     TextField,
     Select,
@@ -16,7 +15,6 @@ import BazaarSwitch from "components/BazaarSwitch";
 import { currency } from "lib";
 import {
     StyledTableRow,
-    CategoryWrapper,
     StyledTableCell,
     StyledIconButton,
 } from "../StyledComponents";

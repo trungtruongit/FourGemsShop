@@ -57,20 +57,6 @@ const Waiting = () => {
             </Typography>
 
             <CircularProgress color="primary" sx={{ mt: 3 }} />
-            <FlexBox flexWrap="wrap">
-                <Link href="/" passHref legacyBehavior>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        sx={{
-                            m: 1,
-                            mt: 5,
-                        }}
-                    >
-                        Go to Home
-                    </Button>
-                </Link>
-            </FlexBox>
         </FlexRowCenter>
     );
 };
