@@ -29,7 +29,7 @@ export const navigations = [
             },
             {
                 name: "Rotate List",
-                path: "/admin/product-reviews",
+                path: "/admin/rotategoodslist/rotategoods-list",
             },
         ],
     },

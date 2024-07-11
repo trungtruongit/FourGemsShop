@@ -44,12 +44,12 @@ const tableHeading = [
   },
 ]; // =============================================================================
 
-ProductReviews.getLayout = function getLayout(page) {
+RotategoodsList.getLayout = function getLayout(page) {
   return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
 }; // =============================================================================
 
 // =============================================================================
-export default function ProductReviews({ reviews }) {
+export default function RotategoodsList({ reviews }) {
   const [showRotate, setShowRotate] = useState();
   let token = '';
   if (typeof localStorage !== 'undefined') {
