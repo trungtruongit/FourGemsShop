@@ -91,6 +91,9 @@ const Cart = () => {
         };
         fetchPriceApplyVoucher();
     }
+    const handleCheckout = async() =>{
+        localStorage.setItem( "percentDiscount", discountPrice);
+    }
     return (
         <CheckoutNavLayout>
             <SEO title="Cart"/>
@@ -120,6 +123,7 @@ const Cart = () => {
                                 <Button variant="outlined"
                                         color="primary"
                                         type="button"
+                                        onClick={handleCheckout()}
                                         fullWidth>
                                     Checkout Now
                                 </Button>
