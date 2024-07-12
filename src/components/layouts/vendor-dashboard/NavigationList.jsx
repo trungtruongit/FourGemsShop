@@ -15,14 +15,71 @@ export const navigations = [
         path: "/admin/products",
     },
     {
-        name: "Manager Product List",
-        icon: duotone.Products,
-        path: "/manager/products",
-    },
-    {
         name: "Category List",
         icon: duotone.Products,
         path: "/admin/categories",
+    },
+    {
+        name: "Import Goods",
+        icon: duotone.Products,
+        children: [
+            {
+                name: "Import Requests",
+                path: "/admin/import/import-goods",
+            },
+            {
+                name: "Quantity Counter List",
+                path: "/admin/import/counter-list",
+            },
+        ],
+    },
+    {
+        name: "Users Account",
+        icon: duotone.Customers,
+        path: "/admin/users-account",
+    },
+    // DemoFinal
+    // {
+    //     name: "Warranty",
+    //     icon: duotone.Refund,
+    //     children: [
+    //         {
+    //             name: "Warranty Request",
+    //             path: "/admin/refund-request",
+    //         },
+    //         {
+    //             name: "Warranty Settings",
+    //             path: "/admin/refund-setting",
+    //         },
+    //     ],
+    // },
+    // {
+    //     name: "Support Tickets",
+    //     icon: duotone.AccountSetting,
+    //     path: "/vendor/support-tickets",
+    // },
+    {
+        type: "label",
+        label: "Manager",
+    },
+    // {
+    //     name: "Earnings",
+    //     icon: duotone.ProjectChart,
+    //     children: [
+    //         {
+    //             name: "Earning History",
+    //             path: "/vendor/earning-history",
+    //         },
+    //         {
+    //             name: "Payments",
+    //             path: "/vendor/payouts",
+    //         },
+    //     ],
+    // },
+    {
+        name: "Manager Product List",
+        icon: duotone.Products,
+        path: "/manager/products",
     },
     {
         name: "Order List",
@@ -44,37 +101,14 @@ export const navigations = [
         ],
     },
     {
-        name: "Import Goods",
-        icon: duotone.Products,
-        children: [
-            {
-                name: "Import Requests",
-                path: "/admin/import/import-goods",
-            },
-            {
-                name: "Quantity Counter List",
-                path: "/admin/import/counter-list",
-            },
-        ],
+        name: "Customers",
+        icon: duotone.ElementHub,
+        path: "/admin/customers",
     },
     {
-        name: "Users Account",
-        icon: duotone.Customers,
-        path: "/admin/users-account",
-    },
-    {
-        name: "Warranty",
-        icon: duotone.Refund,
-        children: [
-            {
-                name: "Warranty Request",
-                path: "/admin/refund-request",
-            },
-            {
-                name: "Warranty Settings",
-                path: "/admin/refund-setting",
-            },
-        ],
+        name: "Promotions",
+        icon: duotone.ElementHub,
+        path: "/admin/promotions",
     },
     {
         name: "Sellers",
@@ -89,38 +123,5 @@ export const navigations = [
                 path: "/admin/earning-history",
             },
         ],
-    },
-    {
-        type: "label",
-        label: "Manager",
-    },
-    {
-        name: "Earnings",
-        icon: duotone.ProjectChart,
-        children: [
-            {
-                name: "Earning History",
-                path: "/vendor/earning-history",
-            },
-            {
-                name: "Payments",
-                path: "/vendor/payouts",
-            },
-        ],
-    },
-    {
-        name: "Support Tickets",
-        icon: duotone.AccountSetting,
-        path: "/vendor/support-tickets",
-    },
-    {
-        name: "Customers",
-        icon: duotone.ElementHub,
-        path: "/admin/customers",
-    },
-    {
-        name: "Promotions",
-        icon: duotone.ElementHub,
-        path: "/admin/promotions",
     },
 ];
