@@ -3,25 +3,30 @@ export const navigations = [
     {
         type: "label",
         label: "Admin",
+        withAdmin: "true",
     },
     {
         name: "Dashboard",
         icon: duotone.Dashboard,
         path: "/vendor/dashboard",
+        withAdmin: "true",
     },
     {
         name: "Product List",
         icon: duotone.Products,
         path: "/admin/products",
+        withAdmin: "true",
     },
     {
         name: "Category List",
         icon: duotone.Products,
         path: "/admin/categories",
+        withAdmin: "true",
     },
     {
         name: "Import Goods",
         icon: duotone.Products,
+        withAdmin: "true",
         children: [
             {
                 name: "Import Requests",
@@ -37,6 +42,7 @@ export const navigations = [
         name: "Users Account",
         icon: duotone.Customers,
         path: "/admin/users-account",
+        withAdmin: "true",
     },
     // DemoFinal
     // {
