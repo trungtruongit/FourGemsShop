@@ -87,7 +87,7 @@ export const navigations = [
     },
     {
         type: "label",
-        label: "Vendor",
+        label: "Manager",
     },
     {
         name: "Earnings",
