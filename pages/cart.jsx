@@ -77,7 +77,7 @@ const Cart = () => {
     const handleApplyVoucher = async () => {
         const fetchPriceApplyVoucher = async () => {
             try {
-                const resPriceByVoucher = await axios.get(`https://four-gems-system-790aeec3afd8.herokuapp.com/voucher/f6b8b798-67cf-46c6-9553-bca7a1a69c05?code=${voucher}`,
+                const resPriceByVoucher = await axios.get(`https://four-gems-system-790aeec3afd8.herokuapp.com/voucher/${voucher}`,
                     {
                         headers: {
                             Authorization: 'Bearer ' + token //the token is a variable which holds the token
@@ -92,8 +92,10 @@ const Cart = () => {
         fetchPriceApplyVoucher();
     }
     const handleCheckout = async() =>{
+        localStorage.setItem("code", voucher)
         localStorage.setItem( "percentDiscount", discountPrice);
     }
+
     return (
         <CheckoutNavLayout>
             <SEO title="Cart"/>
@@ -289,7 +291,7 @@ const Cart = () => {
                                                     sx={{
                                                         mt: {xs: "1rem", sm: 0},
                                                     }}
-                                                    onClick={() => handleApplyVoucher()}
+                                                    onClick={(e) => handleApplyVoucher()}
                                                 >
                                                     Apply Voucher
                                                 </Button>
