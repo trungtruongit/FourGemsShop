@@ -144,28 +144,6 @@ const Login = () => {
                     Login
                 </Button>
             </form>
-
-            <FlexBox
-                justifyContent="center"
-                bgcolor="grey.200"
-                borderRadius="4px"
-                py={2.5}
-                mt="1.25rem"
-            >
-                Forgot your password?
-                <Link href="/reset-password" passHref legacyBehavior>
-                    <a>
-                        <H6
-                            ml={1}
-                            mt={0.3}
-                            borderBottom="1px solid"
-                            borderColor="grey.900"
-                        >
-                            Reset It
-                        </H6>
-                    </a>
-                </Link>
-            </FlexBox>
         </Wrapper>
     );
 };

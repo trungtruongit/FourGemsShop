@@ -15,6 +15,7 @@ const ProductIntro = ({ product }) => {
         image,
         description,
         quantityInStock,
+        warrantyYear,
     } = product;
     const { state, dispatch } = useAppContext();
     const [cartItem, setCartItem] = useState(null);
@@ -49,7 +50,7 @@ const ProductIntro = ({ product }) => {
                         <LazyImage
                             alt={productName}
                             width={590}
-                            height={450}
+                            height={500}
                             bgcolor="white"
                             loading="eager"
                             objectFit="contain"
@@ -65,7 +66,7 @@ const ProductIntro = ({ product }) => {
                     xs={12}
                     mt={3}
                     alignItems="center"
-                    height={450}
+                    height={500}
                 >
                     <div
                         style={{
@@ -84,18 +85,15 @@ const ProductIntro = ({ product }) => {
                     >
                         <FlexBox
                             alignItems="center"
-                            mb={2}
+                            justifyContent="space-between"
                             paddingRight={2}
                             fontSize={18}
                         >
                             <p>{description}</p>
                         </FlexBox>
 
-                        <Box mb={3}>
-                            <H2 color="primary.main" mb={0.5} lineHeight="1">
-                                {currency(price)}
-                            </H2>
-                            <Box>
+                        <Box mb={1}>
+                            <Box mt={-1}>
                                 <span
                                     style={{
                                         color: "#102E46",
@@ -106,57 +104,82 @@ const ProductIntro = ({ product }) => {
                                 </span>{" "}
                                 Available
                             </Box>
+                            <Box mt={1}>
+                                <span
+                                    style={{
+                                        color: "#102E46",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    {warrantyYear}
+                                </span>{" "}
+                                Years
+                            </Box>
+                            <H2
+                                color="primary.main"
+                                mt={1}
+                                mb={1.5}
+                                lineHeight="1"
+                            >
+                                {currency(price)}
+                            </H2>
                         </Box>
 
-                        {!cartItem?.qty ? (
-                            <Button
-                                color="primary"
-                                variant="contained"
-                                onClick={handleCartAmountChange(1)}
-                                sx={{
-                                    mb: 4.5,
-                                    px: "1.75rem",
-                                    height: 40,
-                                    padding: 2,
-                                }}
-                            >
-                                Add to Cart
-                            </Button>
-                        ) : (
-                            <FlexBox alignItems="center" mb={4.5}>
+                        <FlexBox
+                            justifyContent="flex-end"
+                            alignItems="center"
+                            mb={4.5}
+                            mr={2}
+                        >
+                            {!cartItem?.qty ? (
                                 <Button
-                                    size="small"
-                                    sx={{
-                                        p: 1,
-                                    }}
                                     color="primary"
-                                    variant="outlined"
-                                    onClick={handleCartAmountChange(
-                                        cartItem.qty - 1
-                                    )}
-                                >
-                                    <Remove fontSize="small" />
-                                </Button>
-
-                                <H3 fontWeight="600" mx={2.5}>
-                                    {cartItem.qty.toString().padStart(2, "0")}
-                                </H3>
-
-                                <Button
-                                    size="small"
+                                    variant="contained"
+                                    onClick={handleCartAmountChange(1)}
                                     sx={{
-                                        p: 1,
+                                        px: "1.75rem",
+                                        height: 40,
+                                        padding: 2,
                                     }}
-                                    color="primary"
-                                    variant="outlined"
-                                    onClick={handleCartAmountChange(
-                                        cartItem.qty + 1
-                                    )}
                                 >
-                                    <Add fontSize="small" />
+                                    Add to Cart
                                 </Button>
-                            </FlexBox>
-                        )}
+                            ) : (
+                                <FlexBox alignItems="center">
+                                    <Button
+                                        size="small"
+                                        sx={{
+                                            p: 1,
+                                        }}
+                                        color="primary"
+                                        variant="outlined"
+                                        onClick={handleCartAmountChange(
+                                            cartItem.qty - 1
+                                        )}
+                                    >
+                                        <Remove fontSize="small" />
+                                    </Button>
+                                    <H3 fontWeight="600" mx={2.5}>
+                                        {cartItem.qty
+                                            .toString()
+                                            .padStart(2, "0")}
+                                    </H3>
+                                    <Button
+                                        size="small"
+                                        sx={{
+                                            p: 1,
+                                        }}
+                                        color="primary"
+                                        variant="outlined"
+                                        onClick={handleCartAmountChange(
+                                            cartItem.qty + 1
+                                        )}
+                                    >
+                                        <Add fontSize="small" />
+                                    </Button>
+                                </FlexBox>
+                            )}
+                        </FlexBox>
                     </div>
                 </Grid>
             </Grid>

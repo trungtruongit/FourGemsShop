@@ -82,31 +82,6 @@ const ProductDetails = (props) => {
                     <H2>Loading...</H2>
                 )}
 
-                {/* PRODUCT DESCRIPTION AND REVIEW */}
-                <div
-                    style={{
-                        backgroundColor: "#FFFFFF",
-                        paddingBottom: "1.5rem",
-                    }}
-                >
-                    <StyledTabs
-                        textColor="primary"
-                        value={selectedOption}
-                        indicatorColor="primary"
-                        onChange={handleOptionClick}
-                        centered
-                    >
-                        <Tab className="inner-tab" label="Care & maintenance" />
-                    </StyledTabs>
-                    <Box
-                        mb={6}
-                        margin="0 10rem"
-                        fontFamily="Ubuntu"
-                        color="black"
-                    >
-                        {selectedOption === 0 && <CareAndMaintenance />}
-                    </Box>
-                </div>
                 <div
                     style={{
                         display: "grid",
