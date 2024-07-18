@@ -16,22 +16,26 @@ const reducer = (state, action) => {
     case "CHANGE_CART_AMOUNT": {
       const cartList = state.cart;
       const cartItem = action.payload;
-      const exist = cartList.find((item) => item.id === cartItem.id);
+      const exist = cartList.find((item) => item.productId === cartItem.productId);
+
+      console.log('Dispatching CHANGE_CART_AMOUNT', cartItem);
+      console.log('Existing cart:', cartList);
 
       let newCart;
       let totalQuantity;
 
       if (cartItem.qty < 1) {
-        newCart = cartList.filter((item) => item.id !== cartItem.id);
+        newCart = cartList.filter((item) => item.productId !== cartItem.productId);
       } else if (exist) {
         newCart = cartList.map((item) =>
-            item.id === cartItem.id ? { ...item, qty: cartItem.qty } : item
+          item.productId === cartItem.productId ? { ...item, qty: cartItem.qty } : item
         );
       } else {
         newCart = [...cartList, cartItem];
       }
 
       totalQuantity = newCart.reduce((acc, item) => acc + item.qty, 0);
+      console.log('Updated cart:', newCart);
       return { ...state, cart: newCart, totalQuantity };
     }
 

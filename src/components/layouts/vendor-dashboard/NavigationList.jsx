@@ -24,7 +24,7 @@ export const navigations = [
         withAdmin: "true",
     },
     {
-        name: "Import Goods",
+        name: "Export Product To Counter",
         icon: duotone.Products,
         withAdmin: "true",
         children: [

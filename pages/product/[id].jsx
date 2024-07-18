@@ -96,8 +96,6 @@ const ProductDetails = (props) => {
                         onChange={handleOptionClick}
                         centered
                     >
-                        <Tab className="inner-tab" label="Description" />
-                        <Tab className="inner-tab" label="Review (50)" />
                         <Tab className="inner-tab" label="Care & maintenance" />
                     </StyledTabs>
                     <Box
@@ -106,13 +104,9 @@ const ProductDetails = (props) => {
                         fontFamily="Ubuntu"
                         color="black"
                     >
-                        {selectedOption === 0 && <ProductDescription />}
-                        {selectedOption === 1 && <ProductReview />}
-                        {selectedOption === 2 && <CareAndMaintenance />}
+                        {selectedOption === 0 && <CareAndMaintenance />}
                     </Box>
                 </div>
-
-                {/*{relatedProducts && <RelatedProducts productsData={relatedProducts} />}*/}
                 <div
                     style={{
                         display: "grid",

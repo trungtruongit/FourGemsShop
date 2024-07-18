@@ -49,17 +49,24 @@ const ProductCard20 = ({ product }) => {
   const { state, dispatch } = useAppContext();
   const [openDialog, setOpenDialog] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
-  const cartItem = state.cart.find((item) => item.id === product.productId);
+  const cartItem = state.cart.find((item) => item.productId === product.productId);
 
   const handleFavorite = () => setIsFavorite((fav) => !fav);
 
   const handleAddToCart = (product) => {
+    const currentQty = cartItem?.qty || 0;
+    if (currentQty >= product.quantityInStock) {
+      enqueueSnackbar("Cannot add more than available stock", {
+        variant: "warning",
+      });
+      return;
+    }
     const payload = {
-      id: product.productId,
+      productId: product.productId,
       name: product.productName,
       price: product.price,
       imgUrl: product.image,
-      qty: (cartItem?.qty || 0) + 1,
+      qty: currentQty + 1,
     };
     dispatch({
       type: "CHANGE_CART_AMOUNT",
@@ -99,7 +106,7 @@ const ProductCard20 = ({ product }) => {
         openDialog={openDialog}
         handleCloseDialog={() => setOpenDialog(false)}
         product={{
-          id: product.productId,
+          productId: product.productId,
           slug: product.productName,
           title: product.productName,
           price: product.price,

@@ -1,25 +1,34 @@
-import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Add, Remove } from "@mui/icons-material";
-import { Avatar, Box, Button, Grid } from "@mui/material";
+import { Box, Button, Grid } from "@mui/material";
 import LazyImage from "components/LazyImage";
-import BazaarRating from "components/BazaarRating";
-import { H1, H2, H3, H6 } from "components/Typography";
+import { H1, H2, H3 } from "components/Typography";
 import { useAppContext } from "contexts/AppContext";
-import { FlexBox, FlexRowCenter } from "../flex-box";
+import { FlexBox } from "../flex-box";
 import { currency } from "lib";
 
-// ================================================================
 const ProductIntro = ({ product }) => {
-    const { productId, price, productName, image, description } = product;
+    const {
+        productId,
+        price,
+        productName,
+        image,
+        description,
+        quantityInStock,
+    } = product;
     const { state, dispatch } = useAppContext();
-    const [selectedImage, setSelectedImage] = useState(0); // CHECK PRODUCT EXIST OR NOT IN THE CART
+    const [cartItem, setCartItem] = useState(null);
 
-    const cartItem = state.cart.find((item) => item.id === productId); // HANDLE SELECT IMAGE
-
-    const handleImageClick = (ind) => () => setSelectedImage(ind); // HANDLE CHANGE CART
+    useEffect(() => {
+        const foundCartItem = state.cart.find(
+            (item) => item.productId === productId
+        );
+        setCartItem(foundCartItem);
+    }, [state.cart, productId]);
 
     const handleCartAmountChange = (amount) => () => {
+        if (amount < 0 || amount > quantityInStock) return;
+
         dispatch({
             type: "CHANGE_CART_AMOUNT",
             payload: {
@@ -40,7 +49,7 @@ const ProductIntro = ({ product }) => {
                         <LazyImage
                             alt={productName}
                             width={590}
-                            height={550}
+                            height={450}
                             bgcolor="white"
                             loading="eager"
                             objectFit="contain"
@@ -56,7 +65,7 @@ const ProductIntro = ({ product }) => {
                     xs={12}
                     mt={3}
                     alignItems="center"
-                    height={550}
+                    height={450}
                 >
                     <div
                         style={{
@@ -86,7 +95,17 @@ const ProductIntro = ({ product }) => {
                             <H2 color="primary.main" mb={0.5} lineHeight="1">
                                 {currency(price)}
                             </H2>
-                            <Box color="inherit">Stock Available</Box>
+                            <Box>
+                                <span
+                                    style={{
+                                        color: "#102E46",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    {quantityInStock}
+                                </span>{" "}
+                                Available
+                            </Box>
                         </Box>
 
                         {!cartItem?.qty ? (
@@ -113,14 +132,14 @@ const ProductIntro = ({ product }) => {
                                     color="primary"
                                     variant="outlined"
                                     onClick={handleCartAmountChange(
-                                        cartItem?.qty - 1
+                                        cartItem.qty - 1
                                     )}
                                 >
                                     <Remove fontSize="small" />
                                 </Button>
 
                                 <H3 fontWeight="600" mx={2.5}>
-                                    {cartItem?.qty.toString().padStart(2, "0")}
+                                    {cartItem.qty.toString().padStart(2, "0")}
                                 </H3>
 
                                 <Button
@@ -131,22 +150,13 @@ const ProductIntro = ({ product }) => {
                                     color="primary"
                                     variant="outlined"
                                     onClick={handleCartAmountChange(
-                                        cartItem?.qty + 1
+                                        cartItem.qty + 1
                                     )}
                                 >
                                     <Add fontSize="small" />
                                 </Button>
                             </FlexBox>
                         )}
-
-                        <FlexBox alignItems="center" mb={2}>
-                            <Box>Sold By:</Box>
-                            <Link href="/shops/fdfdsa" passHref>
-                                <a>
-                                    <H6 ml={1}>Mobile Store</H6>
-                                </a>
-                            </Link>
-                        </FlexBox>
                     </div>
                 </Grid>
             </Grid>
