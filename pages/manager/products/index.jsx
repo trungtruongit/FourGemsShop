@@ -38,11 +38,6 @@ ProductList.getLayout = function getLayout(page) {
 export default function ProductList({ initialProducts }) {
     const [products, setProducts] = useState(initialProducts);
     const [loading, setLoading] = useState(false);
-    const router = useRouter();
-
-    const handleNav = () => {
-        router.push("/admin/products/create");
-    };
 
     let token = "";
     if (typeof localStorage !== "undefined") {
@@ -99,13 +94,6 @@ export default function ProductList({ initialProducts }) {
     return (
         <Box py={4}>
             <H3>Product List</H3>
-
-            {/* <SearchArea
-                handleSearch={() => {}}
-                buttonText="Add Product"
-                handleBtnClick={handleNav}
-                searchPlaceholder="Search Product..."
-            /> */}
             <Card>
                 <Scrollbar autoHide={false}>
                     <TableContainer

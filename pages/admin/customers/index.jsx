@@ -24,6 +24,11 @@ const tableHeading = [
         align: "left",
     },
     {
+        id: "point",
+        label: "Point",
+        align: "left",
+    },
+    {
         id: "email",
         label: "Email",
         align: "left",

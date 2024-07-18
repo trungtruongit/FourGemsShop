@@ -268,6 +268,28 @@ const ProductForm = (props) => {
                                     }
                                 />
                             </Grid>
+                            <Grid item sm={6} xs={12}>
+                                <TextField
+                                    fullWidth
+                                    color="info"
+                                    size="medium"
+                                    type="number"
+                                    name="warrantyYear"
+                                    label="Year of Warranty"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    placeholder="Year of Warranty"
+                                    value={values.warrantyYear}
+                                    error={
+                                        !!touched.warrantyYear &&
+                                        !!errors.warrantyYear
+                                    }
+                                    helperText={
+                                        touched.warrantyYear &&
+                                        errors.warrantyYear
+                                    }
+                                />
+                            </Grid>
 
                             <Grid item sm={6} xs={12}>
                                 <TextField
@@ -292,34 +314,6 @@ const ProductForm = (props) => {
                                     <MenuItem value="56">Gold 21K</MenuItem>
                                     <MenuItem value="57">Gold 22K</MenuItem>
                                     <MenuItem value="52">Gold 24K</MenuItem>
-                                </TextField>
-                            </Grid>
-
-                            <Grid item sm={6} xs={12}>
-                                <TextField
-                                    select
-                                    fullWidth
-                                    color="info"
-                                    size="medium"
-                                    name="collectionId"
-                                    onBlur={handleBlur}
-                                    placeholder="Collection"
-                                    onChange={handleChange}
-                                    value={values.collectionId}
-                                    label="Collection"
-                                    error={
-                                        !!touched.collectionId &&
-                                        !!errors.collectionId
-                                    }
-                                    helperText={
-                                        touched.collectionId &&
-                                        errors.collectionId
-                                    }
-                                >
-                                    <MenuItem value="1">Spring</MenuItem>
-                                    <MenuItem value="2">Summer</MenuItem>
-                                    <MenuItem value="3">Fall</MenuItem>
-                                    <MenuItem value="4">Winter</MenuItem>
                                 </TextField>
                             </Grid>
 

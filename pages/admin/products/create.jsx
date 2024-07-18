@@ -30,6 +30,7 @@ export default function CreateProduct() {
         isGem: "",
         isActive: "",
         typeId: "",
+        warrantyYear: 0,
     };
 
     const validationSchema = yup.object().shape({
@@ -40,6 +41,7 @@ export default function CreateProduct() {
         laborCost: yup.number().required("required"),
         ratioPrice: yup.number().required("required"),
         stonePrice: yup.number().required("required"),
+        warrantyYear: yup.number().required("required"),
         goldId: yup.string().required("required"),
         collectionId: yup.number().required("required"),
         isJewel: yup.number().required("required"),
@@ -66,6 +68,7 @@ export default function CreateProduct() {
             goldId: values.goldId,
             typeId: values.typeId,
             collectionId: values.collectionId,
+            warrantyYear: values.warrantyYear,
         };
 
         try {

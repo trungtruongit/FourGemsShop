@@ -71,7 +71,6 @@ export default function ProductList({ initialProducts }) {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const counterId = localStorage.getItem("counterId");
             try {
                 if (token) {
                     const response = await axios.get(

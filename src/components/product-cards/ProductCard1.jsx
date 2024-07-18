@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { Add, Favorite, Remove, RemoveRedEye } from "@mui/icons-material";
 import { Box, Button, Chip, IconButton, styled } from "@mui/material";
 import { useSnackbar } from "notistack";
@@ -83,11 +83,14 @@ const ProductCard1 = ({
     const { state, dispatch } = useAppContext();
     const [openModal, setOpenModal] = useState(false);
     const [isFavorite, setIsFavorite] = useState(false);
+    const [cartItem, setCartItem] = useState(null);
 
     const toggleIsFavorite = () => setIsFavorite((fav) => !fav);
-
     const toggleDialog = useCallback(() => setOpenModal((open) => !open), []);
-    const cartItem = state.cart.find((item) => item.id === id);
+
+    useEffect(() => {
+        setCartItem(state.cart.find((item) => item.id === id));
+    }, [state.cart, id]);
 
     const handleCartAmountChange = (product, type) => () => {
         const currentQty = cartItem?.qty || 0;

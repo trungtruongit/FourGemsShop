@@ -1,9 +1,11 @@
+import { useState } from "react";
 import {
     Card,
     Checkbox,
     Divider,
     FormControlLabel,
     TextField,
+    Button,
 } from "@mui/material";
 import Accordion from "components/accordion/Accordion";
 import { FlexBetween, FlexBox } from "components/flex-box";
@@ -11,7 +13,20 @@ import { H5, H6, Paragraph, Span } from "components/Typography";
 import AccordionHeader from "components/accordion/AccordionHeader";
 import Link from "next/link";
 
-const ProductFilterCard = () => {
+const ProductFilterCard = ({ onFilterByPrice, setPriceRange }) => {
+    const [minPrice, setMinPrice] = useState(0);
+    const [maxPrice, setMaxPrice] = useState(250);
+
+    const handleMinPriceChange = (e) => {
+        setMinPrice(e.target.value);
+        setPriceRange((prev) => ({ ...prev, min: e.target.value }));
+    };
+
+    const handleMaxPriceChange = (e) => {
+        setMaxPrice(e.target.value);
+        setPriceRange((prev) => ({ ...prev, max: e.target.value }));
+    };
+
     return (
         <Card
             sx={{
@@ -95,6 +110,8 @@ const ProductFilterCard = () => {
                     type="number"
                     size="small"
                     fullWidth
+                    value={minPrice}
+                    onChange={handleMinPriceChange}
                 />
                 <H5 color="grey.600" px={1}>
                     -
@@ -104,8 +121,18 @@ const ProductFilterCard = () => {
                     type="number"
                     size="small"
                     fullWidth
+                    value={maxPrice}
+                    onChange={handleMaxPriceChange}
                 />
             </FlexBetween>
+            <Button
+                variant="contained"
+                color="primary"
+                sx={{ mt: 2 }}
+                onClick={onFilterByPrice}
+            >
+                Filter by Price
+            </Button>
 
             <Divider
                 sx={{

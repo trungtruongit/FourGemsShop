@@ -62,6 +62,7 @@ const ProductRow = ({ product }) => {
         goldTypeName,
         collectionId,
     } = product;
+    console.log(goldTypeName);
     const router = useRouter();
     const [edit, setEdit] = useState(false);
     const [newProductName, setProductName] = useState(productName);
