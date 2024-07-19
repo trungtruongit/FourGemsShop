@@ -9,7 +9,6 @@ import Scrollbar from "components/Scrollbar";
 import useMuiTable from "hooks/useMuiTable";
 import { SellerRow } from "pages-sections/admin";
 import { useState, useEffect } from "react";
-import CustomSearchArea from './CustomSearchArea';
 
 const tableHeading = [
   { id: "fullName", label: "Full Name", align: "left" },
