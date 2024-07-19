@@ -12,7 +12,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import SearchCustomer from "../../../src/components/dashboard/SearchCustomer";
 import PromotionRow from "../../../src/pages-sections/admin/promotion/PromotionRow";
-import SearchPromotion from "../../../src/components/dashboard/SearchPromotion"; // table column list
+import SearchPromotion from "../../../src/components/dashboard/SearchPromotion";
+import {useRouter} from "next/router"; // table column list
 
 const tableHeading = [
     {
@@ -52,6 +53,7 @@ export default function SellerList() {
     const [loading, setLoading] = useState(false);
     const [dataSearch, setDataSearch] = useState();
     const [promotionSearch, setPromotionSearch] = useState([]);
+    const router = useRouter();
     let token = "";
     if (typeof localStorage !== "undefined") {
         token = localStorage.getItem("token");
@@ -74,7 +76,7 @@ export default function SellerList() {
         listData: promotionSearch ? promotionSearch : promotionInfo,
     });
     const handleAddPromotion = async => {
-        console.log("OK")
+        router.push("/admin/promotions/create")
     }
     useEffect(() => {
         const fetchDataPromotion = async () => {
