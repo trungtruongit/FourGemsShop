@@ -6,6 +6,12 @@ import axios from "axios";
 const PromotionForm = (props) => {
     const { initialValues, validationSchema, handleFormSubmit } = props;
     const [productPromotion, setProductPromotion] = useState([]);
+    const findProductName = (productPromotion, productId) => {
+       if(productPromotion){
+           const name = productPromotion.filter((item) => item.productId === productId);
+           return name[0].productName;
+       }
+    }
     let token = "";
     if (typeof localStorage !== "undefined") {
         token = localStorage.getItem("token");
@@ -33,7 +39,6 @@ const PromotionForm = (props) => {
         };
         fetchProductPromotion();
     }, [token]);
-
     return (
         <Card
             sx={{
@@ -138,7 +143,7 @@ const PromotionForm = (props) => {
                                                 selected.map((value) => (
                                                     <Chip
                                                         key={value}
-                                                        label={value}
+                                                        label={findProductName(productPromotion, value)}
                                                         style={{ margin: '2px', maxWidth: 'calc(100% - 4px)' }}
                                                     />
                                                 ))
@@ -147,7 +152,7 @@ const PromotionForm = (props) => {
                                     )}
                                 >
                                     {productPromotion.map((product) => (
-                                        <MenuItem key={product.id} value={product.productName}>
+                                        <MenuItem key={product.productId} value={product.productId}>
                                             {product.productName}
                                         </MenuItem>
                                     ))}

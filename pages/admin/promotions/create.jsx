@@ -5,6 +5,7 @@ import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import axios from "axios";
 import { useRouter } from "next/router";
 import PromotionForm from "../../../src/pages-sections/admin/promotion/PromotionForm";
+import {parseSelector} from "bootstrap/js/src/util";
 
 // =============================================================================
 CreatePromotion.getLayout = function getLayout(page) {
@@ -39,7 +40,7 @@ export default function CreatePromotion() {
     const handleFormSubmit = async (values) => {
         const createPromotion = {
             description: values.description,
-            discount: values.discount,
+            discount: values.discount.toString(),
             endDate: formatDateTime(values.endDate),
             productIdList: values.promotionProduct
         }
@@ -47,7 +48,8 @@ export default function CreatePromotion() {
         try {
             const token = localStorage.getItem("token");
             await axios.post(
-                "https://four-gems-system-790aeec3afd8.herokuapp.com/promotions"
+                "https://four-gems-system-790aeec3afd8.herokuapp.com/promotions",
+                createPromotion
                 ,
                 {
                     headers: {
