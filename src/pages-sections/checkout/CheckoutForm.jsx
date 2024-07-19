@@ -6,7 +6,7 @@ import * as yup from "yup";
 import { Formik } from "formik";
 import Card1 from "components/Card1";
 import axios from "axios";
-import {H4, H5, Paragraph, Span} from "components/Typography";
+import { H4, H5, Paragraph, Span } from "components/Typography";
 import { useAppContext } from "../../contexts/AppContext";
 import { jwtDecode } from "jwt-decode";
 import { currency } from "../../lib";
@@ -17,7 +17,7 @@ const CheckoutForm = () => {
     const cartList = state.cart;
     const [customerId, setCustomerId] = useState(0);
     const [customerShowInfo, setCustomerShowInfo] = useState("");
-    const perDiscount = localStorage.getItem("percentDiscount")
+    const perDiscount = localStorage.getItem("percentDiscount");
     let token = "";
     const handleWaiting = () => {
         router.push("/waiting");
@@ -39,8 +39,13 @@ const CheckoutForm = () => {
     }));
     const getTotalPrice = () =>
         cartList.reduce((accum, item) => accum + item?.price * item?.qty, 0);
-    const tax = (getTotalPrice() - (getTotalPrice() * perDiscount/100)) * 0.08;
-    const totalBill = (getTotalPrice() - (getTotalPrice() * perDiscount/100) + tax).toFixed(2);
+    const tax =
+        (getTotalPrice() - (getTotalPrice() * perDiscount) / 100) * 0.08;
+    const totalBill = (
+        getTotalPrice() -
+        (getTotalPrice() * perDiscount) / 100 +
+        tax
+    ).toFixed(2);
     const productIds = cartList?.map((item) => ({
         id: item?.id,
         qty: item?.qty,
@@ -221,9 +226,25 @@ const CheckoutForm = () => {
                                             marginTop: "1px",
                                         }}
                                     >
-                                        Gender:
+                                        Point:
                                     </H5>
-                                    {customerShowInfo?.gender}
+                                    {customerShowInfo?.loyaltyPoints}
+                                </Grid>
+                                <Grid
+                                    sx={{
+                                        display: "flex",
+                                        marginBottom: "7px",
+                                    }}
+                                >
+                                    <H5
+                                        sx={{
+                                            marginRight: "10px",
+                                            marginTop: "1px",
+                                        }}
+                                    >
+                                        MemberShip:
+                                    </H5>
+                                    {customerShowInfo?.memberShipTier}
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -306,18 +327,28 @@ const CheckoutForm = () => {
                         </FlexBetween>
 
                         <FlexBetween mb={1}>
-                            <Typography color="grey.600">Discount <Span sx={{color: "green"}}>(-{perDiscount}%)</Span>:</Typography>
+                            <Typography color="grey.600">
+                                Discount{" "}
+                                <Span sx={{ color: "green" }}>
+                                    (-{perDiscount}%)
+                                </Span>
+                                :
+                            </Typography>
                             <Typography
                                 fontSize="18px"
                                 fontWeight="600"
                                 lineHeight="1"
                             >
-                                {currency(getTotalPrice() * perDiscount/100)}
+                                {currency(
+                                    (getTotalPrice() * perDiscount) / 100
+                                )}
                             </Typography>
                         </FlexBetween>
 
                         <FlexBetween mb={2}>
-                            <Typography color="grey.600">Tax <Span sx={{color: "red"}}>(+8%)</Span>:</Typography>
+                            <Typography color="grey.600">
+                                Tax <Span sx={{ color: "red" }}>(+8%)</Span>:
+                            </Typography>
                             <Typography
                                 fontSize="18px"
                                 fontWeight="600"
@@ -341,7 +372,11 @@ const CheckoutForm = () => {
                                 lineHeight="1"
                                 textAlign="right"
                             >
-                                {currency(getTotalPrice() - (getTotalPrice() * perDiscount/100) + tax)}
+                                {currency(
+                                    getTotalPrice() -
+                                        (getTotalPrice() * perDiscount) / 100 +
+                                        tax
+                                )}
                             </Typography>
                         </FlexBetween>
                     </Card1>
