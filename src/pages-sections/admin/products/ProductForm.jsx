@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     Button,
     Card,
@@ -11,10 +11,9 @@ import {
 } from "@mui/material";
 import { Clear } from "@mui/icons-material";
 import { Formik } from "formik";
-import DropZone from "components/DropZone";
-
-import { FlexBox } from "components/flex-box";
-import BazaarImage from "components/BazaarImage";
+import DropZone from "../../../components/DropZone";
+import BazaarImage from "../../../components/BazaarImage";
+import { FlexBox } from "../../../components/flex-box";
 
 const UploadImageBox = styled(Box)(({ theme }) => ({
     width: 70,
@@ -27,48 +26,34 @@ const UploadImageBox = styled(Box)(({ theme }) => ({
     justifyContent: "center",
     backgroundColor: alpha(theme.palette.info.light, 0.1),
 }));
+
 const StyledClear = styled(Clear)(() => ({
     top: 5,
     right: 5,
     fontSize: 14,
     cursor: "pointer",
     position: "absolute",
-})); // ================================================================
+}));
 
-// ================================================================
-const ProductForm = (props) => {
-    const {
-        initialValues,
-        validationSchema,
-        handleFormSubmit,
-        files,
-        setFiles,
-        imgUrl,
-        setImgUrl,
-    } = props;
+const ProductForm = ({
+    initialValues,
+    validationSchema,
+    handleFormSubmit,
+    imgUrl,
+    setImgUrl,
+}) => {
+    const [files, setFiles] = useState([]);
 
-    const handleChangeDropZone = (incomingFiles) => {
-        incomingFiles.forEach((file) => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setFiles((prevFiles) => [
-                    ...prevFiles,
-                    {
-                        file,
-                        preview: URL.createObjectURL(file),
-                    },
-                ]);
-            };
-            reader.readAsDataURL(file);
-        });
+    const handleChangeDropZone = (url) => {
+        setImgUrl(url);
+        setFiles([{ preview: url }]);
     };
 
-    const handleFileDelete = (fileToDelete) => {
-        setFiles((files) =>
-            files.filter((item) => item.file.name !== fileToDelete.file.name)
-        );
+    const handleFileDelete = () => {
+        setFiles([]);
+        setImgUrl(null);
     };
-    console.log(imgUrl);
+
     return (
         <Card
             sx={{
@@ -116,32 +101,31 @@ const ProductForm = (props) => {
                                 <DropZone
                                     setImgUrl={setImgUrl}
                                     imgUrl={imgUrl}
-                                    accept="image/jpeg"
-                                    onChange={(files) =>
-                                        handleChangeDropZone(files)
+                                    onChange={(url) =>
+                                        handleChangeDropZone(url)
                                     }
                                 />
 
-                                <FlexBox
-                                    flexDirection="row"
-                                    mt={2}
-                                    flexWrap="wrap"
-                                    gap={1}
-                                >
-                                    {files.map((file, index) => (
-                                        <UploadImageBox key={index}>
-                                            <BazaarImage
-                                                src={file.preview}
-                                                width="100%"
-                                            />
-                                            <StyledClear
-                                                onClick={() =>
-                                                    handleFileDelete(file)
-                                                }
-                                            />
-                                        </UploadImageBox>
-                                    ))}
-                                </FlexBox>
+                                {files.length > 0 && (
+                                    <FlexBox
+                                        flexDirection="row"
+                                        mt={2}
+                                        flexWrap="wrap"
+                                        gap={1}
+                                    >
+                                        {files.map((file, index) => (
+                                            <UploadImageBox key={index}>
+                                                <BazaarImage
+                                                    src={file.preview}
+                                                    width="100%"
+                                                />
+                                                <StyledClear
+                                                    onClick={handleFileDelete}
+                                                />
+                                            </UploadImageBox>
+                                        ))}
+                                    </FlexBox>
+                                )}
                             </Grid>
 
                             <Grid item xs={12}>
