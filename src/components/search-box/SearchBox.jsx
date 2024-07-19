@@ -50,16 +50,12 @@ const SearchBox = () => {
                 if (!value) setResultList([]);
                 else
                     setResultList(
-                        response.data.data.map.filter(
-                            (res) => res.active === true
-                        )((product) => ({
-                            productName: product.productName,
-                            productId: product.productId,
-                        }))
-                        // response.data.data.map((product) => ({
-                        //     productName: product.productName,
-                        //     productId: product.productId,
-                        // }))
+                        response.data.data
+                            .filter((res) => res.active === true)
+                            .map((product) => ({
+                                productName: product.productName,
+                                productId: product.productId,
+                            }))
                     );
             } catch (e) {
                 console.log(e);

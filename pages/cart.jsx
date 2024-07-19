@@ -31,6 +31,8 @@ const Cart = () => {
     const [customerInfo, setCustomerInfo] = useState("");
     const [voucher, setVoucher] = useState("");
     const [discountPrice, setDiscountPrice] = useState(0);
+    const [discountMemberPrice, setDiscountMemberPrice] = useState(0);
+
     const handleFormSubmit = async (values) => {
         router.push("/payment");
     };
@@ -60,6 +62,7 @@ const Cart = () => {
             Search
         </Button>
     );
+
     const handleBtnSearch = async () => {
         const fetchSearchCustomInfo = async () => {
             try {
@@ -75,14 +78,17 @@ const Cart = () => {
                     await router.push("/admin/customerInfo/create");
                 } else {
                     setCustomerInfo(resCusInfo.data.data[0]);
+                    setDiscountMemberPrice(
+                        resCusInfo.data.data[0].precent_discount
+                    );
                 }
-                console.log(resCusInfo.data.data[0]);
             } catch (error) {
                 console.error("Failed to fetch customer:", error);
             }
         };
         fetchSearchCustomInfo();
     };
+    console.log(discountMemberPrice);
     const handleApplyVoucher = async () => {
         const fetchPriceApplyVoucher = async () => {
             try {
@@ -341,6 +347,26 @@ const Cart = () => {
                                                 )}
                                             </Typography>
                                         </FlexBetween>
+                                        <FlexBetween mb={1}>
+                                            <Typography color="grey.600">
+                                                Discount of MemberShip{" "}
+                                                <Span sx={{ color: "green" }}>
+                                                    (-{discountMemberPrice}%)
+                                                </Span>
+                                                :
+                                            </Typography>
+                                            <Typography
+                                                fontSize="18px"
+                                                fontWeight="600"
+                                                lineHeight="1"
+                                            >
+                                                {currency(
+                                                    (discountMemberPrice /
+                                                        100) *
+                                                        getTotalPrice()
+                                                )}
+                                            </Typography>
+                                        </FlexBetween>
 
                                         <FlexBetween mb={2}>
                                             <Typography color="grey.600">
@@ -382,9 +408,15 @@ const Cart = () => {
                                                 {currency(
                                                     getTotalPrice() -
                                                         (discountPrice / 100) *
+                                                            getTotalPrice() -
+                                                        (discountMemberPrice /
+                                                            100) *
                                                             getTotalPrice() +
                                                         (getTotalPrice() -
                                                             (discountPrice /
+                                                                100) *
+                                                                getTotalPrice() -
+                                                            (discountMemberPrice /
                                                                 100) *
                                                                 getTotalPrice()) *
                                                             0.08
