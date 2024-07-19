@@ -114,6 +114,7 @@ const Cart = () => {
     const handleCheckout = async () => {
         localStorage.setItem("code", voucher);
         localStorage.setItem("percentDiscount", discountPrice);
+        localStorage.setItem("percentMemberDiscount", discountMemberPrice);
     };
 
     return (

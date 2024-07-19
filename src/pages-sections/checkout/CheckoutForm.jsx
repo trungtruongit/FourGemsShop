@@ -18,6 +18,7 @@ const CheckoutForm = () => {
     const [customerId, setCustomerId] = useState(0);
     const [customerShowInfo, setCustomerShowInfo] = useState("");
     const perDiscount = localStorage.getItem("percentDiscount");
+    const percentMemberDiscount = localStorage.getItem("percentMemberDiscount");
     let token = "";
     const handleWaiting = () => {
         router.push("/waiting");
@@ -32,8 +33,9 @@ const CheckoutForm = () => {
         console.log("Web Storage is not supported in this environment.");
     }
     const decoded = jwtDecode(token);
+    console.log(cartList);
     const productName = cartList?.map((item) => ({
-        productId: item?.id,
+        productId: item?.productId,
         quantity: item?.qty,
         price: item?.price,
     }));
@@ -344,6 +346,25 @@ const CheckoutForm = () => {
                                 )}
                             </Typography>
                         </FlexBetween>
+                        <FlexBetween mb={1}>
+                            <Typography color="grey.600">
+                                Discount of MemberShip{" "}
+                                <Span sx={{ color: "green" }}>
+                                    (-{percentMemberDiscount}%)
+                                </Span>
+                                :
+                            </Typography>
+                            <Typography
+                                fontSize="18px"
+                                fontWeight="600"
+                                lineHeight="1"
+                            >
+                                {currency(
+                                    (getTotalPrice() * percentMemberDiscount) /
+                                        100
+                                )}
+                            </Typography>
+                        </FlexBetween>
 
                         <FlexBetween mb={2}>
                             <Typography color="grey.600">
@@ -374,8 +395,15 @@ const CheckoutForm = () => {
                             >
                                 {currency(
                                     getTotalPrice() -
-                                        (getTotalPrice() * perDiscount) / 100 +
-                                        tax
+                                        (perDiscount / 100) * getTotalPrice() -
+                                        (percentMemberDiscount / 100) *
+                                            getTotalPrice() +
+                                        (getTotalPrice() -
+                                            (perDiscount / 100) *
+                                                getTotalPrice() -
+                                            (percentMemberDiscount / 100) *
+                                                getTotalPrice()) *
+                                            0.08
                                 )}
                             </Typography>
                         </FlexBetween>
