@@ -104,7 +104,6 @@ export default function SellerList({ sellers }) {
         fetchDataCus();
     }, []);
     useEffect(() => {
-        console.log(dataSearch);
         const fetchDataCusSearch = async () => {
             try {
                 const responeSearchCus = await axios.get(
