@@ -19,13 +19,6 @@ const navbarNavigations = [
     {
         megaMenu: false,
         megaMenuWithSub: false,
-        title: "Support Ticket",
-        url: "/support-ticket",
-        common: true,
-    },
-    {
-        megaMenu: false,
-        megaMenuWithSub: false,
         title: "Buy Back",
         url: "/buy-back",
         withStaff: false,
