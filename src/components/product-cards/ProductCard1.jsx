@@ -72,8 +72,6 @@ const ProductCard1 = ({
     title,
     price,
     imgUrl,
-    rating = 5,
-    hideRating,
     hoverEffect,
     discount = 5,
     showProductSize,
@@ -82,14 +80,13 @@ const ProductCard1 = ({
     const { enqueueSnackbar } = useSnackbar();
     const { state, dispatch } = useAppContext();
     const [openModal, setOpenModal] = useState(false);
-    const [isFavorite, setIsFavorite] = useState(false);
     const [cartItem, setCartItem] = useState(null);
 
-    const toggleIsFavorite = () => setIsFavorite((fav) => !fav);
     const toggleDialog = useCallback(() => setOpenModal((open) => !open), []);
 
     useEffect(() => {
-        setCartItem(state.cart.find((item) => item.id === id));
+        console.log(state.cart);
+        setCartItem(state.cart.find((item) => item.productId === id));
     }, [state.cart, id]);
 
     const handleCartAmountChange = (product, type) => () => {
@@ -100,10 +97,16 @@ const ProductCard1 = ({
             });
             return;
         }
-
+        const object = {
+            price: product.price,
+            qty: product.qty,
+            name: product.name,
+            imgUrl: product.imgUrl,
+            productId: product.id,
+        };
         dispatch({
             type: "CHANGE_CART_AMOUNT",
-            payload: product,
+            payload: object,
         });
 
         if (type === "remove") {
@@ -120,28 +123,6 @@ const ProductCard1 = ({
     return (
         <StyledBazaarCard hoverEffect={hoverEffect}>
             <ImageWrapper>
-                {!!discount && (
-                    <StyledChip
-                        color="primary"
-                        size="small"
-                        label={`${discount}% off`}
-                    />
-                )}
-
-                <HoverIconWrapper className="hover-box">
-                    <IconButton onClick={toggleDialog}>
-                        <RemoveRedEye color="disabled" fontSize="small" />
-                    </IconButton>
-
-                    <IconButton onClick={toggleIsFavorite}>
-                        {isFavorite ? (
-                            <Favorite color="primary" fontSize="small" />
-                        ) : (
-                            <FavoriteBorder fontSize="small" color="disabled" />
-                        )}
-                    </IconButton>
-                </HoverIconWrapper>
-
                 <Link href={`/product/${id}`}>
                     <a>
                         <LazyImage
@@ -184,14 +165,6 @@ const ProductCard1 = ({
                                 </H3>
                             </a>
                         </Link>
-
-                        {!hideRating && (
-                            <BazaarRating
-                                value={rating || 0}
-                                color="warn"
-                                readOnly
-                            />
-                        )}
 
                         {showProductSize && (
                             <Span color="grey.600" mb={1} display="block">

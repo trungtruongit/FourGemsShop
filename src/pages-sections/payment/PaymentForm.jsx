@@ -120,7 +120,7 @@ const PaymentForm = () => {
                     mb: 4,
                 }}
             >
-                <FormControlLabel
+                {/* <FormControlLabel
                     name="vn-pay"
                     sx={{
                         mb: 3,
@@ -143,7 +143,7 @@ const PaymentForm = () => {
                         mb: 3,
                         mx: -4,
                     }}
-                />
+                /> */}
 
                 <FormControlLabel
                     name="paypal"
@@ -185,15 +185,13 @@ const PaymentForm = () => {
 
                 <Divider
                     sx={{
+                        mt:3,
                         mb: 3,
                         mx: -4,
                     }}
                 />
 
                 <FormControlLabel
-                    sx={{
-                        mb: 3,
-                    }}
                     name="credit-card"
                     onChange={handlePaymentMethodChange}
                     label={
@@ -208,13 +206,6 @@ const PaymentForm = () => {
                             size="small"
                         />
                     }
-                />
-
-                <Divider
-                    sx={{
-                        mb: 3,
-                        mx: -4,
-                    }}
                 />
 
                 {paymentMethod === "credit-card" && (
