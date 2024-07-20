@@ -9,7 +9,7 @@ const PromotionForm = (props) => {
     const findProductName = (productPromotion, productId) => {
        if(productPromotion){
            const name = productPromotion.filter((item) => item.productId === productId);
-           return name[0].productName;
+           return name[0]?.productName;
        }
     }
     let token = "";
@@ -161,7 +161,7 @@ const PromotionForm = (props) => {
 
                             <Grid item sm={12} xs={12}>
                                 <Button variant="contained" color="info" type="submit">
-                                    Add Customer
+                                    Add Promotion
                                 </Button>
                             </Grid>
                         </Grid>

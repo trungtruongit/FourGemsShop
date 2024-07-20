@@ -73,7 +73,7 @@ export default function SellerList() {
         page,
         handleChangeRowsPerPage,
     } = useMuiTable({
-        listData: promotionSearch ? promotionSearch : promotionInfo,
+        listData: promotionInfo,
     });
     const handleAddPromotion = async => {
         router.push("/admin/promotions/create")
@@ -111,6 +111,7 @@ export default function SellerList() {
                     }
                 );
                 setPromotionSearch(responeSearchPromotion.data.data.content);
+                setPromotionInfo(responeSearchPromotion.data.data.content);
             } catch (error) {
                 console.error("Failed to search data customers:", error);
             }
