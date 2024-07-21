@@ -46,7 +46,6 @@ const SearchBox = () => {
                         },
                     }
                 );
-                console.log(response.data.data.map((name) => name.productName));
                 if (!value) setResultList([]);
                 else
                     setResultList(
@@ -100,7 +99,6 @@ const SearchBox = () => {
             ))}
         </BazaarMenu>
     );
-    console.log(resultList);
     return (
         <Box
             position="relative"

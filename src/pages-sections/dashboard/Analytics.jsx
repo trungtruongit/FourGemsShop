@@ -68,7 +68,6 @@ const Analytics = () => {
                 );
                 const apiData = resProfit12Mounth.data.data;
                 const dataArray = Object.values(apiData);
-                //console.log(dataArray); // Kiểm tra xem dữ liệu
                 setProfit12Month(dataArray); // Cập nhật state với dataArray
             } catch (e) {
                 console.log(e);
@@ -91,7 +90,6 @@ const Analytics = () => {
                 );
                 const apiData = resIncome12Mounth.data.data;
                 const dataArray = Object.values(apiData);
-                console.log(dataArray); // Kiểm tra xem dữ liệu
                 setIncome12Month(dataArray); // Cập nhật state với dataArray
             } catch (e) {
                 console.log(e);

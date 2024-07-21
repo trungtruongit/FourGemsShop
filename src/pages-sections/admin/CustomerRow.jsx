@@ -62,7 +62,6 @@ const CustomerRow = ({ customer }) => {
                 }
             );
             window.location.reload();
-            console.log(resUpdateAccount.data.data);
         } catch (e) {
             console.log(e);
         }

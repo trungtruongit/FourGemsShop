@@ -30,7 +30,6 @@ const Section3 = () => {
                         },
                     }
                 );
-                //console.log(resTotal7.data)
                 setTotal7(resTotal7.data.data);
             } catch (e) {
                 console.log(e);
@@ -52,7 +51,6 @@ const Section3 = () => {
                 );
                 const apiData = resEach7.data.data;
                 const dataArray = Object.values(apiData);
-                //console.log(dataArray);
                 setEach7Day(dataArray);
             } catch (e) {
                 console.log(e);
@@ -85,7 +83,6 @@ const Section3 = () => {
                         },
                     }
                 );
-                // console.log(resOrder7.data)
                 setOrder7(resOrder7.data.data);
             } catch (e) {
                 console.log(e);
@@ -107,7 +104,6 @@ const Section3 = () => {
                 );
                 const apiData = resEach7.data.data;
                 const dataArray = Object.values(apiData);
-                //console.log(dataArray); // Kiểm tra xem dữ liệu
                 setEach7Day(dataArray); // Cập nhật state với dataArray
             } catch (e) {
                 console.log(e);

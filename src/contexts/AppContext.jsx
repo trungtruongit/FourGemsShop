@@ -20,9 +20,6 @@ const reducer = (state, action) => {
                 (item) => item.productId === cartItem.productId
             );
 
-            console.log("Dispatching CHANGE_CART_AMOUNT", cartItem);
-            console.log("Existing cart:", cartList);
-
             let newCart;
             let totalQuantity;
 
@@ -41,7 +38,6 @@ const reducer = (state, action) => {
             }
 
             totalQuantity = newCart.reduce((acc, item) => acc + item.qty, 0);
-            console.log("Updated cart:", newCart);
             return { ...state, cart: newCart, totalQuantity };
         }
 

@@ -22,7 +22,6 @@ const Waiting = () => {
     useEffect(() => {
         const fetchStatusOrder = async () => {
             const orderId = localStorage.getItem("orderId");
-            console.log(orderId);
             try {
                 const responseGetOrderStatus = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/order/status/${orderId}`,
@@ -33,7 +32,6 @@ const Waiting = () => {
                     }
                 );
                 setPage(responseGetOrderStatus.data.data);
-                console.log(responseGetOrderStatus.data.data);
             } catch (error) {
                 console.error("Failed to search customers:", error);
             }
