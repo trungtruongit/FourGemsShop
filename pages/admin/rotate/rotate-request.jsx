@@ -22,6 +22,7 @@ import { useAppContext } from "contexts/AppContext";
 import Card1 from "../../../src/components/Card1";
 import { H5 } from "../../../src/components/Typography";
 import ProductCardRotateGoodsList2 from "../../../src/components/products/ProductCardRotateGoodsList2";
+import { jwtDecode } from "jwt-decode";
 
 const RotateDetails = () => {
     const { state } = useAppContext();
@@ -48,7 +49,8 @@ const RotateDetails = () => {
     // Handle form submission for rotate details
     const handleFormSubmit = async (values) => {
         setRotateId(values);
-        const counterId = localStorage.getItem("counterId");
+        const decoded = jwtDecode(token);
+        const counterId = decoded?.counterId;
         if (counterId === values.counterId) {
             setPopupOpen(true);
         } else {
@@ -67,7 +69,8 @@ const RotateDetails = () => {
     };
     const handleConfirmRotate = async (values) => {
         setRotateRequestPopup(false);
-        const counterId = localStorage.getItem("counterId");
+        const decoded = jwtDecode(token);
+        const counterId = decoded?.counterId;
         console.log(values.counterId);
         const RotateRequest = {
             fromCounterId: parseInt(values.counterId),
@@ -100,7 +103,8 @@ const RotateDetails = () => {
     // Handle confirmation of rotate goods transfer
     const handleConfirmTransfer = async (values) => {
         setConfirmPopup(false);
-        const counterId = localStorage.getItem("counterId");
+        const decoded = jwtDecode(token);
+        const counterId = decoded?.counterId;
         const fetchCounterInfo = async () => {
             try {
                 const resCounterInfo = await axios.get(

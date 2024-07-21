@@ -7,6 +7,7 @@ import { currency } from "lib";
 import { useGetDate, useLast7Days } from "../../hooks/useGetDate";
 import { useEffect, useState } from "react";
 import axios from "axios"; // apext chart instance
+import { jwtDecode } from "jwt-decode";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
     ssr: false,
@@ -20,7 +21,8 @@ const Section3 = () => {
     useEffect(() => {
         const token = localStorage.getItem("token");
         const fetchData7 = async () => {
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
                 const resTotal7 = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-money-by-date?countId=${counterId}&startDate=${startDate7}&endDate=${endDate7}`,
@@ -39,7 +41,8 @@ const Section3 = () => {
     }, []);
     useEffect(() => {
         const fetchDataEach7 = async () => {
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
                 const resEach7 = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-money-each-day?countId=${counterId}&startDate=${startDate7}&endDate=${endDate7}`,
@@ -73,7 +76,8 @@ const Section3 = () => {
     }
     useEffect(() => {
         const fetchOrder7 = async () => {
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
                 const resOrder7 = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-number-order-by-date?countId=${counterId}&startDate=${startDate7}&endDate=${endDate7}`,
@@ -92,7 +96,8 @@ const Section3 = () => {
     }, []);
     useEffect(() => {
         const fetchOrderEach7 = async () => {
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
                 const resEach7 = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-money-each-day?countId=${counterId}&startDate=${startDate7}&endDate=${endDate7}`,
@@ -114,9 +119,10 @@ const Section3 = () => {
     const [orderEachDay7, setOrderEachDay7] = useState();
     useEffect(() => {
         const fetchEachDayOrder7 = async () => {
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
-                //http://localhost:8080/user/get-user-information?userId=4
+
                 const resEachDayOrder7 = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-total-order-each-day?countId=${counterId}&startDate=${startDate7}&endDate=${endDate7}`,
                     {
@@ -127,7 +133,7 @@ const Section3 = () => {
                 );
                 const apiData = resEachDayOrder7.data.data;
                 const dataArray = Object.values(apiData);
-                // console.log(dataArray); // Kiểm tra xem dữ liệu
+                
                 setOrderEachDay7(dataArray); // Cập nhật state với dataArray
             } catch (e) {
                 console.log(e);

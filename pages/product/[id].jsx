@@ -9,6 +9,7 @@ import ProductReview from "components/products/ProductReview";
 import ProductDescription from "components/products/ProductDescription";
 import CareAndMaintenance from "components/products/CareAndMaintenance";
 import axios from "axios"; // styled component
+import { jwtDecode } from "jwt-decode";
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
     minHeight: 0,
@@ -43,7 +44,8 @@ const ProductDetails = (props) => {
     }
     useEffect(() => {
         const fetchData = async () => {
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
                 if (token) {
                     const response = await axios.get(

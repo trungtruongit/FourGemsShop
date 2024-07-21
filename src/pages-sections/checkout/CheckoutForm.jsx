@@ -53,6 +53,7 @@ const CheckoutForm = () => {
         price: item?.price,
         name: item?.name,
     }));
+    
     const code = localStorage.getItem("code");
     useEffect(() => {
         if (router?.query?.customerId) {

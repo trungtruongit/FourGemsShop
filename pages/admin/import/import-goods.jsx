@@ -21,6 +21,7 @@ import SEO from "components/SEO";
 import { useAppContext } from "contexts/AppContext";
 import Card1 from "../../../src/components/Card1";
 import { H5 } from "../../../src/components/Typography";
+import { jwtDecode } from "jwt-decode";
 
 const ImportGoods = () => {
     const { state } = useAppContext();
@@ -91,7 +92,8 @@ const ImportGoods = () => {
 
     const handleFormSubmit = async (values) => {
         setRotateId(values);
-        const counterId = localStorage.getItem("counterId");
+        const decoded = jwtDecode(token);
+        const counterId = decoded?.counterId;
         if (counterId === values.counterId) {
             setPopupOpen(true);
         } else {

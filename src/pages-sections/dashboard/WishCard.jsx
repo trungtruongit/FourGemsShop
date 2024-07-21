@@ -44,7 +44,8 @@ const WishCard = () => {
     }, []);
     useEffect(() => {
         const fetchData = async () => {
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
                 //http://localhost:8080/order/get-money-by-date?countId=1&startDate=2021-05-29&endDate=2024-05-29
                 const res = await axios.get(

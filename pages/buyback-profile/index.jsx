@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import QCDashboardLayout from "../../src/components/layouts/customer-dashboard/QCPage";
 import { useRouter } from "next/router";
+import { jwtDecode } from "jwt-decode";
 
 // ============================================================
 const Profile = ({ user }) => {
@@ -48,7 +49,6 @@ const Profile = ({ user }) => {
                     }
                 );
                 setCustomerShowInfo(responeGetCus.data.data);
-                console.log(responeGetCus.data.data);
             } catch (error) {
                 console.error("Failed to search customers:", error);
             }
@@ -58,7 +58,8 @@ const Profile = ({ user }) => {
     useEffect(() => {
         const fetchData = async () => {
             const productId = localStorage.getItem("productId");
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
                 if (token) {
                     const response = await axios.get(
@@ -89,8 +90,8 @@ const Profile = ({ user }) => {
     const handleSubmitBuyBack = async () => {
         const productId = localStorage.getItem("productId");
         const orderId = localStorage.getItem("orderId");
-        const userId = localStorage.getItem("userId");
-        console.log(productId, orderId, userId);
+        const decoded = jwtDecode(token);
+        const userId = decoded?.id;
         try {
             if (token) {
                 const responeFormBuyBack = await axios.post(

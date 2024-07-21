@@ -19,7 +19,6 @@ export const OrderRowWarranty = ({ order }) => {
     console.log(orderId);
     const handleViewOrderDetail = async () => {
         localStorage.setItem("orderIdStaff", orderId);
-        console.log(localStorage.getItem("orderIdStaff"));
         router.push(`./${orderId}`);
     };
 

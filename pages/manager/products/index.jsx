@@ -12,6 +12,7 @@ import api from "utils/__api__/dashboard";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 // TABLE HEADING DATA LIST
 const tableHeading = [
@@ -65,7 +66,8 @@ export default function ProductList({ initialProducts }) {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
                 if (token) {
                     const response = await axios.get(

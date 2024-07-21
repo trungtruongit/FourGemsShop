@@ -18,6 +18,7 @@ import useSettings from "hooks/useSettings";
 import navbarNavigations from "data/navbarNavigations";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { jwtDecode } from "jwt-decode";
 
 const navLinkStyle = {
     cursor: "pointer",
@@ -103,7 +104,8 @@ const Navbar = ({ navListOpen, hideCategories, elevation, border }) => {
     const { settings } = useSettings();
     const [role, setRole] = useState("");
     useEffect(() => {
-        const role = localStorage.getItem("role");
+        const decoded = jwtDecode(token);
+        const role = decoded?.role;
         setRole(role);
     }, []);
     const handleLogOut = () => {

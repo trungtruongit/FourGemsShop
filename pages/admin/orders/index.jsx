@@ -11,6 +11,7 @@ import { OrderRow } from "pages-sections/admin";
 import api from "utils/__api__/dashboard";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 // TABLE HEADING DATA LIST
 const tableHeading = [
     {
@@ -65,7 +66,8 @@ export default function OrderList({ orders }) {
     useEffect(() => {
         const fetchOrderInfo = async () => {
             setLoading(true);
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
                 const responeOrderInfo = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/order?counterId=${counterId}`,
@@ -76,7 +78,6 @@ export default function OrderList({ orders }) {
                     }
                 );
                 setOrderInfo(responeOrderInfo.data.data);
-                console.log(responeOrderInfo.data.data);
             } catch (error) {
                 console.error("Failed to fetch order info:", error);
             } finally {
