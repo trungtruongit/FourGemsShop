@@ -40,7 +40,6 @@ const ProductDetails = (props) => {
     } else if (typeof sessionStorage !== "undefined") {
         token = sessionStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
     }
     useEffect(() => {
         const fetchData = async () => {
@@ -57,7 +56,6 @@ const ProductDetails = (props) => {
                         }
                     );
                     setProduct(response.data.data);
-                    console.log(response.data.data);
                 } else {
                     console.warn(
                         "Token is missing. Please ensure it's properly set."
@@ -69,7 +67,6 @@ const ProductDetails = (props) => {
         };
         fetchData();
     }, [id]);
-    console.log(product);
     return (
         <ShopLayout1>
             <Container

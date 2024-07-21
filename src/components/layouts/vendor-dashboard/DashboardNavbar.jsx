@@ -73,7 +73,6 @@ const DashboardNavbar = ({ handleDrawerToggle }) => {
         token = localStorage.getItem("token");
     } else {
         // If neither localStorage nor sessionStorage is supported
-        console.log("Web Storage is not supported in this environment.");
     }
     useEffect(() => {
         const decoded = jwtDecode(token);

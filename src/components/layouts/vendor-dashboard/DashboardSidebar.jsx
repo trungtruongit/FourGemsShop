@@ -42,7 +42,6 @@ const DashboardSidebar = (props) => {
         token = localStorage.getItem("token");
     } else {
         // If neither localStorage nor sessionStorage is supported
-        console.log("Web Storage is not supported in this environment.");
     }
     useEffect(() => {
         // Assume the role is stored in localStorage

@@ -32,13 +32,12 @@ const Profile = ({ user }) => {
         token = localStorage.getItem("token");
     } else {
         // If neither localStorage nor sessionStorage is supported
-        console.log("Web Storage is not supported in this environment.");
     }
     useEffect(() => {
         const customerId = localStorage.getItem("customerId");
         const fetchGetCusById = async () => {
             if (!customerId) return;
-            console.log("Fetching customer info for ID:", customerId);
+
             try {
                 const responeGetCus = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/customers/${customerId}`,
@@ -73,7 +72,6 @@ const Profile = ({ user }) => {
                     // Làm tròn lên giá product.price
                     const roundedPrice = Math.ceil(response.data.data.price);
                     setProduct({ ...response.data.data, price: roundedPrice });
-                    console.log(response.data.data);
                 } else {
                     console.warn(
                         "Token is missing. Please ensure it's properly set."
@@ -103,7 +101,6 @@ const Profile = ({ user }) => {
                         },
                     }
                 );
-                console.log(responeFormBuyBack.data.data);
             } else {
                 console.warn(
                     "Token is missing. Please ensure it's properly set."

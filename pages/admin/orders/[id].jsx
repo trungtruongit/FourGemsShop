@@ -22,8 +22,7 @@ export default function OrderEdit() {
     // Fallback to sessionStorage if localStorage is not supported
     token = localStorage.getItem("token");
   } else {
-    // If neither localStorage nor sessionStorage is supported
-    console.log("Web Storage is not supported in this environment.");
+    
   }
   const handleBack = () => {
     router.push("/admin/orders");

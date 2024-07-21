@@ -43,7 +43,7 @@ const ImportGoods = () => {
     } else if (typeof sessionStorage !== "undefined") {
         token = sessionStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
+
     }
 
     useEffect(() => {
@@ -154,10 +154,7 @@ const ImportGoods = () => {
                     },
                 }
             );
-            console.log(
-                "Import request created:",
-                createImportRequest.data.data
-            );
+            
             setRefreshData((prev) => !prev); // Toggle refreshData state to re-fetch product data
         } catch (error) {
             console.error("Failed to create import request:", error);

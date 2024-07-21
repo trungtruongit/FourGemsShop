@@ -72,7 +72,6 @@ const Section3 = () => {
         token = localStorage.getItem("token");
     } else {
         // If neither localStorage nor sessionStorage is supported
-        console.log("Web Storage is not supported in this environment.");
     }
     useEffect(() => {
         const fetchOrder7 = async () => {
@@ -122,7 +121,6 @@ const Section3 = () => {
             const decoded = jwtDecode(token);
             const counterId = decoded?.counterId;
             try {
-
                 const resEachDayOrder7 = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-total-order-each-day?countId=${counterId}&startDate=${startDate7}&endDate=${endDate7}`,
                     {
@@ -133,7 +131,7 @@ const Section3 = () => {
                 );
                 const apiData = resEachDayOrder7.data.data;
                 const dataArray = Object.values(apiData);
-                
+
                 setOrderEachDay7(dataArray); // Cập nhật state với dataArray
             } catch (e) {
                 console.log(e);

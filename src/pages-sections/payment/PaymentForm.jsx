@@ -31,7 +31,6 @@ const PaymentForm = () => {
     } else if (typeof sessionStorage !== "undefined") {
         token = sessionStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
     }
     const VNPay = {
         amount: VNDPrice,

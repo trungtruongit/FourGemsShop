@@ -29,7 +29,6 @@ export default function VendorDashboard(props) {
         token = localStorage.getItem("token");
     } else {
         // If neither localStorage nor sessionStorage is supported
-        console.log("Web Storage is not supported in this environment.");
     }
     useEffect(() => {
         const fetchOrder = async () => {
@@ -44,7 +43,6 @@ export default function VendorDashboard(props) {
                         },
                     }
                 );
-                // console.log(resOrder.data)
                 setOrder(resOrder.data.data);
             } catch (e) {
                 console.log(e);
@@ -109,7 +107,7 @@ export default function VendorDashboard(props) {
                         },
                     }
                 );
-                //console.log(resOutStock.data)
+
                 setOutOfStock(resOutStock.data.data);
             } catch (e) {
                 console.log(e);
@@ -131,7 +129,7 @@ export default function VendorDashboard(props) {
                         },
                     }
                 );
-                // console.log(resItemsY.data)
+
                 setItemsY(resItemsY.data.data);
             } catch (e) {
                 console.log(e);

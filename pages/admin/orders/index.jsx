@@ -61,7 +61,7 @@ export default function OrderList({ orders }) {
     } else if (typeof sessionStorage !== "undefined") {
         token = localStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
+
     }
     useEffect(() => {
         const fetchOrderInfo = async () => {

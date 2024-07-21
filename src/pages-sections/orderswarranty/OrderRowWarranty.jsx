@@ -16,7 +16,6 @@ import { router } from "next/client";
 // =================================================
 export const OrderRowWarranty = ({ order }) => {
     const { orderId } = order;
-    console.log(orderId);
     const handleViewOrderDetail = async () => {
         localStorage.setItem("orderIdStaff", orderId);
         router.push(`./${orderId}`);

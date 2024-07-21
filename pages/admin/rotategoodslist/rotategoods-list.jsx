@@ -60,7 +60,6 @@ export default function RotategoodsList({ reviews }) {
         token = localStorage.getItem("token");
     } else {
         // If neither localStorage nor sessionStorage is supported
-        console.log("Web Storage is not supported in this environment.");
     }
     useEffect(() => {
         const decoded = jwtDecode(token);
@@ -89,7 +88,7 @@ export default function RotategoodsList({ reviews }) {
         totalQuantity: item.totalQuantity,
         status: item.status,
     }));
-    console.log(filteredRotateReq);
+
     const {
         order,
         orderBy,

@@ -44,7 +44,6 @@ export default function CreatePromotion() {
             endDate: formatDateTime(values.endDate),
             productIdList: values.promotionProduct
         }
-        console.log(createPromotion);
         try {
             const token = localStorage.getItem("token");
             await axios.post(

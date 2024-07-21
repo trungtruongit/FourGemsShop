@@ -60,7 +60,7 @@ export default function SellerList() {
     } else if (typeof sessionStorage !== "undefined") {
         token = localStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
+        
     }
     const {
         order,

@@ -16,7 +16,7 @@ export default function CreateProduct() {
     const [productPublish, setProductPublish] = useState(1);
     const [files, setFiles] = useState([]);
     const [imgUrl, setImgUrl] = useState("");
-    console.log(imgUrl);
+    
     const INITIAL_VALUES = {
         productName: "",
         description: "",
