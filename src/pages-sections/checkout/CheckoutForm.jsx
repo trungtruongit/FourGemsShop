@@ -33,7 +33,6 @@ const CheckoutForm = () => {
         console.log("Web Storage is not supported in this environment.");
     }
     const decoded = jwtDecode(token);
-    console.log(cartList);
     const productName = cartList?.map((item) => ({
         productId: item?.productId,
         quantity: item?.qty,
@@ -75,7 +74,6 @@ const CheckoutForm = () => {
                     }
                 );
                 setCustomerShowInfo(responeGetCus.data.data);
-                console.log(responeGetCus.data.data);
             } catch (error) {
                 console.error("Failed to search customers:", error);
             }
@@ -90,7 +88,6 @@ const CheckoutForm = () => {
             productItemRequestList: productName,
             code: code,
         };
-        console.log(orderNew);
         try {
             const createOrder = await axios.post(
                 `https://four-gems-system-790aeec3afd8.herokuapp.com/order`,
@@ -101,7 +98,6 @@ const CheckoutForm = () => {
                     },
                 }
             );
-            console.log(createOrder?.data?.data?.orderId);
             localStorage.setItem("orderId", createOrder?.data?.data?.orderId);
         } catch (error) {
             console.error("Failed to create order:", error);

@@ -77,7 +77,6 @@ const DashboardNavbar = ({ handleDrawerToggle }) => {
     }
     useEffect(() => {
         const decoded = jwtDecode(token);
-        // console.log(decoded)
         const fetchDataName = async () => {
             try {
                 const resName = await axios.post(
@@ -89,7 +88,6 @@ const DashboardNavbar = ({ handleDrawerToggle }) => {
                         },
                     }
                 );
-                // console.log(resName.data)
                 setName(decoded.name);
             } catch (e) {
                 console.log(e);

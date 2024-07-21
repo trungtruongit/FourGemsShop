@@ -93,8 +93,6 @@ const BarCodeTest = () => {
             variant: "success",
         });
     };
-
-    console.log(barCode);
     return (
         <div>
             <Topbar />

@@ -25,7 +25,6 @@ const OrderDetails = ({ order }) => {
     console.log('Web Storage is not supported in this environment.');
   }
   const decoded = jwtDecode(token);
-  console.log(decoded)
   return (
       <Grid container spacing={3}>
         <Grid item xs={12}>

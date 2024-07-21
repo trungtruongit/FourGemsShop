@@ -35,7 +35,6 @@ const PaymentForm = () => {
     } else {
         console.log("Web Storage is not supported in this environment.");
     }
-    console.log(VNDPrice);
     const VNPay = {
         amount: VNDPrice,
         bankCode: "NCB",
@@ -45,7 +44,6 @@ const PaymentForm = () => {
         amount: totalPrice,
         orderId: orderId,
     };
-    console.log(VNPay);
     const handleVNPay = async () => {
         try {
             const createVNPay = await axios.post(

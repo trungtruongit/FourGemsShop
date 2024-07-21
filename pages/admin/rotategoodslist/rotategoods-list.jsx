@@ -73,7 +73,6 @@ export default function RotategoodsList({ reviews }) {
               },
             }
         );
-        console.log(resRotateRes.data.data);
         setShowRotate(resRotateRes.data.data);
       } catch (e) {
         console.log("Can not fetch rotate request" + e);

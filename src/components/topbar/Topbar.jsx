@@ -67,8 +67,6 @@ const TopbarWrapper = styled(Box, {
 // ===========================================
 const Topbar = ({ bgColor }) => {
     useEffect(() => {
-        // get language from browser
-        // console.log(navigator.language);
     }, []);
 
     return (

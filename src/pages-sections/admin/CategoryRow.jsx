@@ -41,7 +41,6 @@ const CategoryRow = ({ category }) => {
                     },
                 }
             );
-            console.log(response.data);
             setEdit(false);
         } catch (error) {
             console.error("There was an error!", error);

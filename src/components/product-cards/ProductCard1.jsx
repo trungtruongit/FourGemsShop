@@ -85,7 +85,6 @@ const ProductCard1 = ({
     const toggleDialog = useCallback(() => setOpenModal((open) => !open), []);
 
     useEffect(() => {
-        console.log(state.cart);
         setCartItem(state.cart.find((item) => item.productId === id));
     }, [state.cart, id]);
 

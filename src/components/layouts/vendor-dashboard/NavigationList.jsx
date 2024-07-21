@@ -119,15 +119,6 @@ export const navigations = [
     {
         name: "Sellers",
         icon: duotone.Seller,
-        children: [
-            {
-                name: "Seller List",
-                path: "/admin/sellers",
-            },
-            {
-                name: "Earning History",
-                path: "/admin/earning-history",
-            },
-        ],
+        path: "/admin/sellers",
     },
 ];

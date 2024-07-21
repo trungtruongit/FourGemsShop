@@ -24,7 +24,6 @@ const WishCard = () => {
     }
     useEffect(() => {
         const decoded = jwtDecode(token);
-        // console.log(decoded)
         const fetchDataName = async () => {
             try {
                 const resName = await axios.post(
@@ -56,7 +55,6 @@ const WishCard = () => {
                         },
                     }
                 );
-                // console.log(res.data)
                 setStart(res.data.data);
             } catch (e) {
                 console.log(e);
@@ -64,7 +62,6 @@ const WishCard = () => {
         };
         fetchData();
     }, []);
-    // console.log(name)
     return (
         <Card
             sx={{

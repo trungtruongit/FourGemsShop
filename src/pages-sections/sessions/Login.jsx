@@ -61,7 +61,6 @@ const Login = () => {
                     password: password,
                 }
             );
-            console.log(response.data.data !== undefined);
             if (response.data.data !== "") {
                 console.log("successfully logged in");
                 nav.push("/otp");

@@ -40,7 +40,6 @@ const ReviewRow = ({showRotate}) => {
                             },
                         }
                     );
-                    console.log(resConfirmRotate.data.data);
                     window.location.reload();
                 } catch (e) {
                     console.log("Can not confirm rotate request" + e);
@@ -63,7 +62,6 @@ const ReviewRow = ({showRotate}) => {
                         },
                     }
                 );
-                console.log(resCancelRotate.data.data);
                 window.location.reload();
             } catch (e) {
                 console.log("Can not confirm rotate request" + e);
