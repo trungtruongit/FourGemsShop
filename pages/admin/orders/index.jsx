@@ -20,7 +20,7 @@ const tableHeading = [
     },
     {
         id: "customerName",
-        label: "Customer Id",
+        label: "Customer Name",
         align: "left",
     },
     {
@@ -85,7 +85,6 @@ export default function OrderList({ orders }) {
         };
         fetchOrderInfo();
     }, [orderInfo]);
-    console.log(orderInfo);
     const filteredOrders = orderInfo?.map((order) => ({
         orderId: order?.orderId,
         customerName: order?.customerName,
@@ -93,7 +92,6 @@ export default function OrderList({ orders }) {
         totalAmount: order?.totalAmount,
         status: order?.status,
     }));
-    console.log(filteredOrders);
     const {
         order,
         orderBy,

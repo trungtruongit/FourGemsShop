@@ -76,7 +76,7 @@ const PaymentForm = () => {
             localStorage.removeItem("percentDiscount");
             router.push("/order-success");
         } catch (error) {
-            console.error("Failed to fetch VNPay:", error);
+            console.error("Failed to fetch Cash:", error);
         }
     };
     // Add this function to handle the Review button click
@@ -255,7 +255,7 @@ const PaymentForm = () => {
                         fullWidth
                         onClick={handleReviewClick}
                     >
-                        Review
+                        Done
                     </Button>
                 </Grid>
             </Grid>

@@ -41,6 +41,7 @@ const OrderRow = ({ order }) => {
     const handleViewOrderDetail = async () => {
         localStorage.setItem("orderId", orderId);
         router.push(`/admin/orders/${orderId}`);
+
     };
     const handleCancelUser = async () => {
         try {
@@ -81,11 +82,11 @@ const OrderRow = ({ order }) => {
 
             <StyledTableCell align="center">
                 {isProcess ? (
-                    <div style={{display: 'flex', alignItems: 'center'}}>
+                    <div style={{ display: "flex", alignItems: "center" }}>
                         <StyledIconButton
                             onClick={() => handleViewOrderDetail()}
                         >
-                            <RemoveRedEye/>
+                            <RemoveRedEye />
                         </StyledIconButton>
                         <Button
                             sx={{
@@ -114,17 +115,16 @@ const OrderRow = ({ order }) => {
                             Cancel
                         </Button>
                     </div>
-
                 ) : (
                     <>
                         <StyledIconButton
                             onClick={() => handleViewOrderDetail()}
                         >
-                            <RemoveRedEye/>
+                            <RemoveRedEye />
                         </StyledIconButton>
 
                         <StyledIconButton>
-                            <Delete/>
+                            <Delete />
                         </StyledIconButton>
                     </>
                 )}

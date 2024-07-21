@@ -32,6 +32,7 @@ const Market = (props) => {
             }
             const decoded = jwtDecode(token);
             localStorage.setItem("role", decoded.role);
+            localStorage.setItem("userId", decoded.id);
             localStorage.setItem("counterId", decoded?.counterId);
             if (decoded?.role === "staff") {
                 router.push("/");
