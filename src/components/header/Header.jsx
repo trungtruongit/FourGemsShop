@@ -46,7 +46,7 @@ const Header = ({ isFixed, className, searchBoxType = "type1" }) => {
         router.push("/goldpage/goldpage");
     };
     const handleWarranty = () => {
-        router.push("/warranty");
+        router.push("/orderwarrantystaff/warranty");
     };
 
     const toggleDialog = () => setDialogOpen(!dialogOpen);

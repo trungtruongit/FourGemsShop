@@ -43,7 +43,6 @@ export default function OrderEdit() {
     }
     fetchOrderDetail();
   }, []);
-  console.log(orderDetails)
   if (!orderDetails) {
     return <h1>Loading...</h1>;
   }

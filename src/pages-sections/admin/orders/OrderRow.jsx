@@ -41,7 +41,6 @@ const OrderRow = ({ order }) => {
     const handleViewOrderDetail = async () => {
         localStorage.setItem("orderId", orderId);
         router.push(`/admin/orders/${orderId}`);
-
     };
     const handleCancelUser = async () => {
         try {
