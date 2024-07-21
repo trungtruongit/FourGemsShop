@@ -25,18 +25,17 @@ const SearchBox = () => {
     const [category, setCategory] = useState("All Categories");
     const [resultList, setResultList] = useState([]);
     let token = "";
-    if (typeof localStorage !== "undefined") {
-        token = localStorage.getItem("token");
-    } else if (typeof sessionStorage !== "undefined") {
-        // Fallback to sessionStorage if localStorage is not supported
-        token = localStorage.getItem("token");
-    } else {
-        // If neither localStorage nor sessionStorage is supported
-    }
     const handleCategoryChange = (cat) => () => setCategory(cat);
 
     const handleSearch = async (e) => {
         startTransition(async () => {
+            if (typeof localStorage !== "undefined") {
+                token = localStorage.getItem("token");
+            } else if (typeof sessionStorage !== "undefined") {
+                token = localStorage.getItem("token");
+            } else {
+                // If neither localStorage nor sessionStorage is supported
+            }
             const decoded = jwtDecode(token);
             const counterId = decoded?.counterId;
             const value = e.target?.value;

@@ -120,10 +120,6 @@ const OrderRow = ({ order }) => {
                         >
                             <RemoveRedEye />
                         </StyledIconButton>
-
-                        <StyledIconButton>
-                            <Delete />
-                        </StyledIconButton>
                     </>
                 )}
             </StyledTableCell>

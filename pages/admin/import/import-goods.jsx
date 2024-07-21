@@ -43,7 +43,6 @@ const ImportGoods = () => {
     } else if (typeof sessionStorage !== "undefined") {
         token = sessionStorage.getItem("token");
     } else {
-
     }
 
     useEffect(() => {
@@ -105,34 +104,6 @@ const ImportGoods = () => {
         counterId: yup.string().required("Counter ID is required"),
     });
 
-    const handleClosePopup = () => {
-        setPopupOpen(false);
-    };
-
-    const handleConfirmTransfer = async (values) => {
-        setConfirmPopup(false);
-        const counterId = values.counterId; // Use the selected counterId from values
-
-        const fetchCounterInfo = async () => {
-            try {
-                const resCounterInfo = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/counter/${counterId}`,
-                    {
-                        headers: {
-                            Authorization: "Bearer " + token,
-                        },
-                    }
-                );
-                setCounterInfo(resCounterInfo.data.data);
-            } catch (error) {
-                console.error("Failed to fetch counter info:", error);
-            }
-        };
-
-        await fetchCounterInfo();
-        setRefreshData((prev) => !prev); // Toggle refreshData state to re-fetch product data
-    };
-
     const handleConfirmRotate = async (values) => {
         setRotateRequestPopup(false);
         const ImportRequest = {
@@ -154,7 +125,7 @@ const ImportGoods = () => {
                     },
                 }
             );
-            
+
             setRefreshData((prev) => !prev); // Toggle refreshData state to re-fetch product data
         } catch (error) {
             console.error("Failed to create import request:", error);
@@ -308,60 +279,7 @@ const ImportGoods = () => {
                     </Formik>
                 </Grid>
             </Grid>
-            <Dialog
-                open={popupOpen}
-                onClose={handleClosePopup}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">
-                    {"This is your counter"}
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        The counter ID you have entered matches your counter ID.
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        onClick={handleClosePopup}
-                        color="primary"
-                        autoFocus
-                    >
-                        Close
-                    </Button>
-                </DialogActions>
-            </Dialog>
-            <Dialog
-                open={confirmPopup}
-                onClose={() => setConfirmPopup(false)}
-                aria-labelledby="confirm-dialog-title"
-                aria-describedby="confirm-dialog-description"
-            >
-                <DialogTitle id="confirm-dialog-title">
-                    Confirm Import Goods To Counter
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="confirm-dialog-description">
-                        Are you sure to import goods to this counter?
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        onClick={() => setConfirmPopup(false)}
-                        color="primary"
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={() => handleConfirmTransfer(rotateId)}
-                        color="primary"
-                        autoFocus
-                    >
-                        OK
-                    </Button>
-                </DialogActions>
-            </Dialog>
+
             <Dialog
                 open={rotateRequestPopup}
                 onClose={handleCloseRotateRequestPopup}
