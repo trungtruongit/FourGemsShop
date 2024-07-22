@@ -48,7 +48,7 @@ const SearchBox = () => {
             }
             try {
                 const response = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=200&page=0&sortKeyword=price&sortType= &categoryName=${type}&searchKeyword=${value}`,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=300&page=0&sortKeyword=price&sortType= &categoryName=${type}&searchKeyword=${value}`,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token

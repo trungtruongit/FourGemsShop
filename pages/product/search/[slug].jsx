@@ -47,7 +47,7 @@ const ProductSearchResult = () => {
             const counterId = decoded?.counterId;
             try {
                 const resShowProduct = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=200&page=0&sortKeyword=price&sortType=${selectedValue}&categoryName=${cateogory}&searchKeyword= `,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=300&page=0&sortKeyword=price&sortType=${selectedValue}&categoryName=${cateogory}&searchKeyword= `,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
