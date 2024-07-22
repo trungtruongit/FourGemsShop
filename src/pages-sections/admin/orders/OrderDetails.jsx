@@ -23,6 +23,16 @@ const OrderDetails = ({ order }) => {
   } else {
 
   }
+  const formatDateTime = (dateTime) => {
+    const date = new Date(dateTime);
+    const yyyy = date.getFullYear();
+    const MM = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    const HH = String(date.getHours()).padStart(2, '0');
+    const mm = String(date.getMinutes()).padStart(2, '0');
+    const ss = String(date.getSeconds()).padStart(2, '0');
+    return `${dd}/${MM}/${yyyy} ${HH}:${mm}:${ss}`;
+  };
   const decoded = jwtDecode(token);
   return (
       <Grid container spacing={3}>
@@ -42,7 +52,7 @@ const OrderDetails = ({ order }) => {
 
               <Paragraph>
                 <Span color="grey.600">Placed on: </Span>
-                {order.orderDate}
+                {formatDateTime(order.orderDate)}
               </Paragraph>
               <Paragraph>
                 <Span color="grey.600">Create by: </Span>

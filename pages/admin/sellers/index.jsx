@@ -31,9 +31,6 @@ export default function SellerList() {
       console.error("No token found");
       return;
     }
-
-
-
     fetch("https://four-gems-system-790aeec3afd8.herokuapp.com/user/get-all", {
       headers: {
         Authorization: `Bearer ${storedToken}`,

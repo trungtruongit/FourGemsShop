@@ -62,6 +62,16 @@ const Cart = () => {
         }
     };
     const handleApplyVoucher = async () => {
+        if (!voucher.trim()) {
+            enqueueSnackbar("Please enter a voucher code.", { variant: 'warning' });
+            setDiscountPrice(0);
+            return;
+        }
+
+        // Reset discount and used state before applying the new voucher
+        setDiscountPrice(0);
+        setIsUsed(false);
+
         try {
             const { data } = await axios.get(
                 `https://four-gems-system-790aeec3afd8.herokuapp.com/voucher/${voucher}`,
@@ -71,17 +81,23 @@ const Cart = () => {
                     },
                 }
             );
-            setDiscountPrice(data.data.discountPercent);
-            setIsUsed(data.data.used);
-            if(isUsed){
-                enqueueSnackbar("Voucher has been used.", { variant: 'warning' });
-                return;
+
+            if (data.data) {
+                setDiscountPrice(data.data.discountPercent);
+                setIsUsed(data.data.used);
+
+                if (data.data.used) {
+                    enqueueSnackbar("Voucher has been used.", { variant: 'warning' });
+                    return;
+                }
+            } else {
+                enqueueSnackbar("Invalid voucher code.", { variant: 'error' });
             }
         } catch (error) {
             console.error("Failed to fetch discount price:", error);
-            setDiscountPrice(0)
+            enqueueSnackbar("Failed to apply voucher. Please try again.", { variant: 'error' });
+            setDiscountPrice(0);
         }
-        handleApplyVoucher();
     };
     // Checkout
     const handleCheckout = () => {
@@ -98,7 +114,7 @@ const Cart = () => {
         const discount = (discountPrice / 100) * totalPrice;
         const memberDiscount = (discountMemberPrice / 100) * totalPrice;
         const finalPrice = totalPrice - discount - memberDiscount;
-        const tax = finalPrice * 0.08;
+        const tax = finalPrice * 0.1;
         const totalAmount = finalPrice + tax;
 
         if (totalAmount > 0) {
@@ -368,7 +384,7 @@ const Cart = () => {
                                             <Typography color="grey.600">
                                                 Tax{" "}
                                                 <Span sx={{ color: "red" }}>
-                                                    (+8%)
+                                                    (+10%)
                                                 </Span>
                                                 :
                                             </Typography>
@@ -378,7 +394,7 @@ const Cart = () => {
                                                 lineHeight="1"
                                             >
                                                 {currency(
-                                                    (getTotalPrice() - (discountPrice / 100) * getTotalPrice() - (discountMemberPrice / 100) * getTotalPrice()) * 0.08
+                                                    (getTotalPrice() - (discountPrice / 100) * getTotalPrice() - (discountMemberPrice / 100) * getTotalPrice()) * 0.1
                                                 )}
                                             </Typography>
                                         </FlexBetween>
@@ -394,7 +410,7 @@ const Cart = () => {
                                                 textAlign="right"
                                             >
                                                 {currency(
-                                                    (getTotalPrice() - (discountPrice / 100) * getTotalPrice() - (discountMemberPrice / 100) * getTotalPrice()) + ((getTotalPrice() - (discountPrice / 100) * getTotalPrice() - (discountMemberPrice / 100) * getTotalPrice()) * 0.08)
+                                                    (getTotalPrice() - (discountPrice / 100) * getTotalPrice() - (discountMemberPrice / 100) * getTotalPrice()) + ((getTotalPrice() - (discountPrice / 100) * getTotalPrice() - (discountMemberPrice / 100) * getTotalPrice()) * 0.1)
                                                 )}
                                             </Typography>
                                         </FlexBetween>
