@@ -6,6 +6,8 @@ import Section6 from "pages-sections/market-2/Section6";
 import Section7 from "pages-sections/market-2/Section7";
 import Section8 from "pages-sections/market-2/Section8";
 import Section9 from "pages-sections/market-2/Section9";
+import ProductSection from "pages-sections/market-2/ProductSection";
+import ProductFetchApi from "pages-sections/market-2/ProductFetchApi";
 import ShopLayout1 from "components/layouts/ShopLayout1";
 import api from "utils/__api__/market-2";
 import { useRouter } from "next/router"; // =======================================================
@@ -18,11 +20,7 @@ import axios from "axios";
 const Market = (props) => {
     const theme = useTheme();
     const router = useRouter();
-    const [showBraceletProduct, setShowBraceletProduct] = useState([]);
-    const [showRingProduct, setShowRingProduct] = useState([]);
-    const [showEarringProduct, setShowEarringProduct] = useState([]);
-    const [showNecklaceProduct, setShowNecklaceProduct] = useState([]);
-    const [showCharmProduct, setShowCharmProduct] = useState([]);
+    const [productType, setProductType] = useState([]);
     useEffect(() => {
         if (typeof window !== "undefined") {
             const token = localStorage.getItem("token");
@@ -40,156 +38,35 @@ const Market = (props) => {
             }
         }
     }, []);
+
     useEffect(() => {
-        const fetchProductBracelet = async () => {
+        const fetchProductType = async () => {
             const token = localStorage.getItem("token");
-            const decoded = jwtDecode(token);
-            const counterId = decoded?.counterId;
             try {
-                const resBraceletProduct = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=300&page=0&sortKeyword=productId&sortType=ASC&categoryName=bracelet&searchKeyword= `,
+                const resProductType = await axios.get(
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product-type`,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
                         },
                     }
                 );
-
-                setShowBraceletProduct(
-                    resBraceletProduct?.data?.data.filter(
-                        (res) => res.active === true
-                    )
-                );
+                setProductType(resProductType.data.data);
             } catch (e) {
                 console.log(e);
             }
         };
-        fetchProductBracelet();
-    }, []);
-
-    useEffect(() => {
-        const fetchProductRing = async () => {
-            const token = localStorage.getItem("token");
-            const decoded = jwtDecode(token);
-            const counterId = decoded?.counterId;
-            try {
-                const resRingProduct = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=300&page=0&sortKeyword=price&sortType= &categoryName=ring&searchKeyword= `,
-                    {
-                        headers: {
-                            Authorization: "Bearer " + token, //the token is a variable which holds the token
-                        },
-                    }
-                );
-                setShowRingProduct(
-                    resRingProduct?.data?.data.filter(
-                        (res) => res.active === true
-                    )
-                );
-            } catch (e) {
-                console.log(e);
-            }
-        };
-        fetchProductRing();
-    }, []);
-
-    useEffect(() => {
-        const fetchProductEarring = async () => {
-            const token = localStorage.getItem("token");
-            const decoded = jwtDecode(token);
-            const counterId = decoded?.counterId;
-            try {
-                const resEarringProduct = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=300&page=0&sortKeyword=price&sortType= &categoryName=earring&searchKeyword= `,
-                    {
-                        headers: {
-                            Authorization: "Bearer " + token, //the token is a variable which holds the token
-                        },
-                    }
-                );
-                setShowEarringProduct(
-                    resEarringProduct?.data?.data.filter(
-                        (res) => res.active === true
-                    )
-                );
-            } catch (e) {
-                console.log(e);
-            }
-        };
-        fetchProductEarring();
-    }, []);
-
-    useEffect(() => {
-        const fetchProductNecklaces = async () => {
-            const token = localStorage.getItem("token");
-            const decoded = jwtDecode(token);
-            const counterId = decoded?.counterId;
-            try {
-                const resNecklacesProduct = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=300&page=0&sortKeyword=price&sortType= &categoryName=necklace&searchKeyword= `,
-                    {
-                        headers: {
-                            Authorization: "Bearer " + token, //the token is a variable which holds the token
-                        },
-                    }
-                );
-                setShowNecklaceProduct(
-                    resNecklacesProduct?.data?.data.filter(
-                        (res) => res.active === true
-                    )
-                );
-            } catch (e) {
-                console.log(e);
-            }
-        };
-        fetchProductNecklaces();
-    }, []);
-
-    useEffect(() => {
-        const fetchProductCharm = async () => {
-            const token = localStorage.getItem("token");
-            const decoded = jwtDecode(token);
-            const counterId = decoded?.counterId;
-            try {
-                const resCharmProduct = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=300&page=0&sortKeyword=productId&sortType=ASC&categoryName=charm&searchKeyword= `,
-                    {
-                        headers: {
-                            Authorization: "Bearer " + token, //the token is a variable which holds the token
-                        },
-                    }
-                );
-                setShowCharmProduct(
-                    resCharmProduct?.data?.data.filter(
-                        (res) => res.active === true
-                    )
-                );
-            } catch (e) {
-                console.log(e);
-            }
-        };
-        fetchProductCharm();
+        fetchProductType();
     }, []);
 
     return (
         <ShopLayout1 topbarBgColor={theme.palette.grey[900]}>
             <SEO title="FourGemsShop" />
             <Box bgcolor="#FFFFFF">
-                {/* Necklaces */}
-                <Section5 products={showNecklaceProduct} />
-
-                {/*/!* Rings*!/*/}
-                <Section6 products={showRingProduct} />
-
-                {/*/!* Earrings *!/*/}
-                <Section7 products={showEarringProduct} />
-
-                {/*  Charm */}
-                <Section8 products={showCharmProduct} />
-
-                {/* Bracelet */}
-                <Section9 products={showBraceletProduct} />
-
+                {productType &&
+                    productType.map((product) => (
+                        <ProductFetchApi categoryName={product.name} />
+                    ))}
                 <div
                     style={{
                         display: "grid",

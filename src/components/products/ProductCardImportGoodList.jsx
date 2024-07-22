@@ -6,7 +6,7 @@ export const ProductCardImportGoodsList = ({ products }) => {
         <div>
             {products.map((item) => (
                 <ProductCardImportGoods
-                    id={item.productId}
+                    productId={item.productId}
                     slug={item.productName}
                     title={item.productName}
                     price={item.price}
@@ -17,4 +17,3 @@ export const ProductCardImportGoodsList = ({ products }) => {
         </div>
     );
 };
-

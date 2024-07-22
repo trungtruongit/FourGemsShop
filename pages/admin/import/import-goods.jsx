@@ -110,7 +110,7 @@ const ImportGoods = () => {
             fromCounterId: 0,
             toCounterId: rotateId.counterId,
             productTransferRequestList: cartList.map((item) => ({
-                productId: item.id,
+                productId: item.productId,
                 quantity: item.qty,
             })),
         };
