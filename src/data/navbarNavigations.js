@@ -16,19 +16,5 @@ const navbarNavigations = [
         url: "/barcode",
         withStaff: true,
     },
-    {
-        megaMenu: false,
-        megaMenuWithSub: false,
-        title: "Buy Back",
-        url: "/buy-back",
-        withStaff: false,
-    },
-    {
-        megaMenu: false,
-        megaMenuWithSub: false,
-        title: "Warranty",
-        url: "/warranty",
-        withStaff: false,
-    },
 ];
 export default navbarNavigations;
