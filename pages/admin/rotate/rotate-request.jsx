@@ -49,15 +49,13 @@ const RotateDetails = () => {
     const handleFormSubmit = async (values) => {
         setRotateId(values);
         const decoded = jwtDecode(token);
-        const counterId = decoded?.counterId;
+        const counterId = decoded?.counterId?.toString();
         if (counterId === values.counterId) {
             setPopupOpen(true);
         } else {
             setConfirmPopup(true);
         }
     };
-
-    // Validation schema for Formik form
     const validationSchema = yup.object().shape({
         counterId: yup.string().required("Counter ID is required"),
     });
@@ -93,10 +91,6 @@ const RotateDetails = () => {
         } catch (error) {
             console.error("Failed to create rotate request:", error);
         }
-        // Redirect user after successful request (optional)
-        // setTimeout(() => {
-        //   router.push("/checkout");
-        // }, 3000);
     };
     // Handle confirmation of rotate goods transfer
     const handleConfirmTransfer = async (values) => {

@@ -69,7 +69,6 @@ const Profile = ({ user }) => {
                             },
                         }
                     );
-                    // Làm tròn lên giá product.price
                     const roundedPrice = Math.ceil(response.data.data.price);
                     setProduct({ ...response.data.data, price: roundedPrice });
                 } else {

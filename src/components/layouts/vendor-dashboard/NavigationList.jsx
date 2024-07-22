@@ -44,44 +44,10 @@ export const navigations = [
         path: "/admin/users-account",
         withAdmin: "true",
     },
-    // DemoFinal
-    // {
-    //     name: "Warranty",
-    //     icon: duotone.Refund,
-    //     children: [
-    //         {
-    //             name: "Warranty Request",
-    //             path: "/admin/refund-request",
-    //         },
-    //         {
-    //             name: "Warranty Settings",
-    //             path: "/admin/refund-setting",
-    //         },
-    //     ],
-    // },
-    // {
-    //     name: "Support Tickets",
-    //     icon: duotone.AccountSetting,
-    //     path: "/vendor/support-tickets",
-    // },
     {
         type: "label",
         label: "Manager",
     },
-    // {
-    //     name: "Earnings",
-    //     icon: duotone.ProjectChart,
-    //     children: [
-    //         {
-    //             name: "Earning History",
-    //             path: "/vendor/earning-history",
-    //         },
-    //         {
-    //             name: "Payments",
-    //             path: "/vendor/payouts",
-    //         },
-    //     ],
-    // },
     {
         name: "Manager Product List",
         icon: duotone.Products,

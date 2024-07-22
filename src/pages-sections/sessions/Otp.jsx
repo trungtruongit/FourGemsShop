@@ -59,8 +59,10 @@ const Otp = () => {
         <Wrapper elevation={3}>
             <form onSubmit={handleSubmit}>
                 <BazaarImage
-                    src="/assets/images/logo.svg"
+                    src="/logo.png"
                     sx={{
+                        width: "100px",
+                        height: "100px",
                         m: "auto",
                     }}
                 />

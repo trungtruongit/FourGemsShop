@@ -5,11 +5,9 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
 import InputBase from "@mui/material/InputBase";
-import Globe from "components/icons/Globe";
 import Toggle from "components/icons/Toggle";
 import AccountPopover from "./popovers/AccountPopover";
 import { FlexBox, FlexRowCenter } from "components/flex-box";
-import NotificationsPopover from "./popovers/NoficationPopover"; // custom styled components
 import { H3 } from "components/Typography";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -120,20 +118,8 @@ const DashboardNavbar = ({ handleDrawerToggle }) => {
                     <Box flexGrow={1} sx={{}} />
 
                     <FlexBox alignItems="center" gap={4}>
-                        {/* <StyledInputBase
-                            placeholder="Search anything..."
-                            startAdornment={
-                                <Search
-                                    sx={{
-                                        color: "grey.500",
-                                        mr: 1,
-                                    }}
-                                />
-                            }
-                        /> */}
                         <AccountPopover />
                         <H3>{name}</H3>
-                        <NotificationsPopover />
                     </FlexBox>
                 </StyledToolBar>
             </Container>
