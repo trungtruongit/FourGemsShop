@@ -9,7 +9,17 @@ import {
     StyledTableRow,
 } from "../StyledComponents";
 import { currency } from "lib"; // ========================================================================
+function convertDate(dateString) {
+    const date = new Date(dateString);
 
+    const day = date.getUTCDate();
+    const month = date.getUTCMonth() + 1; // Tháng bắt đầu từ 0
+    const year = date.getUTCFullYear();
+
+    const formattedDate = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
+
+    return formattedDate;
+}
 // ========================================================================
 const PromotionRow = ({ seller }) => {
     const {
@@ -49,12 +59,12 @@ const PromotionRow = ({ seller }) => {
                 {discount + "%"}
             </StyledTableCell>
             <StyledTableCell
-                align="center"
+                align="left"
                 sx={{
                     fontWeight: 400,
                 }}
             >
-                {startDate}
+                {convertDate(startDate)}
             </StyledTableCell>
             <StyledTableCell
                 align="left"
@@ -62,7 +72,7 @@ const PromotionRow = ({ seller }) => {
                     fontWeight: 400,
                 }}
             >
-                {endDate}
+                {convertDate(endDate)}
             </StyledTableCell>
         </StyledTableRow>
     );

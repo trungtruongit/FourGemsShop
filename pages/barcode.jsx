@@ -88,10 +88,10 @@ const BarCodeTest = () => {
 
     const handleAddToCart = (product) => {
         const cartItem = state.cart.find(
-            (item) => item.id === product.productId
+            (item) => item.productId === product.productId
         );
         const payload = {
-            id: product.productId,
+            productId: product.productId,
             name: product.productName,
             price: product.price,
             imgUrl: product.image,

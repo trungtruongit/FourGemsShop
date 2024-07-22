@@ -8,7 +8,7 @@ import {
     useMediaQuery,
 } from "@mui/material";
 import TableRow from "components/TableRow";
-import { H3, H5, Small } from "components/Typography";
+import { H5, Small } from "components/Typography";
 import { FlexBetween, FlexBox } from "components/flex-box";
 import UserDashboardHeader from "components/header/UserDashboardHeader";
 import CustomerDashboardNavigation from "components/layouts/customer-dashboard/Navigations";

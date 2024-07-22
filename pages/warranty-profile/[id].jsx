@@ -62,7 +62,7 @@ const CartBuyBack = () => {
                                 bgcolor: "primary.light",
                             }}
                         >
-                            Back to Buy Back
+                            Back to Warranty
                         </Button>
                     </Link>
                 }
