@@ -26,9 +26,15 @@ export default function CreateAccount() {
     name: yup.string().required("required"),
     userName: yup.string().required("required"),
     address: yup.string().required("required"),
-    email: yup.string().required("required"),
-    password: yup.string().required("required"),
-    phoneNumber: yup.string().required("required"),
+    email: yup.string().email("Invalid email address").required("required"),
+    password: yup
+        .string()
+        .required("Password is required")
+        .min(6, "Password must be at least 6 characters long"),
+    phoneNumber: yup
+        .string()
+        .matches(/^0\d{9}$/, "Phone number must be exactly 10 digits and start with 0")
+        .required("Phone number is required"),
     roleId: yup.string().required("required"),
     counterId: yup.string().required("required"),
   });

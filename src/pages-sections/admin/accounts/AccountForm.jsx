@@ -1,10 +1,39 @@
-import { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { Button, Card, Grid, MenuItem, TextField } from "@mui/material";
 import { Formik } from "formik";
+import axios from "axios";
 const AccountForm = (props) => {
   const { initialValues, validationSchema, handleFormSubmit } = props;
   const [files, setFiles] = useState([]); // HANDLE UPDATE NEW IMAGE VIA DROP ZONE
   const [productPulish, setProductPublish] = useState();
+  const [counters, setCounters] = useState([]);
+  let token = "";
+  if (typeof localStorage !== "undefined") {
+    token = localStorage.getItem("token");
+  } else if (typeof sessionStorage !== "undefined") {
+    token = sessionStorage.getItem("token");
+  } else {
+  }
+
+  useEffect(() => {
+    const fetchCounters = async () => {
+      try {
+        const response = await axios.get(
+            `https://four-gems-system-790aeec3afd8.herokuapp.com/counter`,
+            {
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+            }
+        );
+        setCounters(response.data.data);
+      } catch (error) {
+        console.error("Failed to fetch counters:", error);
+      }
+    };
+
+    fetchCounters();
+  }, [token]);
   return (
     <Card
       sx={{
@@ -37,8 +66,8 @@ const AccountForm = (props) => {
                   value={values.userName}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  error={!!touched.name && !!errors.name}
-                  helperText={touched.name && errors.name}
+                  error={!!touched.userName && !!errors.userName}
+                  helperText={touched.userName && errors.userName}
                 />
               </Grid>
               <Grid item sm={6} xs={12}>
@@ -67,8 +96,8 @@ const AccountForm = (props) => {
                   value={values.address}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  error={!!touched.name && !!errors.name}
-                  helperText={touched.name && errors.name}
+                  error={!!touched.address && !!errors.address}
+                  helperText={touched.address && errors.address}
                 />
               </Grid>
               <Grid item sm={6} xs={12}>
@@ -82,8 +111,8 @@ const AccountForm = (props) => {
                   value={values.email}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  error={!!touched.name && !!errors.name}
-                  helperText={touched.name && errors.name}
+                  error={!!touched.email && !!errors.email}
+                  helperText={touched.email && errors.email}
                 />
               </Grid>
               <Grid item sm={6} xs={12}>
@@ -97,8 +126,8 @@ const AccountForm = (props) => {
                   value={values.phoneNumber}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  error={!!touched.name && !!errors.name}
-                  helperText={touched.name && errors.name}
+                  error={!!touched.phoneNumber && !!errors.phoneNumber}
+                  helperText={touched.phoneNumber && errors.phoneNumber}
                 />
               </Grid>
               <Grid item sm={6} xs={12}>
@@ -112,8 +141,8 @@ const AccountForm = (props) => {
                   value={values.password}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  error={!!touched.name && !!errors.name}
-                  helperText={touched.name && errors.name}
+                  error={!!touched.password && !!errors.password}
+                  helperText={touched.password && errors.password}
                 />
               </Grid>
               <Grid item sm={6} xs={12}>
@@ -131,8 +160,14 @@ const AccountForm = (props) => {
                   error={!!touched.counterId && !!errors.counterId}
                   helperText={touched.counterId && errors.counterId}
                 >
-                  <MenuItem value="1">1</MenuItem>
-                  <MenuItem value="2">2</MenuItem>
+                  {counters.map((counter) => (
+                      <MenuItem
+                          key={counter.counterId}
+                          value={counter.counterId}
+                      >
+                        Counter {counter.counterId}
+                      </MenuItem>
+                  ))}
                 </TextField>
               </Grid>
               <Grid item sm={6} xs={12}>
@@ -150,6 +185,7 @@ const AccountForm = (props) => {
                   error={!!touched.roleId && !!errors.roleId}
                   helperText={touched.roleId && errors.roleId}
                 >
+                  <MenuItem value="4">QC</MenuItem>
                   <MenuItem value="3">Admin</MenuItem>
                   <MenuItem value="2">Manager</MenuItem>
                   <MenuItem value="1">Staff</MenuItem>
