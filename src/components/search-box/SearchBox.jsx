@@ -7,6 +7,7 @@ import BazaarMenu from "components/BazaarMenu";
 import { FlexBox } from "components/flex-box";
 import { SearchOutlinedIcon, SearchResultCard } from "./styled";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 const DropDownHandler = styled(FlexBox)(({ theme }) => ({
     whiteSpace: "pre",
@@ -23,12 +24,20 @@ const SearchBox = () => {
     const [_, startTransition] = useTransition();
     const [category, setCategory] = useState("All Categories");
     const [resultList, setResultList] = useState([]);
-
+    let token = "";
     const handleCategoryChange = (cat) => () => setCategory(cat);
 
     const handleSearch = async (e) => {
         startTransition(async () => {
-            const counterId = localStorage.getItem("counterId");
+            if (typeof localStorage !== "undefined") {
+                token = localStorage.getItem("token");
+            } else if (typeof sessionStorage !== "undefined") {
+                token = localStorage.getItem("token");
+            } else {
+                // If neither localStorage nor sessionStorage is supported
+            }
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             const value = e.target?.value;
             const token = localStorage.getItem("token");
             let type = "";

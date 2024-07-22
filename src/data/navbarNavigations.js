@@ -16,5 +16,12 @@ const navbarNavigations = [
         url: "/barcode",
         withStaff: true,
     },
+    {
+        megaMenu: false,
+        megaMenuWithSub: false,
+        title: "Logout",
+        url: "/login",
+        withStaff: false,
+    },
 ];
 export default navbarNavigations;

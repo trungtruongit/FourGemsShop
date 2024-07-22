@@ -21,7 +21,6 @@ const OrderRow = ({ order }) => {
     } else if (typeof sessionStorage !== "undefined") {
         token = localStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
     }
     const handleConfirmUser = async () => {
         try {
@@ -81,11 +80,11 @@ const OrderRow = ({ order }) => {
 
             <StyledTableCell align="center">
                 {isProcess ? (
-                    <div style={{display: 'flex', alignItems: 'center'}}>
+                    <div style={{ display: "flex", alignItems: "center" }}>
                         <StyledIconButton
                             onClick={() => handleViewOrderDetail()}
                         >
-                            <RemoveRedEye/>
+                            <RemoveRedEye />
                         </StyledIconButton>
                         <Button
                             sx={{
@@ -114,17 +113,12 @@ const OrderRow = ({ order }) => {
                             Cancel
                         </Button>
                     </div>
-
                 ) : (
                     <>
                         <StyledIconButton
                             onClick={() => handleViewOrderDetail()}
                         >
-                            <RemoveRedEye/>
-                        </StyledIconButton>
-
-                        <StyledIconButton>
-                            <Delete/>
+                            <RemoveRedEye />
                         </StyledIconButton>
                     </>
                 )}

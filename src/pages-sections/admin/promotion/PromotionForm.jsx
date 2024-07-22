@@ -1,4 +1,12 @@
-import {Button, Card, Grid, MenuItem, Select, Chip, TextField} from "@mui/material";
+import {
+    Button,
+    Card,
+    Grid,
+    MenuItem,
+    Select,
+    Chip,
+    TextField,
+} from "@mui/material";
 import { Formik } from "formik";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -7,18 +15,19 @@ const PromotionForm = (props) => {
     const { initialValues, validationSchema, handleFormSubmit } = props;
     const [productPromotion, setProductPromotion] = useState([]);
     const findProductName = (productPromotion, productId) => {
-       if(productPromotion){
-           const name = productPromotion.filter((item) => item.productId === productId);
-           return name[0]?.productName;
-       }
-    }
+        if (productPromotion) {
+            const name = productPromotion.filter(
+                (item) => item.productId === productId
+            );
+            return name[0]?.productName;
+        }
+    };
     let token = "";
     if (typeof localStorage !== "undefined") {
         token = localStorage.getItem("token");
     } else if (typeof sessionStorage !== "undefined") {
         token = localStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
     }
 
     useEffect(() => {
@@ -51,14 +60,14 @@ const PromotionForm = (props) => {
                 validationSchema={validationSchema}
             >
                 {({
-                      values,
-                      errors,
-                      touched,
-                      handleChange,
-                      handleBlur,
-                      handleSubmit,
-                      setFieldValue,
-                  }) => (
+                    values,
+                    errors,
+                    touched,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    setFieldValue,
+                }) => (
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={3}>
                             <Grid item sm={6} xs={12}>
@@ -72,8 +81,14 @@ const PromotionForm = (props) => {
                                     value={values.description}
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    error={!!touched.description && !!errors.description}
-                                    helperText={touched.description && errors.description}
+                                    error={
+                                        !!touched.description &&
+                                        !!errors.description
+                                    }
+                                    helperText={
+                                        touched.description &&
+                                        errors.description
+                                    }
                                 />
                             </Grid>
                             <Grid item sm={6} xs={12}>
@@ -88,8 +103,12 @@ const PromotionForm = (props) => {
                                     value={values.discount}
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    error={!!touched.discount && !!errors.discount}
-                                    helperText={touched.discount && errors.discount}
+                                    error={
+                                        !!touched.discount && !!errors.discount
+                                    }
+                                    helperText={
+                                        touched.discount && errors.discount
+                                    }
                                 />
                             </Grid>
                             <Grid item sm={6} xs={12}>
@@ -103,8 +122,12 @@ const PromotionForm = (props) => {
                                     value={values.endDate}
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    error={!!touched.endDate && !!errors.endDate}
-                                    helperText={touched.endDate && errors.endDate}
+                                    error={
+                                        !!touched.endDate && !!errors.endDate
+                                    }
+                                    helperText={
+                                        touched.endDate && errors.endDate
+                                    }
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
@@ -113,10 +136,10 @@ const PromotionForm = (props) => {
                             <Grid item sm={12} xs={12}>
                                 <Select
                                     sx={{
-                                        height: 'auto',
+                                        height: "auto",
                                         minHeight: 100,
-                                        display: 'flex',
-                                        alignItems: 'flex-start',
+                                        display: "flex",
+                                        alignItems: "flex-start",
                                     }}
                                     multiple
                                     fullWidth
@@ -124,27 +147,46 @@ const PromotionForm = (props) => {
                                     size="medium"
                                     name="promotionProduct"
                                     onBlur={handleBlur}
-                                    onChange={(event) => setFieldValue("promotionProduct", event.target.value)}
+                                    onChange={(event) =>
+                                        setFieldValue(
+                                            "promotionProduct",
+                                            event.target.value
+                                        )
+                                    }
                                     value={values.promotionProduct || []}
                                     label="Select Product"
-                                    error={!!touched.promotionProduct && !!errors.promotionProduct}
+                                    error={
+                                        !!touched.promotionProduct &&
+                                        !!errors.promotionProduct
+                                    }
                                     renderValue={(selected) => (
-                                        <div style={{
-                                            display: 'flex',
-                                            flexWrap: 'wrap',
-                                            gap: '4px',
-                                            maxWidth: '100%',
-                                            overflow: 'hidden',
-                                            textOverflow: 'ellipsis'
-                                        }}>
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                flexWrap: "wrap",
+                                                gap: "4px",
+                                                maxWidth: "100%",
+                                                overflow: "hidden",
+                                                textOverflow: "ellipsis",
+                                            }}
+                                        >
                                             {selected.length === 0 ? (
-                                                <span>No products selected</span>
+                                                <span>
+                                                    No products selected
+                                                </span>
                                             ) : (
                                                 selected.map((value) => (
                                                     <Chip
                                                         key={value}
-                                                        label={findProductName(productPromotion, value)}
-                                                        style={{ margin: '2px', maxWidth: 'calc(100% - 4px)' }}
+                                                        label={findProductName(
+                                                            productPromotion,
+                                                            value
+                                                        )}
+                                                        style={{
+                                                            margin: "2px",
+                                                            maxWidth:
+                                                                "calc(100% - 4px)",
+                                                        }}
                                                     />
                                                 ))
                                             )}
@@ -152,7 +194,10 @@ const PromotionForm = (props) => {
                                     )}
                                 >
                                     {productPromotion.map((product) => (
-                                        <MenuItem key={product.productId} value={product.productId}>
+                                        <MenuItem
+                                            key={product.productId}
+                                            value={product.productId}
+                                        >
                                             {product.productName}
                                         </MenuItem>
                                     ))}
@@ -160,7 +205,11 @@ const PromotionForm = (props) => {
                             </Grid>
 
                             <Grid item sm={12} xs={12}>
-                                <Button variant="contained" color="info" type="submit">
+                                <Button
+                                    variant="contained"
+                                    color="info"
+                                    type="submit"
+                                >
                                     Add Promotion
                                 </Button>
                             </Grid>

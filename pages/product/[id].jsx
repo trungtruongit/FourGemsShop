@@ -9,6 +9,7 @@ import ProductReview from "components/products/ProductReview";
 import ProductDescription from "components/products/ProductDescription";
 import CareAndMaintenance from "components/products/CareAndMaintenance";
 import axios from "axios"; // styled component
+import { jwtDecode } from "jwt-decode";
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
     minHeight: 0,
@@ -39,11 +40,11 @@ const ProductDetails = (props) => {
     } else if (typeof sessionStorage !== "undefined") {
         token = sessionStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
     }
     useEffect(() => {
         const fetchData = async () => {
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
                 if (token) {
                     const response = await axios.get(
@@ -55,7 +56,6 @@ const ProductDetails = (props) => {
                         }
                     );
                     setProduct(response.data.data);
-                    console.log(response.data.data);
                 } else {
                     console.warn(
                         "Token is missing. Please ensure it's properly set."
@@ -67,7 +67,6 @@ const ProductDetails = (props) => {
         };
         fetchData();
     }, [id]);
-    console.log(product);
     return (
         <ShopLayout1>
             <Container

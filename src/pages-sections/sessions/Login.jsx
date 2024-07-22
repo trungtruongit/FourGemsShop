@@ -62,7 +62,6 @@ const Login = () => {
                 }
             );
             if (response.data.data !== "") {
-                console.log("successfully logged in");
                 nav.push("/otp");
             }
         } catch (e) {
@@ -100,7 +99,7 @@ const Login = () => {
                     onBlur={handleBlur}
                     value={values.email}
                     onChange={handleChange}
-                    label="Email or Phone Number"
+                    label="Username"
                     placeholder="exmple@mail.com"
                     error={!!touched.email && !!errors.email}
                     helperText={touched.email && errors.email}

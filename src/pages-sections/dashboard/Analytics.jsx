@@ -7,6 +7,7 @@ import { H5 } from "components/Typography";
 import { FlexBetween } from "components/flex-box";
 import { analyticsChartOptions } from "./chartsOptions";
 import axios from "axios"; // apext chart instance
+import { jwtDecode } from "jwt-decode";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
     ssr: false,
@@ -51,12 +52,12 @@ const Analytics = () => {
         token = localStorage.getItem("token");
     } else {
         // If neither localStorage nor sessionStorage is supported
-        console.log("Web Storage is not supported in this environment.");
     }
     const [profit12Month, setProfit12Month] = useState();
     useEffect(() => {
         const fetchProfit12Mounth = async () => {
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
                 const resProfit12Mounth = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/order/total-profit-each-month?countId=${counterId}&year=2024`,
@@ -78,7 +79,8 @@ const Analytics = () => {
     const [income12Month, setIncome12Month] = useState();
     useEffect(() => {
         const fetchIncome12Mounth = async () => {
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
                 const resIncome12Mounth = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/order/total-money-each-month?countId=${counterId}&year=2024`,

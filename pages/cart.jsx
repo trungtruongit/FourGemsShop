@@ -44,8 +44,7 @@ const Cart = () => {
         // Fallback to sessionStorage if localStorage is not supported
         token = localStorage.getItem("token");
     } else {
-        // If neither localStorage nor sessionStorage is supported
-        console.log("Web Storage is not supported in this environment.");
+        
     }
     const SEARCH_BUTTON = (
         <Button
@@ -88,7 +87,6 @@ const Cart = () => {
         };
         fetchSearchCustomInfo();
     };
-    console.log(discountMemberPrice);
     const handleApplyVoucher = async () => {
         const fetchPriceApplyVoucher = async () => {
             try {

@@ -50,7 +50,7 @@ const ProductIntro = ({ product }) => {
                         <LazyImage
                             alt={productName}
                             width={590}
-                            height={500}
+                            height={600}
                             bgcolor="white"
                             loading="eager"
                             objectFit="contain"
@@ -66,7 +66,7 @@ const ProductIntro = ({ product }) => {
                     xs={12}
                     mt={3}
                     alignItems="center"
-                    height={500}
+                    height={600}
                 >
                     <div
                         style={{

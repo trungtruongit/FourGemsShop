@@ -30,7 +30,6 @@ const CheckoutForm = () => {
         token = localStorage.getItem("token");
     } else {
         // If neither localStorage nor sessionStorage is supported
-        console.log("Web Storage is not supported in this environment.");
     }
     const decoded = jwtDecode(token);
     const productName = cartList?.map((item) => ({
@@ -53,6 +52,7 @@ const CheckoutForm = () => {
         price: item?.price,
         name: item?.name,
     }));
+
     const code = localStorage.getItem("code");
     useEffect(() => {
         if (router?.query?.customerId) {
@@ -63,7 +63,6 @@ const CheckoutForm = () => {
     useEffect(() => {
         const fetchGetCusById = async () => {
             if (!customerId) return;
-            console.log("Fetching customer info for ID:", customerId);
             try {
                 const responeGetCus = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/customers/${customerId}`,
