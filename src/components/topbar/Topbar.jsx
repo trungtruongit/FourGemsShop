@@ -85,7 +85,7 @@ const Topbar = ({ bgColor }) => {
                             <Image
                                 display="block"
                                 height="28px"
-                                src="/assets/images/logo.svg"
+                                src="/logo.png"
                                 alt="logo"
                             />
                         </Link>
@@ -103,7 +103,6 @@ const Topbar = ({ bgColor }) => {
                 </FlexBox>
 
                 <FlexBox className="topbarRight" alignItems="center">
-                    {/* <Typography sx={{ paddingRight: "15px" }}>Counter: {counterId}</Typography> */}
                     <Typography sx={{ paddingRight: "15px" }}>EN</Typography>
                     <Typography sx ={{mr:"3px"}}>USD</Typography>
                 </FlexBox>
@@ -112,16 +111,4 @@ const Topbar = ({ bgColor }) => {
     );
 };
 
-const languageList = [
-    {
-        title: "EN",
-        imgUrl: "/assets/images/flags/usa.png",
-    },
-];
-const currencyList = [
-    {
-        title: "USD",
-        imgUrl: "/assets/images/flags/usa.png",
-    },
-];
 export default Topbar;

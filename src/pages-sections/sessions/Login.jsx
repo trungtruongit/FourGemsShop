@@ -92,14 +92,16 @@ const Login = () => {
         <Wrapper elevation={3} passwordVisibility={passwordVisibility}>
             <form onSubmit={handleSubmit}>
                 <BazaarImage
-                    src="/assets/images/logo.svg"
+                    src="/logo.png"
                     sx={{
+                        width: "100px",
+                        height: "100px",
                         m: "auto",
                     }}
                 />
 
                 <H1 textAlign="center" mt={1} mb={4} fontSize={16}>
-                    Welcome To Shop
+                    Welcome To FourGems Shop
                 </H1>
 
                 <BazaarTextField

@@ -20,19 +20,18 @@ const Wrapper = styled(Card)(() => ({
 
 // ===========================================================
 const ProductCardRotateGoods = (props) => {
-    const { imgUrl, title, price, id, stock, slug } = props;
+    const { imgUrl, title, price, productId, stock} = props;
     const { state, dispatch } = useAppContext();
-    const cartItem = state.cart.find((item) => item.slug === slug);
+    const cartItem = state.cart.find((item) => item.productId === productId);
     const handleCartAmountChange = (amount) => () => {
         dispatch({
             type: "CHANGE_CART_AMOUNT",
             payload: {
-                name: title,
-                qty: amount,
                 price,
-                imgUrl,
-                id,
-                slug,
+                qty: amount,
+                name: title,
+                imgUrl: imgUrl,
+                productId,
             },
         });
     };

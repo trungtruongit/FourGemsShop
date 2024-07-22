@@ -32,13 +32,13 @@ const Footer = () => {
             color: "white",
           }}
         >
-          <Box py={10} overflow="hidden">
+          <Box py={5} overflow="hidden">
             <Grid container spacing={3}>
-              <Grid item lg={4} md={6} sm={6} xs={12}>
-                // logo fourgemsjewelry
+              <Grid item lg={5} md={6} sm={6} xs={12}>
+                <img src="/logo.png" alt="Logo" style={{ width: '50%', height: 'auto'}} />
               </Grid>
 
-              <Grid item lg={2} md={6} sm={6} xs={12}>
+              <Grid item lg={3} md={6} sm={6} xs={12}>
                 <Box
                   fontSize="18px"
                   fontWeight="600"
@@ -76,49 +76,6 @@ const Footer = () => {
                     </Link>
                   ))}
                 </div>
-              </Grid>
-
-              <Grid item lg={3} md={6} sm={6} xs={12}>
-                <Box
-                  fontSize="18px"
-                  fontWeight="600"
-                  mb={1.5}
-                  lineHeight="1"
-                  color="white"
-                >
-                  Contact Us
-                </Box>
-                <Box py={0.6} color="grey.500">
-                  EE 738 DEEN DAYAL NAGAR GWALIOR, MP 474020
-                </Box>
-                <Box py={0.6} color="grey.500">
-                  Email: support@qwikshop.com
-                </Box>
-                <Box py={0.6} mb={2} color="grey.500">
-                  Phone: +91 6265 081 928
-                </Box>
-
-                <FlexBox className="flex" mx={-0.625}>
-                  {iconList.map((item, ind) => (
-                    <a
-                      href={item.url}
-                      target="_blank"
-                      rel="noreferrer noopenner"
-                      key={ind}
-                    >
-                      <IconButton
-                        sx={{
-                          margin: 0.5,
-                          fontSize: 12,
-                          padding: "10px",
-                          backgroundColor: "rgba(0,0,0,0.2)",
-                        }}
-                      >
-                        <item.icon fontSize="inherit" />
-                      </IconButton>
-                    </a>
-                  ))}
-                </FlexBox>
               </Grid>
             </Grid>
           </Box>

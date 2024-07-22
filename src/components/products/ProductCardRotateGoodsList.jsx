@@ -1,6 +1,3 @@
-import { Pagination } from "@mui/material";
-import { FlexBetween } from "components/flex-box";
-import { Span } from "../Typography";
 import ProductCardRotateGoods from "../product-cards/ProductCardRotateGoods";
 
 // ==========================================================
@@ -9,7 +6,7 @@ const ProductCardRotateGoodsList = ({ products }) => {
         <div>
             {products.map((item) => (
                 <ProductCardRotateGoods
-                    id={item.productId}
+                    productId={item.productId}
                     slug={item.productName}
                     title={item.productName}
                     price={item.price}

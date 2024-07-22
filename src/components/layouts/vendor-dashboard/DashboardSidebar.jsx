@@ -20,6 +20,7 @@ import {
 } from "./LayoutStyledComponents";
 import { navigations } from "./NavigationList";
 import { jwtDecode } from "jwt-decode";
+
 const TOP_HEADER_AREA = 70;
 
 // -----------------------------------------------------------------------------
@@ -181,7 +182,7 @@ const DashboardSidebar = (props) => {
                         alt="Logo"
                         width={105}
                         height={50}
-                        src="/assets/images/logo.svg"
+                        src="/logo.png"
                         style={{
                             marginLeft: 8,
                         }}
@@ -202,18 +203,15 @@ const DashboardSidebar = (props) => {
             <FlexBetween
                 p={2}
                 maxHeight={TOP_HEADER_AREA}
-                justifyContent={COMPACT ? "center" : "space-between"}
+                justifyContent="center" // Center the Avatar
+                alignItems="center" // Center the content vertically
             >
                 <Avatar
-                    src={
-                        COMPACT
-                            ? "/assets/images/logo.svg"
-                            : "/assets/images/logo.svg"
-                    }
+                    src="/logo.png"
                     sx={{
                         borderRadius: 0,
-                        width: "auto",
-                        marginLeft: COMPACT ? 0 : 1,
+                        width: COMPACT ? "50px" : "80px", // Increased size for non-compact mode
+                        height: COMPACT ? "50px" : "80px", // Increased size for non-compact mode
                     }}
                 />
 
@@ -222,6 +220,7 @@ const DashboardSidebar = (props) => {
                     compact={COMPACT}
                     onClick={setSidebarCompact}
                     sidebarcompact={sidebarCompact ? 1 : 0}
+                    sx={{ ml: 7 }}
                 />
             </FlexBetween>
 

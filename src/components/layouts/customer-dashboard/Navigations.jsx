@@ -91,7 +91,7 @@ const linkList = [
                 title: "Buy Back",
             },
             {
-                href: "/wish-list",
+                href: "/warranty",
                 title: "Warranty",
             },
             {
