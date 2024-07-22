@@ -12,6 +12,7 @@ import { carouselStyled } from "components/carousel/CarouselStyled";
 const ProductSection = ({ products, title, category }) => {
     const width = useWindowSize();
     const [visibleSlides, setVisibleSlides] = useState(4);
+
     useEffect(() => {
         if (width < 426) setVisibleSlides(1);
         else if (width < 650) setVisibleSlides(2);
@@ -19,6 +20,9 @@ const ProductSection = ({ products, title, category }) => {
         else if (width < 1200) setVisibleSlides(4);
         else setVisibleSlides(4);
     }, [width]);
+
+    // Capitalize first letter and add 's' at the end for plural
+    const displayTitle = `${title.charAt(0).toUpperCase() + title.slice(1)}s`;
 
     return (
         <Container
@@ -28,7 +32,7 @@ const ProductSection = ({ products, title, category }) => {
             }}
         >
             <FlexBetween mb={3}>
-                <H2 fontSize={30}>{title}</H2>
+                <H2 fontSize={30}>{displayTitle}</H2>
                 <NavLink3
                     fontSize={30}
                     text="More Products"
@@ -49,4 +53,5 @@ const ProductSection = ({ products, title, category }) => {
         </Container>
     );
 };
+
 export default ProductSection;
