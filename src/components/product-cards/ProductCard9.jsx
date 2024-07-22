@@ -87,10 +87,12 @@ const ProductCard9 = (props) => {
 
                         <FlexBox mt={1} mb={2} alignItems="center">
                             <H5 fontWeight={600} color="primary.main" mr={1}>
-                                {calculateDiscount(price, off)}
+                                {off === 0
+                                    ? currency(price)
+                                    : calculateDiscount(price, off)}
                             </H5>
 
-                            {off && (
+                            {off !== 0 && (
                                 <Span fontWeight="600" color="grey.600">
                                     <del>{currency(price)}</del>
                                 </Span>

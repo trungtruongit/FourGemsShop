@@ -95,15 +95,14 @@ const ProductFilterCard = ({ onFilterByPrice, setPriceRange }) => {
                 )
             )}
 
-            <Divider
+            {/* <Divider
                 sx={{
                     mt: 2,
                     mb: 3,
                 }}
-            />
+            /> */}
 
-            {/* PRICE VARIANT FILTER */}
-            <H6 mb={2}>Price Range</H6>
+            {/* <H6 mb={2}>Price Range</H6>
             <FlexBetween>
                 <TextField
                     placeholder="0"
@@ -155,7 +154,7 @@ const ProductFilterCard = ({ onFilterByPrice, setPriceRange }) => {
                 sx={{
                     my: 3,
                 }}
-            />
+            /> */}
         </Card>
     );
 };

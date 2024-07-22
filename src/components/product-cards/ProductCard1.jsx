@@ -36,27 +36,6 @@ const ImageWrapper = styled(Box)(({ theme }) => ({
         display: "block",
     },
 }));
-const StyledChip = styled(Chip)(() => ({
-    zIndex: 1,
-    top: "10px",
-    left: "10px",
-    paddingLeft: 3,
-    paddingRight: 3,
-    fontWeight: 600,
-    fontSize: "10px",
-    position: "absolute",
-}));
-const HoverIconWrapper = styled(Box)(() => ({
-    zIndex: 2,
-    top: "7px",
-    opacity: 0,
-    right: "15px",
-    display: "flex",
-    cursor: "pointer",
-    position: "absolute",
-    flexDirection: "column",
-    transition: "all 0.3s ease-in-out",
-}));
 const ContentWrapper = styled(Box)(() => ({
     padding: "1rem",
     "& .title, & .categories": {
@@ -76,6 +55,7 @@ const ProductCard1 = ({
     discount = 5,
     showProductSize,
     quantityInStock,
+    off,
 }) => {
     const { enqueueSnackbar } = useSnackbar();
     const { state, dispatch } = useAppContext();
@@ -173,10 +153,12 @@ const ProductCard1 = ({
 
                         <FlexBox alignItems="center" gap={1} mt={0.5}>
                             <Box fontWeight="600" color="primary.main">
-                                {calculateDiscount(price, discount)}
+                                {off === 0
+                                    ? currency(price)
+                                    : calculateDiscount(price, off)}
                             </Box>
 
-                            {!!discount && (
+                            {off !== 0 && (
                                 <Box color="grey.600" fontWeight="600">
                                     <del>{currency(price)}</del>
                                 </Box>

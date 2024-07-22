@@ -31,7 +31,8 @@ const ProductCard9List = ({ products }) => {
                     key={item.productId}
                     title={item.productName}
                     price={item.price}
-                    // off={item.discount}
+                    off={item.discountPercent}
+                    // off={item.discountPercent}
                     imgUrl={item.image}
                 />
             ))}

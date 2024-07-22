@@ -59,6 +59,7 @@ const ProductSearchResult = () => {
                     (res) => res.active === true
                 );
                 setProductList(filteredProducts);
+                console.log(filteredProducts);
                 setLength(filteredProducts.length);
             } catch (e) {
                 console.log(e);
