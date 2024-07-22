@@ -5,12 +5,14 @@ import { H3 } from "components/Typography";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import { OrderDetails } from "pages-sections/admin";
 import axios from "axios"; // =============================================================================
+import { useSnackbar } from "notistack";
 
 OrderEdit.getLayout = function getLayout(page) {
     return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
 }; // =============================================================================
 
 export default function OrderEdit() {
+    const { enqueueSnackbar } = useSnackbar();
     const { query } = useRouter();
     const [orderDetails, setOrderDetails] = useState(null);
     const orderId = localStorage.getItem("orderIdStaff");
@@ -42,11 +44,18 @@ export default function OrderEdit() {
                 ) {
                     console.log(resOrderDetail.data.data[0].url);
                     window.open(resOrderDetail.data.data[0].url, "_blank");
-                    router.push("/orderwarrantystaff/warranty");
+                    enqueueSnackbar(
+                        "The warranty paper has been open in a new tab",
+                        {
+                            variant: "success",
+                        }
+                    );
                 } else {
-                    console.log("No data available");
+                    enqueueSnackbar("No warranty paper were found", {
+                        variant: "warning",
+                    });
                 }
-
+                router.push("/orderwarrantystaff/warranty");
                 // setOrderDetails(resOrderDetail.data.data);
             } catch (e) {
                 console.log(e);
