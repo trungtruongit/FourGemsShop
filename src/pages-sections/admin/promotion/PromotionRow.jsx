@@ -1,10 +1,4 @@
-import { useState } from "react";
-import { Delete, Edit, RemoveRedEye } from "@mui/icons-material";
-import { Avatar, Box } from "@mui/material";
-import { FlexBox } from "components/flex-box";
-import { Paragraph, Small } from "components/Typography";
 import {
-    StyledIconButton,
     StyledTableCell,
     StyledTableRow,
 } from "../StyledComponents";

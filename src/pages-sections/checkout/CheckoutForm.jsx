@@ -41,10 +41,16 @@ const CheckoutForm = () => {
     const tax =
         (getTotalPrice() - (getTotalPrice() * disPrice) / 100 - (getTotalPrice() * customerShowInfo.precent_discount) / 100) * 0.08;
     const totalBill = (
-        getTotalPrice() -
-        (getTotalPrice() * disPrice) / 100 -
-        (getTotalPrice() * customerShowInfo.precent_discount)
-        + tax
+                getTotalPrice() -
+        (disPrice / 100) * getTotalPrice() -
+        (customerShowInfo.precent_discount / 100) *
+        getTotalPrice() +
+        (getTotalPrice() -
+            (disPrice / 100) *
+            getTotalPrice() -
+            (customerShowInfo.precent_discount / 100) *
+            getTotalPrice()) *
+        0.08
     ).toFixed(2);
     const productIds = cartList?.map((item) => ({
         id: item?.id,
@@ -60,6 +66,7 @@ const CheckoutForm = () => {
             setCustomerId(customerIdNum);
         }
     }, [router?.query?.customerId]);
+    localStorage.setItem("customerId", customerId);
     useEffect(() => {
         const fetchGetCusById = async () => {
             if (!customerId) return;
