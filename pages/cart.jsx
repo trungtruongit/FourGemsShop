@@ -21,104 +21,102 @@ import { useState } from "react";
 import axios from "axios";
 import { Formik } from "formik";
 import * as yup from "yup";
+import { useSnackbar } from 'notistack';
 
+// Component
 const Cart = () => {
     const { state } = useAppContext();
     const cartList = state.cart;
     const router = useRouter();
-    const getTotalPrice = () =>
-        cartList.reduce((accum, item) => accum + item.price * item.qty, 0);
-    const [customerInfo, setCustomerInfo] = useState("");
+    const { enqueueSnackbar } = useSnackbar();
+    const [customerInfo, setCustomerInfo] = useState({});
     const [voucher, setVoucher] = useState("");
     const [discountPrice, setDiscountPrice] = useState(0);
     const [discountMemberPrice, setDiscountMemberPrice] = useState(0);
-
-    const handleFormSubmit = async (values) => {
-        router.push("/payment");
-    };
     const [dataNumSearch, setDataNumSearch] = useState("");
-    let token = "";
-    if (typeof localStorage !== "undefined") {
-        token = localStorage.getItem("token");
-    } else if (typeof sessionStorage !== "undefined") {
-        // Fallback to sessionStorage if localStorage is not supported
-        token = localStorage.getItem("token");
-    } else {
-        
-    }
-    const SEARCH_BUTTON = (
-        <Button
-            color="primary"
-            disableElevation
-            variant="contained"
-            onClick={() => handleBtnSearch()}
-            sx={{
-                px: "2rem",
-                height: "100%",
-                borderRadius: "0 20px 20px 0",
-            }}
-        >
-            Search
-        </Button>
-    );
 
+    // Token handling
+    const token = typeof localStorage !== "undefined"
+        ? localStorage.getItem("token")
+        : typeof sessionStorage !== "undefined"
+            ? sessionStorage.getItem("token")
+            : "";
+
+    // Fetch customer info
     const handleBtnSearch = async () => {
-        const fetchSearchCustomInfo = async () => {
-            try {
-                const resCusInfo = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/customers?phoneNumber=${dataNumSearch}`,
-                    {
-                        headers: {
-                            Authorization: "Bearer " + token, //the token is a variable which holds the token
-                        },
-                    }
-                );
-                if (resCusInfo.data.data.length === 0) {
-                    await router.push("/admin/customerInfo/create");
-                } else {
-                    setCustomerInfo(resCusInfo.data.data[0]);
-                    setDiscountMemberPrice(
-                        resCusInfo.data.data[0].precent_discount
-                    );
+        try {
+            const { data } = await axios.get(
+                `https://four-gems-system-790aeec3afd8.herokuapp.com/customers?phoneNumber=${dataNumSearch}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 }
-            } catch (error) {
-                console.error("Failed to fetch customer:", error);
+            );
+            if (data.data.length === 0) {
+                await router.push("/admin/customerInfo/create");
+            } else {
+                const customer = data.data[0];
+                setCustomerInfo(customer);
+                setDiscountMemberPrice(customer.precent_discount);
             }
-        };
-        fetchSearchCustomInfo();
+        } catch (error) {
+            console.error("Failed to fetch customer:", error);
+        }
     };
+
+    // Apply voucher
     const handleApplyVoucher = async () => {
-        const fetchPriceApplyVoucher = async () => {
-            try {
-                const resPriceByVoucher = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/voucher/${voucher}`,
-                    {
-                        headers: {
-                            Authorization: "Bearer " + token, //the token is a variable which holds the token
-                        },
-                    }
-                );
-                localStorage.setItem(
-                    "percentDiscount",
-                    resPriceByVoucher.data.data.discountPercent
-                );
-                setDiscountPrice(resPriceByVoucher.data.data.discountPercent);
-            } catch (error) {
-                console.error("Failed to fetch discount price:", error);
-            }
-        };
-        fetchPriceApplyVoucher();
+        try {
+            const { data } = await axios.get(
+                `https://four-gems-system-790aeec3afd8.herokuapp.com/voucher/${voucher}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            setDiscountPrice(data.data.discountPercent);
+        } catch (error) {
+            console.error("Failed to fetch discount price:", error);
+        }
     };
-    const handleCheckout = async () => {
+
+    // Checkout
+    const handleCheckout = () => {
         localStorage.setItem("code", voucher);
         localStorage.setItem("percentDiscount", discountPrice);
         localStorage.setItem("percentMemberDiscount", discountMemberPrice);
     };
 
+    const handleButtonClick = () => {
+        if (!dataNumSearch.trim()) {
+            enqueueSnackbar("Please enter a phone number to search for the customer before proceeding to checkout.", { variant: 'warning' });
+            return;
+        }
+
+        const totalPrice = getTotalPrice();
+        const discount = (discountPrice / 100) * totalPrice;
+        const memberDiscount = (discountMemberPrice / 100) * totalPrice;
+        const finalPrice = totalPrice - discount - memberDiscount;
+        const tax = finalPrice * 0.08;
+        const totalAmount = finalPrice + tax;
+
+        if (totalAmount > 0) {
+            handleCheckout();
+            router.push(`/checkout?customerId=${customerInfo.id}`);
+        } else {
+            enqueueSnackbar("You must buy something before checking out.", { variant: 'warning' });
+        }
+    };
+
+    // Calculate total price
+    const getTotalPrice = () =>
+        cartList.reduce((accum, item) => accum + item.price * item.qty, 0);
+
     return (
         <CheckoutNavLayout>
             <SEO title="Cart" />
-
             <Grid container spacing={3}>
                 {/* CART PRODUCT LIST */}
                 <Grid item md={5} xs={12}>
@@ -138,40 +136,39 @@ const Cart = () => {
                                 </Button>
                             </Link>
                         </Grid>
-
                         <Grid item sm={6} xs={12}>
-                            <Link
-                                href={`/checkout?customerId=${customerInfo.id}`}
-                                passHref
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                type="button"
+                                onClick={handleButtonClick}
+                                fullWidth
                             >
-                                <Button
-                                    variant="outlined"
-                                    color="primary"
-                                    type="button"
-                                    onClick={handleCheckout()}
-                                    fullWidth
-                                >
-                                    Checkout Now
-                                </Button>
-                            </Link>
+                                Checkout Now
+                            </Button>
                         </Grid>
                     </Grid>
                 </Grid>
                 <Grid item md={7} xs={12}>
                     <Formik
-                        initialValues={initialValues}
-                        validationSchema={checkoutSchema}
-                        onSubmit={handleFormSubmit}
+                        initialValues={{
+                            custom_fullname: "",
+                            custom_phoneNum: "",
+                            custom_email: "",
+                            custom_gender: "",
+                            shipping_address2: "",
+                        }}
+                        validationSchema={yup.object().shape({})} // Add validation if needed
+                        onSubmit={() => router.push("/payment")}
                     >
                         {({
-                            values,
-                            errors,
-                            touched,
-                            handleChange,
-                            handleBlur,
-                            handleSubmit,
-                            setFieldValue,
-                        }) => (
+                              values,
+                              errors,
+                              touched,
+                              handleChange,
+                              handleBlur,
+                              handleSubmit,
+                          }) => (
                             <form onSubmit={handleSubmit}>
                                 <Box className="searchBox">
                                     <TextField
@@ -189,25 +186,32 @@ const Cart = () => {
                                                     border: "none",
                                                 },
                                             },
-                                            endAdornment: SEARCH_BUTTON,
+                                            endAdornment: (
+                                                <Button
+                                                    color="primary"
+                                                    disableElevation
+                                                    variant="contained"
+                                                    onClick={handleBtnSearch}
+                                                    sx={{
+                                                        px: "2rem",
+                                                        height: "100%",
+                                                        borderRadius: "0 20px 20px 0",
+                                                    }}
+                                                >
+                                                    Search
+                                                </Button>
+                                            ),
                                             startAdornment: (
                                                 <SearchOutlinedIcon fontSize="small" />
                                             ),
                                         }}
-                                        onChange={(e) =>
-                                            setDataNumSearch(e.target.value)
-                                        }
+                                        onChange={(e) => setDataNumSearch(e.target.value)}
                                     />
                                 </Box>
-                                <Card1
-                                    sx={{
-                                        mb: 4,
-                                    }}
-                                >
+                                <Card1 sx={{ mb: 4 }}>
                                     <Typography fontWeight="600" mb={2}>
-                                        Customer Infomation
+                                        Customer Information
                                     </Typography>
-
                                     <Grid container spacing={6}>
                                         <Grid item sm={6} xs={12}>
                                             <Grid
@@ -224,7 +228,7 @@ const Cart = () => {
                                                 >
                                                     Full Name:
                                                 </H5>
-                                                {customerInfo.name}
+                                                {customerInfo.name || "-"}
                                             </Grid>
                                             <Grid
                                                 sx={{
@@ -240,7 +244,7 @@ const Cart = () => {
                                                 >
                                                     Phone Number:
                                                 </H5>
-                                                {customerInfo.phoneNumber}
+                                                {customerInfo.phoneNumber || "-"}
                                             </Grid>
                                             <Grid
                                                 sx={{
@@ -256,10 +260,9 @@ const Cart = () => {
                                                 >
                                                     Address:
                                                 </H5>
-                                                {customerInfo.address}
+                                                {customerInfo.address || "-"}
                                             </Grid>
                                         </Grid>
-
                                         <Grid item sm={6} xs={12}>
                                             <Grid
                                                 sx={{
@@ -275,7 +278,7 @@ const Cart = () => {
                                                 >
                                                     Email:
                                                 </H5>
-                                                {customerInfo.email}
+                                                {customerInfo.email || "-"}
                                             </Grid>
                                             <Grid
                                                 sx={{
@@ -289,9 +292,9 @@ const Cart = () => {
                                                         marginTop: "1px",
                                                     }}
                                                 >
-                                                    Point:
+                                                    Points:
                                                 </H5>
-                                                {customerInfo.loyaltyPoints}
+                                                {customerInfo.loyaltyPoints || "-"}
                                             </Grid>
                                             <Grid
                                                 sx={{
@@ -305,9 +308,9 @@ const Cart = () => {
                                                         marginTop: "1px",
                                                     }}
                                                 >
-                                                    MemberShip:
+                                                    Membership:
                                                 </H5>
-                                                {customerInfo.memberShipTier}
+                                                {customerInfo.memberShipTier || "-"}
                                             </Grid>
                                         </Grid>
                                     </Grid>
@@ -326,7 +329,6 @@ const Cart = () => {
                                                 {currency(getTotalPrice())}
                                             </Typography>
                                         </FlexBetween>
-
                                         <FlexBetween mb={1}>
                                             <Typography color="grey.600">
                                                 Discount{" "}
@@ -341,14 +343,13 @@ const Cart = () => {
                                                 lineHeight="1"
                                             >
                                                 {currency(
-                                                    (discountPrice / 100) *
-                                                        getTotalPrice()
+                                                    (discountPrice / 100) * getTotalPrice()
                                                 )}
                                             </Typography>
                                         </FlexBetween>
                                         <FlexBetween mb={1}>
                                             <Typography color="grey.600">
-                                                Discount of MemberShip{" "}
+                                                Membership Discount{" "}
                                                 <Span sx={{ color: "green" }}>
                                                     (-{discountMemberPrice}%)
                                                 </Span>
@@ -360,13 +361,10 @@ const Cart = () => {
                                                 lineHeight="1"
                                             >
                                                 {currency(
-                                                    (discountMemberPrice /
-                                                        100) *
-                                                        getTotalPrice()
+                                                    (discountMemberPrice / 100) * getTotalPrice()
                                                 )}
                                             </Typography>
                                         </FlexBetween>
-
                                         <FlexBetween mb={2}>
                                             <Typography color="grey.600">
                                                 Tax{" "}
@@ -381,19 +379,11 @@ const Cart = () => {
                                                 lineHeight="1"
                                             >
                                                 {currency(
-                                                    (getTotalPrice() -
-                                                        (discountPrice / 100) *
-                                                            getTotalPrice()) *
-                                                        0.08
+                                                    (getTotalPrice() - (discountPrice / 100) * getTotalPrice() - (discountMemberPrice / 100) * getTotalPrice()) * 0.08
                                                 )}
                                             </Typography>
                                         </FlexBetween>
-
-                                        <Divider
-                                            sx={{
-                                                mb: "1rem",
-                                            }}
-                                        />
+                                        <Divider sx={{ mb: "1rem" }} />
                                         <FlexBetween mb={2}>
                                             <Typography color="grey.600">
                                                 Total:
@@ -405,39 +395,18 @@ const Cart = () => {
                                                 textAlign="right"
                                             >
                                                 {currency(
-                                                    getTotalPrice() -
-                                                        (discountPrice / 100) *
-                                                            getTotalPrice() -
-                                                        (discountMemberPrice /
-                                                            100) *
-                                                            getTotalPrice() +
-                                                        (getTotalPrice() -
-                                                            (discountPrice /
-                                                                100) *
-                                                                getTotalPrice() -
-                                                            (discountMemberPrice /
-                                                                100) *
-                                                                getTotalPrice()) *
-                                                            0.08
+                                                    (getTotalPrice() - (discountPrice / 100) * getTotalPrice() - (discountMemberPrice / 100) * getTotalPrice()) + ((getTotalPrice() - (discountPrice / 100) * getTotalPrice() - (discountMemberPrice / 100) * getTotalPrice()) * 0.08)
                                                 )}
                                             </Typography>
                                         </FlexBetween>
-                                        <Grid
-                                            container
-                                            alignItems="center"
-                                            spacing={2}
-                                        >
+                                        <Grid container alignItems="center" spacing={2}>
                                             <Grid item sm={8} xs={12}>
                                                 <TextField
                                                     placeholder="Voucher"
                                                     variant="outlined"
                                                     size="small"
                                                     fullWidth
-                                                    onChange={(e) =>
-                                                        setVoucher(
-                                                            e.target.value
-                                                        )
-                                                    }
+                                                    onChange={(e) => setVoucher(e.target.value)}
                                                 />
                                             </Grid>
                                             <Grid item sm={4} xs={12}>
@@ -445,15 +414,8 @@ const Cart = () => {
                                                     variant="outlined"
                                                     color="primary"
                                                     fullWidth
-                                                    sx={{
-                                                        mt: {
-                                                            xs: "1rem",
-                                                            sm: 0,
-                                                        },
-                                                    }}
-                                                    onClick={(e) =>
-                                                        handleApplyVoucher()
-                                                    }
+                                                    sx={{ mt: { xs: "1rem", sm: 0 } }}
+                                                    onClick={handleApplyVoucher}
                                                 >
                                                     Apply Voucher
                                                 </Button>
@@ -461,11 +423,7 @@ const Cart = () => {
                                         </Grid>
                                     </Card1>
                                 </Grid>
-                                <Divider
-                                    sx={{
-                                        mb: "1rem",
-                                    }}
-                                />
+                                <Divider sx={{ mb: "1rem" }} />
                             </form>
                         )}
                     </Formik>
@@ -474,12 +432,5 @@ const Cart = () => {
         </CheckoutNavLayout>
     );
 };
-const initialValues = {
-    custom_fullname: "",
-    custom_phoneNum: "",
-    custom_email: "",
-    custom_gender: "",
-    shipping_address2: "",
-};
-const checkoutSchema = yup.object().shape({});
+
 export default Cart;

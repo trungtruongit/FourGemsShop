@@ -6,13 +6,6 @@ import { FlexRowCenter } from "components/flex-box"; // ========================
 const Stepper = ({ selectedStep = 1, stepperList, onChange }) => {
   const [selected, setSelected] = useState(selectedStep - 1);
 
-  const handleStepClick = (step, ind) => () => {
-    if (!step.disabled) {
-      setSelected(ind);
-      if (onChange) onChange(ind);
-    }
-  };
-
   useEffect(() => {
     setSelected(selectedStep - 1);
   }, [selectedStep]);
@@ -23,7 +16,7 @@ const Stepper = ({ selectedStep = 1, stepperList, onChange }) => {
           <Chip
             disabled={step.disabled}
             label={`${ind + 1}. ${step.title}`}
-            onClick={handleStepClick(step, ind)}
+
             sx={{
               backgroundColor:
                 ind <= selected ? "primary.main" : "primary.light",
