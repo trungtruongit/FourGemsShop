@@ -65,7 +65,7 @@ const DropZone = ({
         maxFiles: 1,
         multiple: false,
         accept: {
-            "image/*": [".png", ".gif", ".jpeg", ".jpg"],
+            "image/*": [".png", ".jpeg", ".jpg"],
         },
     });
 

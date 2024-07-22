@@ -127,7 +127,7 @@ const WarrantyPage = () => {
                         paddingTop: "1.5rem",
                     }}
                 >
-                    <H1 fontSize={40}>Order List</H1>
+                    <H1 fontSize={40}>Warranty Order List</H1>
                 </div>
                 <Box py={4}>
                     <Card>
