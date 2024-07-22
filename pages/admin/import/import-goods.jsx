@@ -22,6 +22,7 @@ import { useAppContext } from "contexts/AppContext";
 import Card1 from "../../../src/components/Card1";
 import { H5 } from "../../../src/components/Typography";
 import { jwtDecode } from "jwt-decode";
+import { useSnackbar } from "notistack";
 
 const ImportGoods = () => {
     const { state } = useAppContext();
@@ -35,6 +36,7 @@ const ImportGoods = () => {
     const [rotateRequestPopup, setRotateRequestPopup] = useState(false);
     const [counters, setCounters] = useState([]);
     const [refreshData, setRefreshData] = useState(false); // State to trigger API call
+    const { enqueueSnackbar } = useSnackbar();
 
     let token = "";
 
@@ -110,7 +112,7 @@ const ImportGoods = () => {
             fromCounterId: 0,
             toCounterId: rotateId.counterId,
             productTransferRequestList: cartList.map((item) => ({
-                productId: item.id,
+                productId: item.productId,
                 quantity: item.qty,
             })),
         };
@@ -126,8 +128,14 @@ const ImportGoods = () => {
                 }
             );
 
+            enqueueSnackbar("Import product to counter successfully", {
+                variant: "success",
+            });
             setRefreshData((prev) => !prev); // Toggle refreshData state to re-fetch product data
         } catch (error) {
+            enqueueSnackbar("Please enter the right quantity of product", {
+                variant: "error",
+            });
             console.error("Failed to create import request:", error);
         }
     };
