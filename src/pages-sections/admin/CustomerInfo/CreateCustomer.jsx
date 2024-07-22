@@ -49,8 +49,8 @@ const CreateCustomer = (props) => {
                                     value={values.address}
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    error={!!touched.name && !!errors.name}
-                                    helperText={touched.name && errors.name}
+                                    error={!!touched.address && !!errors.address}
+                                    helperText={touched.address && errors.address}
                                 />
                             </Grid>
                             <Grid item sm={6} xs={12}>
@@ -64,8 +64,8 @@ const CreateCustomer = (props) => {
                                     value={values.email}
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    error={!!touched.name && !!errors.name}
-                                    helperText={touched.name && errors.name}
+                                    error={!!touched.email && !!errors.email}
+                                    helperText={touched.email && errors.email}
                                 />
                             </Grid>
                             <Grid item sm={6} xs={12}>

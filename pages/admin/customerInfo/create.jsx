@@ -22,8 +22,11 @@ export default function CreateCusInfo() {
     const validationSchema = yup.object().shape({
         name: yup.string().required("required"),
         gender: yup.string().required("required"),
-        email: yup.string().required("required"),
-        phoneNumber: yup.string().required("required"),
+        email: yup.string().email("Invalid email address").required("required"),
+        phoneNumber: yup
+            .string()
+            .matches(/^0\d{9}$/, "Phone number must be exactly 10 digits and start with 0")
+            .required("Phone number is required"),
         address: yup.string().required("required"),
     });
 
@@ -54,7 +57,6 @@ export default function CreateCusInfo() {
     return (
         <Box py={4}>
             <H3 mb={2}>Add New Customer</H3>
-
             <CreateCustomer
                 initialValues={INITIAL_VALUES}
                 validationSchema={validationSchema}
