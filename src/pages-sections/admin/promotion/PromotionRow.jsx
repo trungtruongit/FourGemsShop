@@ -8,7 +8,7 @@ import {
     StyledTableCell,
     StyledTableRow,
 } from "../StyledComponents";
-import { currency } from "lib"; // ========================================================================
+// ========================================================================
 function convertDate(dateString) {
     const date = new Date(dateString);
 

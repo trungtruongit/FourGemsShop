@@ -21,7 +21,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { useSnackbar } from "notistack";
+import { useSnackbar } from 'notistack';
 
 // Component
 const Cart = () => {
@@ -33,17 +33,13 @@ const Cart = () => {
     const [voucher, setVoucher] = useState("");
     const [discountPrice, setDiscountPrice] = useState(0);
     const [discountMemberPrice, setDiscountMemberPrice] = useState(0);
+    const [isUsed, setIsUsed] = useState(false);
     const [dataNumSearch, setDataNumSearch] = useState("");
-
-    // Token handling
-    const token =
-        typeof localStorage !== "undefined"
-            ? localStorage.getItem("token")
-            : typeof sessionStorage !== "undefined"
+    const token = typeof localStorage !== "undefined"
+        ? localStorage.getItem("token")
+        : typeof sessionStorage !== "undefined"
             ? sessionStorage.getItem("token")
             : "";
-
-    // Fetch customer info
     const handleBtnSearch = async () => {
         try {
             const { data } = await axios.get(
@@ -65,8 +61,6 @@ const Cart = () => {
             console.error("Failed to fetch customer:", error);
         }
     };
-
-    // Apply voucher
     const handleApplyVoucher = async () => {
         try {
             const { data } = await axios.get(
@@ -78,24 +72,25 @@ const Cart = () => {
                 }
             );
             setDiscountPrice(data.data.discountPercent);
+            setIsUsed(data.data.used);
+            if(isUsed){
+                enqueueSnackbar("Voucher has been used.", { variant: 'warning' });
+                return;
+            }
         } catch (error) {
             console.error("Failed to fetch discount price:", error);
+            setDiscountPrice(0)
         }
+        handleApplyVoucher();
     };
-
     // Checkout
     const handleCheckout = () => {
         localStorage.setItem("code", voucher);
-        localStorage.setItem("percentDiscount", discountPrice);
-        localStorage.setItem("percentMemberDiscount", discountMemberPrice);
     };
 
     const handleButtonClick = () => {
         if (!dataNumSearch.trim()) {
-            enqueueSnackbar(
-                "Please enter a phone number to search for the customer before proceeding to checkout.",
-                { variant: "warning" }
-            );
+            enqueueSnackbar("Please enter a phone number to search for the customer before proceeding to checkout.", { variant: 'warning' });
             return;
         }
 
@@ -110,9 +105,7 @@ const Cart = () => {
             handleCheckout();
             router.push(`/checkout?customerId=${customerInfo.id}`);
         } else {
-            enqueueSnackbar("You must buy something before checking out.", {
-                variant: "warning",
-            });
+            enqueueSnackbar("You must buy something before checking out.", { variant: 'warning' });
         }
     };
 
@@ -127,7 +120,7 @@ const Cart = () => {
                 {/* CART PRODUCT LIST */}
                 <Grid item md={5} xs={12}>
                     {cartList.map((item) => (
-                        <ProductCard7 key={item.productId} {...item} />
+                        <ProductCard7 key={item.id} {...item} />
                     ))}
                     <Grid container spacing={6}>
                         <Grid item sm={6} xs={12}>
@@ -168,13 +161,13 @@ const Cart = () => {
                         onSubmit={() => router.push("/payment")}
                     >
                         {({
-                            values,
-                            errors,
-                            touched,
-                            handleChange,
-                            handleBlur,
-                            handleSubmit,
-                        }) => (
+                              values,
+                              errors,
+                              touched,
+                              handleChange,
+                              handleBlur,
+                              handleSubmit,
+                          }) => (
                             <form onSubmit={handleSubmit}>
                                 <Box className="searchBox">
                                     <TextField
@@ -201,8 +194,7 @@ const Cart = () => {
                                                     sx={{
                                                         px: "2rem",
                                                         height: "100%",
-                                                        borderRadius:
-                                                            "0 20px 20px 0",
+                                                        borderRadius: "0 20px 20px 0",
                                                     }}
                                                 >
                                                     Search
@@ -212,9 +204,7 @@ const Cart = () => {
                                                 <SearchOutlinedIcon fontSize="small" />
                                             ),
                                         }}
-                                        onChange={(e) =>
-                                            setDataNumSearch(e.target.value)
-                                        }
+                                        onChange={(e) => setDataNumSearch(e.target.value)}
                                     />
                                 </Box>
                                 <Card1 sx={{ mb: 4 }}>
@@ -253,8 +243,7 @@ const Cart = () => {
                                                 >
                                                     Phone Number:
                                                 </H5>
-                                                {customerInfo.phoneNumber ||
-                                                    "-"}
+                                                {customerInfo.phoneNumber || "-"}
                                             </Grid>
                                             <Grid
                                                 sx={{
@@ -304,8 +293,7 @@ const Cart = () => {
                                                 >
                                                     Points:
                                                 </H5>
-                                                {customerInfo.loyaltyPoints ||
-                                                    "0"}
+                                                {customerInfo.loyaltyPoints || "-"}
                                             </Grid>
                                             <Grid
                                                 sx={{
@@ -321,166 +309,119 @@ const Cart = () => {
                                                 >
                                                     Membership:
                                                 </H5>
-                                                {customerInfo.memberShipTier ||
-                                                    "-"}
+                                                {customerInfo.memberShipTier || "-"}
                                             </Grid>
                                         </Grid>
                                     </Grid>
                                 </Card1>
-                                {customerInfo.name && (
-                                    <Grid item md={12} xs={12}>
-                                        <Card1>
-                                            <FlexBetween mb={1}>
-                                                <Typography color="grey.600">
-                                                    Subtotal:
-                                                </Typography>
-                                                <Typography
-                                                    fontSize="18px"
-                                                    fontWeight="600"
-                                                    lineHeight="1"
-                                                >
-                                                    {currency(getTotalPrice())}
-                                                </Typography>
-                                            </FlexBetween>
-                                            <FlexBetween mb={1}>
-                                                <Typography color="grey.600">
-                                                    Discount{" "}
-                                                    <Span
-                                                        sx={{ color: "green" }}
-                                                    >
-                                                        (-{discountPrice}%)
-                                                    </Span>
-                                                    :
-                                                </Typography>
-                                                <Typography
-                                                    fontSize="18px"
-                                                    fontWeight="600"
-                                                    lineHeight="1"
-                                                >
-                                                    {currency(
-                                                        (discountPrice / 100) *
-                                                            getTotalPrice()
-                                                    )}
-                                                </Typography>
-                                            </FlexBetween>
-                                            <FlexBetween mb={1}>
-                                                <Typography color="grey.600">
-                                                    Membership Discount{" "}
-                                                    <Span
-                                                        sx={{ color: "green" }}
-                                                    >
-                                                        (-{discountMemberPrice}
-                                                        %)
-                                                    </Span>
-                                                    :
-                                                </Typography>
-                                                <Typography
-                                                    fontSize="18px"
-                                                    fontWeight="600"
-                                                    lineHeight="1"
-                                                >
-                                                    {currency(
-                                                        (discountMemberPrice /
-                                                            100) *
-                                                            getTotalPrice()
-                                                    )}
-                                                </Typography>
-                                            </FlexBetween>
-                                            <FlexBetween mb={2}>
-                                                <Typography color="grey.600">
-                                                    Tax{" "}
-                                                    <Span sx={{ color: "red" }}>
-                                                        (+8%)
-                                                    </Span>
-                                                    :
-                                                </Typography>
-                                                <Typography
-                                                    fontSize="18px"
-                                                    fontWeight="600"
-                                                    lineHeight="1"
-                                                >
-                                                    {currency(
-                                                        (getTotalPrice() -
-                                                            (discountPrice /
-                                                                100) *
-                                                                getTotalPrice() -
-                                                            (discountMemberPrice /
-                                                                100) *
-                                                                getTotalPrice()) *
-                                                            0.08
-                                                    )}
-                                                </Typography>
-                                            </FlexBetween>
-                                            <Divider sx={{ mb: "1rem" }} />
-                                            <FlexBetween mb={2}>
-                                                <Typography color="grey.600">
-                                                    Total:
-                                                </Typography>
-                                                <Typography
-                                                    fontSize="25px"
-                                                    fontWeight="600"
-                                                    lineHeight="1"
-                                                    textAlign="right"
-                                                >
-                                                    {currency(
-                                                        getTotalPrice() -
-                                                            (discountPrice /
-                                                                100) *
-                                                                getTotalPrice() -
-                                                            (discountMemberPrice /
-                                                                100) *
-                                                                getTotalPrice() +
-                                                            (getTotalPrice() -
-                                                                (discountPrice /
-                                                                    100) *
-                                                                    getTotalPrice() -
-                                                                (discountMemberPrice /
-                                                                    100) *
-                                                                    getTotalPrice()) *
-                                                                0.08
-                                                    )}
-                                                </Typography>
-                                            </FlexBetween>
-                                            <Grid
-                                                container
-                                                alignItems="center"
-                                                spacing={2}
+                                <Grid item md={12} xs={12}>
+                                    <Card1>
+                                        <FlexBetween mb={1}>
+                                            <Typography color="grey.600">
+                                                Subtotal:
+                                            </Typography>
+                                            <Typography
+                                                fontSize="18px"
+                                                fontWeight="600"
+                                                lineHeight="1"
                                             >
-                                                <Grid item sm={8} xs={12}>
-                                                    <TextField
-                                                        placeholder="Voucher"
-                                                        variant="outlined"
-                                                        size="small"
-                                                        fullWidth
-                                                        onChange={(e) =>
-                                                            setVoucher(
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                    />
-                                                </Grid>
-                                                <Grid item sm={4} xs={12}>
-                                                    <Button
-                                                        variant="outlined"
-                                                        color="primary"
-                                                        fullWidth
-                                                        sx={{
-                                                            mt: {
-                                                                xs: "1rem",
-                                                                sm: 0,
-                                                            },
-                                                        }}
-                                                        onClick={
-                                                            handleApplyVoucher
-                                                        }
-                                                    >
-                                                        Apply Voucher
-                                                    </Button>
-                                                </Grid>
+                                                {currency(getTotalPrice())}
+                                            </Typography>
+                                        </FlexBetween>
+                                        <FlexBetween mb={1}>
+                                            <Typography color="grey.600">
+                                                Discount{" "}
+                                                <Span sx={{ color: "green" }}>
+                                                    (-{discountPrice}%)
+                                                </Span>
+                                                :
+                                            </Typography>
+                                            <Typography
+                                                fontSize="18px"
+                                                fontWeight="600"
+                                                lineHeight="1"
+                                            >
+                                                {currency(
+                                                    (discountPrice / 100) * getTotalPrice()
+                                                )}
+                                            </Typography>
+                                        </FlexBetween>
+                                        <FlexBetween mb={1}>
+                                            <Typography color="grey.600">
+                                                Membership Discount{" "}
+                                                <Span sx={{ color: "green" }}>
+                                                    (-{discountMemberPrice}%)
+                                                </Span>
+                                                :
+                                            </Typography>
+                                            <Typography
+                                                fontSize="18px"
+                                                fontWeight="600"
+                                                lineHeight="1"
+                                            >
+                                                {currency(
+                                                    (discountMemberPrice / 100) * getTotalPrice()
+                                                )}
+                                            </Typography>
+                                        </FlexBetween>
+                                        <FlexBetween mb={2}>
+                                            <Typography color="grey.600">
+                                                Tax{" "}
+                                                <Span sx={{ color: "red" }}>
+                                                    (+8%)
+                                                </Span>
+                                                :
+                                            </Typography>
+                                            <Typography
+                                                fontSize="18px"
+                                                fontWeight="600"
+                                                lineHeight="1"
+                                            >
+                                                {currency(
+                                                    (getTotalPrice() - (discountPrice / 100) * getTotalPrice() - (discountMemberPrice / 100) * getTotalPrice()) * 0.08
+                                                )}
+                                            </Typography>
+                                        </FlexBetween>
+                                        <Divider sx={{ mb: "1rem" }} />
+                                        <FlexBetween mb={2}>
+                                            <Typography color="grey.600">
+                                                Total:
+                                            </Typography>
+                                            <Typography
+                                                fontSize="25px"
+                                                fontWeight="600"
+                                                lineHeight="1"
+                                                textAlign="right"
+                                            >
+                                                {currency(
+                                                    (getTotalPrice() - (discountPrice / 100) * getTotalPrice() - (discountMemberPrice / 100) * getTotalPrice()) + ((getTotalPrice() - (discountPrice / 100) * getTotalPrice() - (discountMemberPrice / 100) * getTotalPrice()) * 0.08)
+                                                )}
+                                            </Typography>
+                                        </FlexBetween>
+                                        <Grid container alignItems="center" spacing={2}>
+                                            <Grid item sm={8} xs={12}>
+                                                <TextField
+                                                    placeholder="Voucher"
+                                                    variant="outlined"
+                                                    size="small"
+                                                    fullWidth
+                                                    onChange={(e) => setVoucher(e.target.value)}
+                                                />
                                             </Grid>
-                                        </Card1>
-                                    </Grid>
-                                )}
+                                            <Grid item sm={4} xs={12}>
+                                                <Button
+                                                    variant="outlined"
+                                                    color="primary"
+                                                    fullWidth
+                                                    sx={{ mt: { xs: "1rem", sm: 0 } }}
+                                                    onClick={handleApplyVoucher}
+                                                >
+                                                    Apply Voucher
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                    </Card1>
+                                </Grid>
                                 <Divider sx={{ mb: "1rem" }} />
                             </form>
                         )}
