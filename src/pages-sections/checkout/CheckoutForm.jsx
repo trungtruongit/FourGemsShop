@@ -17,8 +17,7 @@ const CheckoutForm = () => {
     const cartList = state.cart;
     const [customerId, setCustomerId] = useState(0);
     const [customerShowInfo, setCustomerShowInfo] = useState("");
-    const perDiscount = localStorage.getItem("percentDiscount");
-    const percentMemberDiscount = localStorage.getItem("percentMemberDiscount");
+    const [disPrice, setDiscountPrice] = useState(0);
     let token = "";
     const handleWaiting = () => {
         router.push("/waiting");
@@ -40,11 +39,12 @@ const CheckoutForm = () => {
     const getTotalPrice = () =>
         cartList.reduce((accum, item) => accum + item?.price * item?.qty, 0);
     const tax =
-        (getTotalPrice() - (getTotalPrice() * perDiscount) / 100) * 0.08;
+        (getTotalPrice() - (getTotalPrice() * disPrice) / 100 - (getTotalPrice() * customerShowInfo.precent_discount) / 100) * 0.08;
     const totalBill = (
         getTotalPrice() -
-        (getTotalPrice() * perDiscount) / 100 +
-        tax
+        (getTotalPrice() * disPrice) / 100 -
+        (getTotalPrice() * customerShowInfo.precent_discount)
+        + tax
     ).toFixed(2);
     const productIds = cartList?.map((item) => ({
         id: item?.id,
@@ -72,13 +72,31 @@ const CheckoutForm = () => {
                         },
                     }
                 );
-                setCustomerShowInfo(responeGetCus.data.data);
+                setCustomerShowInfo(responeGetCus.data.data)
             } catch (error) {
                 console.error("Failed to search customers:", error);
             }
         };
         fetchGetCusById();
     }, [customerId, token]);
+    useEffect(() => {
+        const fetchDiscountPrice = async () => {
+            try {
+                const resDiscountPrice = await axios.get(
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/voucher/${code}`,
+                    {
+                        headers: {
+                            Authorization: "Bearer " + token, //the token is a variable which holds the token
+                        },
+                    }
+                );
+                setDiscountPrice(resDiscountPrice.data.data.discountPercent)
+            } catch (error) {
+                console.error("Failed to fetch discount price:", error);
+            }
+        };
+        fetchDiscountPrice();
+    }, []);
     const handleFormSubmit = async () => {
         const orderNew = {
             customerId: customerId,
@@ -327,7 +345,7 @@ const CheckoutForm = () => {
                             <Typography color="grey.600">
                                 Discount{" "}
                                 <Span sx={{ color: "green" }}>
-                                    (-{perDiscount}%)
+                                    (-{disPrice}%)
                                 </Span>
                                 :
                             </Typography>
@@ -337,7 +355,7 @@ const CheckoutForm = () => {
                                 lineHeight="1"
                             >
                                 {currency(
-                                    (getTotalPrice() * perDiscount) / 100
+                                    (getTotalPrice() * disPrice) / 100
                                 )}
                             </Typography>
                         </FlexBetween>
@@ -345,7 +363,7 @@ const CheckoutForm = () => {
                             <Typography color="grey.600">
                                 Discount of MemberShip{" "}
                                 <Span sx={{ color: "green" }}>
-                                    (-{percentMemberDiscount}%)
+                                    (-{customerShowInfo.precent_discount}%)
                                 </Span>
                                 :
                             </Typography>
@@ -355,7 +373,7 @@ const CheckoutForm = () => {
                                 lineHeight="1"
                             >
                                 {currency(
-                                    (getTotalPrice() * percentMemberDiscount) /
+                                    (getTotalPrice() * customerShowInfo.precent_discount) /
                                         100
                                 )}
                             </Typography>
@@ -390,13 +408,13 @@ const CheckoutForm = () => {
                             >
                                 {currency(
                                     getTotalPrice() -
-                                        (perDiscount / 100) * getTotalPrice() -
-                                        (percentMemberDiscount / 100) *
+                                        (disPrice / 100) * getTotalPrice() -
+                                        (customerShowInfo.precent_discount / 100) *
                                             getTotalPrice() +
                                         (getTotalPrice() -
-                                            (perDiscount / 100) *
+                                            (disPrice / 100) *
                                                 getTotalPrice() -
-                                            (percentMemberDiscount / 100) *
+                                            (customerShowInfo.precent_discount / 100) *
                                                 getTotalPrice()) *
                                             0.08
                                 )}

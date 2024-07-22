@@ -33,16 +33,13 @@ const Cart = () => {
     const [voucher, setVoucher] = useState("");
     const [discountPrice, setDiscountPrice] = useState(0);
     const [discountMemberPrice, setDiscountMemberPrice] = useState(0);
+    const [isUsed, setIsUsed] = useState(false);
     const [dataNumSearch, setDataNumSearch] = useState("");
-
-    // Token handling
     const token = typeof localStorage !== "undefined"
         ? localStorage.getItem("token")
         : typeof sessionStorage !== "undefined"
             ? sessionStorage.getItem("token")
             : "";
-
-    // Fetch customer info
     const handleBtnSearch = async () => {
         try {
             const { data } = await axios.get(
@@ -64,8 +61,6 @@ const Cart = () => {
             console.error("Failed to fetch customer:", error);
         }
     };
-
-    // Apply voucher
     const handleApplyVoucher = async () => {
         try {
             const { data } = await axios.get(
@@ -77,16 +72,20 @@ const Cart = () => {
                 }
             );
             setDiscountPrice(data.data.discountPercent);
+            setIsUsed(data.data.used);
+            if(isUsed){
+                enqueueSnackbar("Voucher has been used.", { variant: 'warning' });
+                return;
+            }
         } catch (error) {
             console.error("Failed to fetch discount price:", error);
+            setDiscountPrice(0)
         }
+        handleApplyVoucher();
     };
-
     // Checkout
     const handleCheckout = () => {
         localStorage.setItem("code", voucher);
-        localStorage.setItem("percentDiscount", discountPrice);
-        localStorage.setItem("percentMemberDiscount", discountMemberPrice);
     };
 
     const handleButtonClick = () => {
