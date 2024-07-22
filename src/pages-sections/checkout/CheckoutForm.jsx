@@ -34,12 +34,12 @@ const CheckoutForm = () => {
     const productName = cartList?.map((item) => ({
         productId: item?.productId,
         quantity: item?.qty,
-        price: item?.price,
+        price: (item?.price).toFixed(2),
     }));
     const getTotalPrice = () =>
         cartList.reduce((accum, item) => accum + item?.price * item?.qty, 0);
     const tax =
-        (getTotalPrice() - (getTotalPrice() * disPrice) / 100 - (getTotalPrice() * customerShowInfo.precent_discount) / 100) * 0.08;
+        (getTotalPrice() - (getTotalPrice() * disPrice) / 100 - (getTotalPrice() * customerShowInfo.precent_discount) / 100) * 0.1;
     const totalBill = (
                 getTotalPrice() -
         (disPrice / 100) * getTotalPrice() -
@@ -50,7 +50,7 @@ const CheckoutForm = () => {
             getTotalPrice() -
             (customerShowInfo.precent_discount / 100) *
             getTotalPrice()) *
-        0.08
+        0.1
     ).toFixed(2);
     const productIds = cartList?.map((item) => ({
         id: item?.id,
@@ -423,7 +423,7 @@ const CheckoutForm = () => {
                                                 getTotalPrice() -
                                             (customerShowInfo.precent_discount / 100) *
                                                 getTotalPrice()) *
-                                            0.08
+                                            0.1
                                 )}
                             </Typography>
                         </FlexBetween>

@@ -13,9 +13,6 @@ const Popup = ({ user, onClose }) => {
             <DialogTitle>User Detail</DialogTitle>
             <DialogContent dividers>
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                    <Avatar style={{ marginRight: '10px' }}>
-                        <PersonIcon />
-                    </Avatar>
                     <Typography variant="h6">{fullName}</Typography>
                 </div>
                 <Typography variant="body1">

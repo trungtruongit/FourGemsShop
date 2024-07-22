@@ -22,7 +22,7 @@ const PaymentSummary = () => {
         (getTotalPrice() -
             (getTotalPrice() * perDiscount) / 100 -
             (getTotalPrice() * percentMemberDiscount) / 100) *
-        0.08;
+        0.1;
 
     const totalPrice =
         getTotalPrice() -

@@ -114,7 +114,7 @@ const Cart = () => {
         const discount = (discountPrice / 100) * totalPrice;
         const memberDiscount = (discountMemberPrice / 100) * totalPrice;
         const finalPrice = totalPrice - discount - memberDiscount;
-        const tax = finalPrice * 0.08;
+        const tax = finalPrice * 0.1;
         const totalAmount = finalPrice + tax;
 
         if (totalAmount > 0) {
@@ -384,7 +384,7 @@ const Cart = () => {
                                             <Typography color="grey.600">
                                                 Tax{" "}
                                                 <Span sx={{ color: "red" }}>
-                                                    (+8%)
+                                                    (+10%)
                                                 </Span>
                                                 :
                                             </Typography>
@@ -394,7 +394,7 @@ const Cart = () => {
                                                 lineHeight="1"
                                             >
                                                 {currency(
-                                                    (getTotalPrice() - (discountPrice / 100) * getTotalPrice() - (discountMemberPrice / 100) * getTotalPrice()) * 0.08
+                                                    (getTotalPrice() - (discountPrice / 100) * getTotalPrice() - (discountMemberPrice / 100) * getTotalPrice()) * 0.1
                                                 )}
                                             </Typography>
                                         </FlexBetween>
@@ -410,7 +410,7 @@ const Cart = () => {
                                                 textAlign="right"
                                             >
                                                 {currency(
-                                                    (getTotalPrice() - (discountPrice / 100) * getTotalPrice() - (discountMemberPrice / 100) * getTotalPrice()) + ((getTotalPrice() - (discountPrice / 100) * getTotalPrice() - (discountMemberPrice / 100) * getTotalPrice()) * 0.08)
+                                                    (getTotalPrice() - (discountPrice / 100) * getTotalPrice() - (discountMemberPrice / 100) * getTotalPrice()) + ((getTotalPrice() - (discountPrice / 100) * getTotalPrice() - (discountMemberPrice / 100) * getTotalPrice()) * 0.1)
                                                 )}
                                             </Typography>
                                         </FlexBetween>

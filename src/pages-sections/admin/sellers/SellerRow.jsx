@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { RemoveRedEye } from "@mui/icons-material";
-import { Avatar, Box } from "@mui/material";
 import {
     StyledIconButton,
     StyledTableCell,
