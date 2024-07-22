@@ -80,7 +80,7 @@ const ProductRow = ({ product }) => {
     const [newGoldId, setNewGoldId] = useState(goldId);
     const [newGoldTypeName, setNewGoldTypeName] = useState(goldTypeName);
     const [newCollectionId, setNewCollectionId] = useState(collectionId);
-
+    console.log(ratioPrice);
     let token = "";
     if (typeof localStorage !== "undefined") {
         token = localStorage.getItem("token");
@@ -229,13 +229,10 @@ const ProductRow = ({ product }) => {
                         value={newLaborCost}
                         onChange={(e) => setNewLaborCost(e.target.value)}
                         type="number"
-                        InputProps={{
-                            endAdornment: "%",
-                            inputProps: { min: 0, step: 0.01 },
-                        }}
+                        inputProps={{ min: 0 }}
                     />
                 ) : (
-                    `${newLaborCost}%`
+                    currency(newLaborCost)
                 )}
             </StyledTableCell>
             <StyledTableCell align="left">
@@ -244,10 +241,13 @@ const ProductRow = ({ product }) => {
                         value={newRatioPrice}
                         onChange={(e) => setNewRatioPrice(e.target.value)}
                         type="number"
-                        inputProps={{ min: 0 }}
+                        InputProps={{
+                            endAdornment: "%",
+                            inputProps: { min: 0, step: 0.01 },
+                        }}
                     />
                 ) : (
-                    currency(ratioPrice)
+                    `${ratioPrice}%`
                 )}
             </StyledTableCell>
             <StyledTableCell align="left">
