@@ -1,10 +1,7 @@
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Delete, RemoveRedEye } from "@mui/icons-material";
 import { Box, Button, Grid, IconButton, Pagination, TextField, Typography } from "@mui/material";
 import TableRow from "components/TableRow";
-import { FlexBox } from "components/flex-box";
-import CustomerDashboardLayout from "components/layouts/customer-dashboard";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { SearchOutlinedIcon } from "../../src/components/search-box/styled";
@@ -74,7 +71,7 @@ const AddressList = () => {
     };
 
     const handleViewOrderDetail = async (orderId) => {
-        router.push(`/buyback-profile/${orderId}`);
+        router.push(`/warranty-profile/${orderId}`);
         localStorage.setItem("orderId", orderId);
         localStorage.setItem("customerId", customerInfo.id);
     };
