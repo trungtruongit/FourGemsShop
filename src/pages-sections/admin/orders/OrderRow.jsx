@@ -10,7 +10,17 @@ import {
 import { Button } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
+function convertDate(dateString) {
+    const date = new Date(dateString);
 
+    const day = date.getUTCDate();
+    const month = date.getUTCMonth() + 1; // Tháng bắt đầu từ 0
+    const year = date.getUTCFullYear();
+
+    const formattedDate = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
+
+    return formattedDate;
+}
 const OrderRow = ({ order }) => {
     const { orderId, customerName, orderDate, totalAmount, status } = order;
     const router = useRouter();
@@ -67,7 +77,7 @@ const OrderRow = ({ order }) => {
                     fontWeight: 400,
                 }}
             >
-                {orderDate}
+                {convertDate(orderDate)}
             </StyledTableCell>
 
             <StyledTableCell align="left">
