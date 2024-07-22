@@ -6,6 +6,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { MuiOtpInput } from "mui-one-time-password-input";
 import React from "react";
+import { useSnackbar } from "notistack";
 export const Wrapper = styled(({ children, passwordVisibility, ...rest }) => (
     <Card {...rest}>{children}</Card>
 ))(({ theme, passwordVisibility }) => ({
@@ -26,11 +27,15 @@ export const Wrapper = styled(({ children, passwordVisibility, ...rest }) => (
 }));
 
 const Otp = () => {
+    const { enqueueSnackbar } = useSnackbar();
     const nav = useRouter();
     const [otp, setOtp] = React.useState("");
     const handleOtp = (newValue) => {
-        setOtp(newValue);
+        if (/^\d*$/.test(newValue)) {
+            setOtp(newValue);
+        }
     };
+
     const email = localStorage.getItem("username");
     const handleFormSubmit = async (values) => {
         try {
@@ -42,12 +47,21 @@ const Otp = () => {
                 }
             );
             if (response.data !== null) {
+                enqueueSnackbar("You have logged in successfully", {
+                    variant: "success",
+                });
                 localStorage.setItem("token", response.data.data);
                 nav.push("/");
             } else {
+                enqueueSnackbar("Please enter the correct OTP number", {
+                    variant: "error",
+                });
                 console.log("error");
             }
         } catch (e) {
+            enqueueSnackbar("Please enter the correct OTP number", {
+                variant: "error",
+            });
             console.log(e);
         }
     };

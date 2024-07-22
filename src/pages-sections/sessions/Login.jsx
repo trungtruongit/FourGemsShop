@@ -1,15 +1,15 @@
 import { useCallback, useState } from "react";
-import { Button, Card, Box, styled } from "@mui/material";
+import { Button, Card, styled } from "@mui/material";
 import Link from "next/link";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { H1, H6 } from "components/Typography";
+import { H1 } from "components/Typography";
 import BazaarImage from "components/BazaarImage";
 import BazaarTextField from "components/BazaarTextField";
 import EyeToggleButton from "./EyeToggleButton";
-import { FlexBox, FlexRowCenter } from "components/flex-box";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 
 const fbStyle = {
     background: "#3B5998",
@@ -45,6 +45,7 @@ export const Wrapper = styled(({ children, passwordVisibility, ...rest }) => (
 }));
 
 const Login = () => {
+    const { enqueueSnackbar } = useSnackbar();
     const [passwordVisibility, setPasswordVisibility] = useState(false);
     const togglePasswordVisibility = useCallback(() => {
         setPasswordVisibility((visible) => !visible);
@@ -61,11 +62,23 @@ const Login = () => {
                     password: password,
                 }
             );
-            if (response.data.data !== "") {
+            if (response.data.data === true) {
+                enqueueSnackbar(
+                    "Please enter the OTP sent to your phone number",
+                    { variant: "success" }
+                );
                 nav.push("/otp");
+            } else {
+                enqueueSnackbar(
+                    "Please enter the right username and password",
+                    { variant: "error" }
+                );
             }
         } catch (e) {
             console.log(e);
+            enqueueSnackbar("An error occurred. Please try again.", {
+                variant: "error",
+            });
         }
     };
 
@@ -100,7 +113,7 @@ const Login = () => {
                     value={values.email}
                     onChange={handleChange}
                     label="Username"
-                    placeholder="exmple@mail.com"
+                    placeholder="example@mail.com"
                     error={!!touched.email && !!errors.email}
                     helperText={touched.email && errors.email}
                 />
@@ -151,7 +164,15 @@ const initialValues = {
     password: "",
 };
 const formSchema = yup.object().shape({
-    password: yup.string().required("Password is required"),
-    email: yup.string().required("Username is required"),
+    password: yup
+        .string()
+        .min(6, "Password must be at least 6 characters")
+        .required("Password is required"),
+    email: yup
+        .string()
+        .min(1, "Username must be between 1 and 50 characters")
+        .max(50, "Username must be between 1 and 50 characters")
+        .matches(/^\S.*$/, "Username cannot start with a space")
+        .required("Username is required"),
 });
 export default Login;

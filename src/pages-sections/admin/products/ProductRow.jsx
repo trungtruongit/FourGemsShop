@@ -90,6 +90,12 @@ const ProductRow = ({ product }) => {
     }
 
     const handleUpdateProduct = async () => {
+        // Validate to ensure costs/prices are not negative
+        if (newLaborCost < 0 || newRatioPrice < 0 || newStonePrice < 0) {
+            alert("Costs and prices cannot be negative.");
+            return;
+        }
+
         try {
             const response = await axios.put(
                 `https://four-gems-system-790aeec3afd8.herokuapp.com/product/update-product`,
@@ -222,9 +228,14 @@ const ProductRow = ({ product }) => {
                     <TextField
                         value={newLaborCost}
                         onChange={(e) => setNewLaborCost(e.target.value)}
+                        type="number"
+                        InputProps={{
+                            endAdornment: "%",
+                            inputProps: { min: 0, step: 0.01 },
+                        }}
                     />
                 ) : (
-                    currency(laborCost)
+                    `${newLaborCost}%`
                 )}
             </StyledTableCell>
             <StyledTableCell align="left">
@@ -232,6 +243,8 @@ const ProductRow = ({ product }) => {
                     <TextField
                         value={newRatioPrice}
                         onChange={(e) => setNewRatioPrice(e.target.value)}
+                        type="number"
+                        inputProps={{ min: 0 }}
                     />
                 ) : (
                     currency(ratioPrice)
@@ -242,6 +255,8 @@ const ProductRow = ({ product }) => {
                     <TextField
                         value={newStonePrice}
                         onChange={(e) => setNewStonePrice(e.target.value)}
+                        type="number"
+                        inputProps={{ min: 0 }}
                     />
                 ) : (
                     currency(stonePrice)
@@ -252,6 +267,8 @@ const ProductRow = ({ product }) => {
                     <TextField
                         value={newWeight}
                         onChange={(e) => setNewWeight(e.target.value)}
+                        type="number"
+                        inputProps={{ min: 0 }}
                     />
                 ) : (
                     weight
@@ -262,6 +279,8 @@ const ProductRow = ({ product }) => {
                     <TextField
                         value={newQuantityInStock}
                         onChange={(e) => setNewQuantityInStock(e.target.value)}
+                        type="number"
+                        inputProps={{ min: 0 }}
                     />
                 ) : (
                     quantityInStock

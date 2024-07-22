@@ -20,13 +20,11 @@ export default function OrderEdit() {
         token = localStorage.getItem("token");
     } else if (typeof sessionStorage !== "undefined") {
         // Fallback to sessionStorage if localStorage is not supported
-        token = localStorage.getItem("token");
+        token = sessionStorage.getItem("token");
     } else {
         // If neither localStorage nor sessionStorage is supported
     }
-    const handleBack = () => {
-        router.push("/orderwarrantystaff/warranty");
-    };
+
     useEffect(() => {
         const fetchOrderDetail = async () => {
             try {
@@ -34,11 +32,22 @@ export default function OrderEdit() {
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/warranty-card/view-warranty?orderId=${orderId}`,
                     {
                         headers: {
-                            Authorization: "Bearer " + token, //the token is a variable which holds the token
+                            Authorization: "Bearer " + token, // the token is a variable which holds the token
                         },
                     }
                 );
-                setOrderDetails(resOrderDetail.data.data);
+                if (
+                    resOrderDetail.data.data &&
+                    resOrderDetail.data.data.length > 0
+                ) {
+                    console.log(resOrderDetail.data.data[0].url);
+                    window.open(resOrderDetail.data.data[0].url, "_blank");
+                    router.push("/orderwarrantystaff/warranty");
+                } else {
+                    console.log("No data available");
+                }
+
+                // setOrderDetails(resOrderDetail.data.data);
             } catch (e) {
                 console.log(e);
             }
@@ -57,15 +66,6 @@ export default function OrderEdit() {
                 }}
             >
                 <H3 mb={2}>Order Details</H3>
-                <Button
-                    sx={{
-                        ml: 100,
-                    }}
-                    onClick={() => handleBack()}
-                    variant="body1"
-                >
-                    Back to Order
-                </Button>
             </Box>
             <OrderDetails order={orderDetails} />
         </Box>
