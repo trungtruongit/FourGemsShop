@@ -95,6 +95,10 @@ const linkList = [
                 title: "Warranty",
             },
             {
+                href: "/historywarranty",
+                title: "Warranty History",
+            },
+            {
                 href: "/login",
                 title: "Logout",
             },
