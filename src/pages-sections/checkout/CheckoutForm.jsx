@@ -58,7 +58,7 @@ const CheckoutForm = () => {
         price: item?.price,
         name: item?.name,
     }));
-
+    localStorage.setItem("totalPrice", totalBill);
     const code = localStorage.getItem("code");
     useEffect(() => {
         if (router?.query?.customerId) {
@@ -388,7 +388,7 @@ const CheckoutForm = () => {
 
                         <FlexBetween mb={2}>
                             <Typography color="grey.600">
-                                Tax <Span sx={{ color: "red" }}>(+8%)</Span>:
+                                Tax <Span sx={{ color: "red" }}>(+10%)</Span>:
                             </Typography>
                             <Typography
                                 fontSize="18px"

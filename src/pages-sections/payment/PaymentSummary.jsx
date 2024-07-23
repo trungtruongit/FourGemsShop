@@ -19,16 +19,19 @@ const PaymentSummary = () => {
         cartList.reduce((accum, item) => accum + item.price * item.qty, 0);
 
     const tax =
-        (getTotalPrice() -
-            (getTotalPrice() * perDiscount) / 100 -
-            (getTotalPrice() * percentMemberDiscount) / 100) *
-        0.1;
-
-    const totalPrice =
+        (getTotalPrice() - (getTotalPrice() * perDiscount) / 100 - (getTotalPrice() * percentMemberDiscount) / 100) * 0.1;
+    const totalPrice = (
         getTotalPrice() -
         (perDiscount / 100) * getTotalPrice() -
-        (percentMemberDiscount / 100) * getTotalPrice() +
-        tax;
+        (percentMemberDiscount / 100) *
+        getTotalPrice() +
+        (getTotalPrice() -
+            (perDiscount / 100) *
+            getTotalPrice() -
+            (percentMemberDiscount / 100) *
+            getTotalPrice()) *
+        0.1
+    ).toFixed(2);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -96,7 +99,7 @@ const PaymentSummary = () => {
 
             <FlexBetween mb={2}>
                 <Typography color="grey.600">
-                    Tax <Span sx={{ color: "red" }}>(+8%)</Span>:
+                    Tax <Span sx={{ color: "red" }}>(+10%)</Span>:
                 </Typography>
                 <Typography fontSize="18px" fontWeight="600" lineHeight="1">
                     {currency(tax)}

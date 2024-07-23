@@ -57,7 +57,7 @@ const PaymentForm = () => {
             localStorage.removeItem("percentDiscount");
             router.push(createOrder.data.data);
         } catch (error) {
-            console.error("Failed to fetch VNPay:", error);
+            console.error("Failed to fetch Paypal:", error);
         }
     };
     const handleCashod = async () => {

@@ -4,6 +4,12 @@ import Scrollbar from "components/Scrollbar";
 import { CategoryRow } from "pages-sections/admin";
 import axios from "axios";
 import { useRouter } from "next/router";
+import VendorDashboardLayout from "../../../src/components/layouts/vendor-dashboard";
+import {useEffect, useState} from "react";
+import {Box, Card, Stack, Table, TableContainer, TablePagination} from "@mui/material";
+import SearchArea from "../../../src/components/dashboard/SearchArea";
+import TableHeader from "../../../src/components/data-table/TableHeader";
+import TableBody from "@mui/material/TableBody";
 // TABLE HEADING DATA LIST
 const tableHeading = [
     { id: "id", label: "ID", align: "left" },

@@ -11,8 +11,6 @@ import {
     Typography,
 } from "@mui/material";
 import TableRow from "components/TableRow";
-import { FlexBox } from "components/flex-box";
-import CustomerDashboardLayout from "components/layouts/customer-dashboard";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { SearchOutlinedIcon } from "../../src/components/search-box/styled";

@@ -1,182 +1,153 @@
 import { useEffect, useState } from "react";
+import { Delete, RemoveRedEye } from "@mui/icons-material";
 import {
     Box,
-    Card,
-    Container,
-    Stack,
-    Table,
-    TableBody,
-    TableContainer,
+    Button,
+    Typography,
+    TextField,
 } from "@mui/material";
-import { H1 } from "components/Typography";
-import useMuiTable from "hooks/useMuiTable";
-import Scrollbar from "components/Scrollbar";
-import TableHeader from "components/data-table/TableHeader";
-import TablePagination from "components/data-table/TablePagination";
+import TableRow from "components/TableRow";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
-import {WarrantyHistoryRow} from "../src/pages-sections/warranty-form/WarrantyHistory";
-import { useRouter } from "next/router";
 import QCDashboardLayout from "../src/components/layouts/customer-dashboard/QCPage";
+import { SearchOutlinedIcon } from "../src/components/search-box/styled";
+import { jwtDecode } from "jwt-decode";
 
-const tableHeading = [
-    {
-        id: "orderId",
-        label: "Order ID",
-        align: "left",
-    },
-    {
-        id: "customerName",
-        label: "Customer Name",
-        align: "left",
-    },
-    {
-        id: "orderDate",
-        label: "Order Date",
-        align: "left",
-    },
-    {
-        id: "totalAmount",
-        label: "Amount",
-        align: "left",
-    },
-    {
-        id: "status",
-        label: "Status",
-        align: "left",
-    },
-    {
-        id: "action",
-        label: "Action",
-        align: "center",
-    },
-]; // =============================================================================
-
-const WarrantyHistoryPage = () => {
-    const router = useRouter();
-    const [orderInfo, setOrderInfo] = useState([]);
+const WarrantyHistory = () => {
     const [loading, setLoading] = useState(false);
-    let token = "";
-    if (typeof localStorage !== "undefined") {
-        token = localStorage.getItem("token");
-    } else if (typeof sessionStorage !== "undefined") {
-        token = localStorage.getItem("token");
-    } else {
-    }
+    const [buybackCus, setBuybackCus] = useState([]);
+    const [roleId, setRoleId] = useState(null);  // Initialize as null
+    const [dataNumSearch, setDataNumSearch] = useState("");
+
+    const getToken = () => {
+        if (typeof localStorage !== "undefined") {
+            return localStorage.getItem("token");
+        }
+        return null;
+    };
+
+    const token = getToken();
+
     useEffect(() => {
-        const fetchOrderInfo = async () => {
-            setLoading(true);
-            const token = localStorage.getItem("token");
-            if (!token) {
-                router.push("/login");
-                return;
-            }
-            const tokenDecoded = jwtDecode(token);
-            const userId = tokenDecoded?.id;
+        if (token) {
             try {
-                const responseOrderInfo = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-order-by-user?userId=${userId}`,
-                    {
-                        headers: {
-                            Authorization: "Bearer " + token,
-                        },
-                    }
-                );
-                setOrderInfo(responseOrderInfo.data.data);
+                const decoded = jwtDecode(token);
+                setRoleId(decoded.id);
             } catch (error) {
-                console.error("Failed to fetch order info:", error);
-            } finally {
-                setLoading(false);
+                console.error("Failed to decode token:", error);
             }
-        };
-        fetchOrderInfo();
-    }, []);
+        }
+    }, [token]);
 
-    const filteredOrders = orderInfo.map((order) => ({
-        orderId: order.orderId,
-        customerName: order.customerName,
-        orderDate: order.orderDate,
-        totalAmount: order.totalAmount,
-        status: order.status,
-    }));
+    const fetchOrderBuyBack = async (phoneNumber) => {
+        if (!roleId) return;  // Only fetch if roleId is defined
 
-    const {
-        order,
-        orderBy,
-        selected,
-        rowsPerPage,
-        filteredList,
-        handleChangePage,
-        handleRequestSort,
-        page,
-        handleChangeRowsPerPage,
-    } = useMuiTable({
-        listData: filteredOrders,
-        defaultSort: "status",
-        defaultOrder: "desc",
-    });
+        setLoading(true);
+        try {
+            const responseOrderToBuyBack = await axios.get(
+                `https://four-gems-system-790aeec3afd8.herokuapp.com/warranty-card/view-warranty-history?userId=${roleId}&warrantyCardCode=${dataNumSearch}`,
+                {
+                    headers: {
+                        Authorization: "Bearer " + token,
+                    },
+                }
+            );
+            setBuybackCus(responseOrderToBuyBack.data.data);
+        } catch (error) {
+            console.error("Failed to fetch order buy back:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleBtnSearch = async () => {
+        await fetchOrderBuyBack(dataNumSearch);
+    };
+
+    const SEARCH_BUTTON = (
+        <Button
+            color="primary"
+            disableElevation
+            variant="contained"
+            onClick={handleBtnSearch}
+            sx={{
+                px: "2rem",
+                height: "100%",
+                borderRadius: "0 20px 20px 0",
+            }}
+        >
+            Search
+        </Button>
+    );
 
     return (
         <QCDashboardLayout>
-            <Container>
-                <div
-                    style={{
-                        display: "grid",
-                        textAlign: "center",
-                        paddingBottom: "1.5rem",
-                        paddingTop: "1.5rem",
+            <Box
+                className="searchBox"
+                sx={{ width: "100%", margin: "0 auto", mb: 3 }}
+            >
+                <TextField
+                    placeholder="Please enter warranty code."
+                    fullWidth
+                    InputProps={{
+                        sx: {
+                            height: 50,
+                            paddingRight: 0,
+                            color: "grey.700",
+                            background: "#fff",
+                            borderRadius: "20px",
+                            mt: 3,
+                            "& fieldset": {
+                                border: "none",
+                            },
+                        },
+                        endAdornment: SEARCH_BUTTON,
+                        startAdornment: <SearchOutlinedIcon fontSize="small" />,
                     }}
+                    onChange={(e) => setDataNumSearch(e.target.value)}
+                />
+            </Box>
+            {buybackCus?.map((order) => (
+                <TableRow
+                    sx={{
+                        mb: 2,
+                        padding: "6px 18px",
+                    }}
+                    key={order.orderId}
                 >
-                    <H1 fontSize={40}>Warranty History</H1>
-                </div>
-                <Box py={4}>
-                    <Card>
-                        <Scrollbar>
-                            <TableContainer
-                                sx={{
-                                    minWidth: 900,
-                                }}
-                            >
-                                <Table>
-                                    <TableHeader
-                                        order={order}
-                                        hideSelectBtn
-                                        orderBy={orderBy}
-                                        heading={tableHeading}
-                                        numSelected={selected.length}
-                                        rowCount={filteredList.length}
-                                        onRequestSort={handleRequestSort}
-                                    />
+                    <Typography
+                        whiteSpace="pre"
+                        m={0.75}
+                        textAlign="left"
+                    >
+                        {order.orderId}
+                    </Typography>
 
-                                    <TableBody>
-                                        {filteredList.map((orderInfo) => (
-                                            <WarrantyHistoryRow
-                                                order={orderInfo}
-                                                key={orderInfo.orderId}
-                                            />
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Scrollbar>
+                    <Typography
+                        flex="1 1 260px !important"
+                        m={0.75}
+                        textAlign="left"
+                    >
+                        {order.customerName}
+                    </Typography>
 
-                        <Stack alignItems="center" my={4}>
-                            <TablePagination
-                                onChange={handleChangePage}
-                                count={Math.ceil(
-                                    orderInfo.length / rowsPerPage
-                                )}
-                                page={page + 1}
-                                rowsPerPage={rowsPerPage}
-                                onPageChange={handleChangePage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                            />
-                        </Stack>
-                    </Card>
-                </Box>
-            </Container>
+                    <Typography
+                        whiteSpace="pre"
+                        m={0.75}
+                        textAlign="left"
+                    >
+                        {order.orderDate}
+                    </Typography>
+
+                    <Typography
+                        whiteSpace="pre"
+                        textAlign="center"
+                        color="grey.600"
+                    >
+                    </Typography>
+                </TableRow>
+            ))}
         </QCDashboardLayout>
     );
 };
 
-export default WarrantyHistoryPage;
+export default WarrantyHistory;

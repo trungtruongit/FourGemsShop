@@ -82,14 +82,9 @@ const AccountPopover = () => {
         }}
       >
         <Box px={2} pt={1}>
-          <H6>Gage Paquette</H6>
+          <H6>Hello</H6>
           <Small color="grey.500">Admin</Small>
         </Box>
-
-        <Divider />
-        <MenuItem>Profile</MenuItem>
-        <MenuItem>My Orders</MenuItem>
-        <MenuItem>Settings</MenuItem>
 
         <Divider />
         <MenuItem onClick={handleLogOut}>Logout</MenuItem>

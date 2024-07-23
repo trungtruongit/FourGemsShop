@@ -355,7 +355,7 @@ export const analyticsChartOptions = (theme, categories) => ({
     yaxis: {
         min: 0,
         show: true,
-        max: 100000,
+        max: 500000,
         tickAmount: 6,
         opposite: theme.direction === "rtl",
         labels: {
@@ -425,7 +425,7 @@ export const analyticsChartOptions = (theme, categories) => ({
                 },
                 xaxis: {
                     min: 0,
-                    max: 100000,
+                    max: 10000,
                     tickAmount: 6,
                     labels: {
                         show: true,

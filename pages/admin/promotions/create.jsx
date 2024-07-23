@@ -56,7 +56,7 @@ export default function CreatePromotion() {
                     }
                 }
             );
-            // router.push("/admin/promotions");
+            router.push("/admin/promotions");
         } catch (e) {
             console.error(e);
         }
