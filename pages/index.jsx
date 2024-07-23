@@ -1,12 +1,6 @@
 import { Box, useTheme } from "@mui/material";
 import SEO from "components/SEO";
 import Setting from "components/Setting";
-import Section5 from "pages-sections/market-2/Section5";
-import Section6 from "pages-sections/market-2/Section6";
-import Section7 from "pages-sections/market-2/Section7";
-import Section8 from "pages-sections/market-2/Section8";
-import Section9 from "pages-sections/market-2/Section9";
-import ProductSection from "pages-sections/market-2/ProductSection";
 import ProductFetchApi from "pages-sections/market-2/ProductFetchApi";
 import ShopLayout1 from "components/layouts/ShopLayout1";
 import api from "utils/__api__/market-2";

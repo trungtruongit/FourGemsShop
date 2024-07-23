@@ -19,7 +19,7 @@ import {
     ListIconWrapper,
 } from "./LayoutStyledComponents";
 import { navigations } from "./NavigationList";
-import { jwtDecode } from "jwt-decode";
+import jwtDecode from "jwt-decode";
 
 const TOP_HEADER_AREA = 70;
 
@@ -35,26 +35,32 @@ const DashboardSidebar = (props) => {
     const [onHover, setOnHover] = useState(false);
     const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
     const [role, setRole] = useState(null);
-    let token = "";
-    if (typeof localStorage !== "undefined") {
-        token = localStorage.getItem("token");
-    } else if (typeof sessionStorage !== "undefined") {
-        // Fallback to sessionStorage if localStorage is not supported
-        token = localStorage.getItem("token");
-    } else {
-        // If neither localStorage nor sessionStorage is supported
-    }
+    const [loading, setLoading] = useState(true); // Add loading state
+
     useEffect(() => {
-        // Assume the role is stored in localStorage
-        const decoded = jwtDecode(token);
-        const userRole = decoded?.role;
-
-        setRole(userRole);
-
-        // Redirect based on role
-        if (userRole === "manager" && router.pathname === "/vendor/dashboard") {
-            router.push("/manager/products");
+        let token = "";
+        if (typeof window !== "undefined") {
+            token = localStorage.getItem("token");
         }
+
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+                const userRole = decoded?.role;
+                setRole(userRole);
+
+                // Redirect based on role
+                if (userRole === "manager" && router.pathname === "/vendor/dashboard") {
+                    router.push("/manager/products");
+                }
+            } catch (error) {
+                console.error("Invalid token:", error);
+                router.push("/login");
+            }
+        } else {
+            router.push("/login");
+        }
+        setLoading(false);
     }, [router]);
 
     const COMPACT = sidebarCompact && !onHover ? 1 : 0;
@@ -170,6 +176,8 @@ const DashboardSidebar = (props) => {
             </NavWrapper>
         </Scrollbar>
     );
+
+    if (loading) return null; // Render nothing or a loading spinner while checking token
 
     if (downLg) {
         return (

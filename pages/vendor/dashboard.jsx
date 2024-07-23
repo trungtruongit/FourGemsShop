@@ -9,28 +9,51 @@ import StockOutProducts from "pages-sections/dashboard/StockOutProducts";
 import api from "utils/__api__/dashboard";
 import { useGetDate, useYesterdayDate } from "../../src/hooks/useGetDate";
 import { useEffect, useState } from "react";
-import axios from "axios"; // =============================================================================
-import { jwtDecode } from "jwt-decode";
+import axios from "axios";
+import jwtDecode from "jwt-decode";
+import { useRouter } from "next/router";
 
 VendorDashboard.getLayout = function getLayout(page) {
     return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
-}; // =============================================================================
+};
 
-// =============================================================================
 export default function VendorDashboard(props) {
     const { cardList, recentPurchase, stockOutProducts } = props;
     const { startDate, endDate } = useGetDate();
-    const [order, setOrder] = useState(); //Orders Today
-    let token = "";
-    if (typeof localStorage !== "undefined") {
-        token = localStorage.getItem("token");
-    } else if (typeof sessionStorage !== "undefined") {
-        // Fallback to sessionStorage if localStorage is not supported
-        token = localStorage.getItem("token");
-    } else {
-        // If neither localStorage nor sessionStorage is supported
-    }
+    const { yesStartDate, yesEndDate } = useYesterdayDate();
+    const [order, setOrder] = useState();
+    const [orderY, setOrderY] = useState();
+    const [items, setItems] = useState();
+    const [itemsY, setItemsY] = useState();
+    const [outOfStock, setOutOfStock] = useState();
+    const [kpiStaff, setKpiStaff] = useState();
+    const router = useRouter();
+    const [token, setToken] = useState("");
+    const [role, setRole] = useState("");
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
+        if (typeof window !== "undefined") {
+            const storedToken = localStorage.getItem("token");
+            if (!storedToken) {
+                router.push("/login");
+            } else {
+                setToken(storedToken);
+                try {
+                    const decoded = jwtDecode(storedToken);
+                    setRole(decoded?.role);
+                } catch (error) {
+                    console.error("Invalid token:", error);
+                    router.push("/login");
+                }
+            }
+            // setLoading(false);
+        }
+    }, [router]);
+
+    useEffect(() => {
+        if (!token) return;
+
         const fetchOrder = async () => {
             const decoded = jwtDecode(token);
             const counterId = decoded?.counterId;
@@ -49,10 +72,11 @@ export default function VendorDashboard(props) {
             }
         };
         fetchOrder();
-    }, []);
-    const { yesStartDate, yesEndDate } = useYesterdayDate();
-    const [orderY, setOrderY] = useState(); //Orders Yesterday
+    }, [token, endDate]);
+
     useEffect(() => {
+        if (!token) return;
+
         const fetchOrderY = async () => {
             const decoded = jwtDecode(token);
             const counterId = decoded?.counterId;
@@ -61,7 +85,7 @@ export default function VendorDashboard(props) {
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-number-order-by-date?countId=${counterId}&startDate=${yesStartDate}&endDate=${yesEndDate}`,
                     {
                         headers: {
-                            Authorization: "Bearer " + token, //the token is a variable which holds the token
+                            Authorization: "Bearer " + token,
                         },
                     }
                 );
@@ -71,9 +95,11 @@ export default function VendorDashboard(props) {
             }
         };
         fetchOrderY();
-    }, []);
-    const [items, setItems] = useState(); //Items Today
+    }, [token, yesStartDate, yesEndDate]);
+
     useEffect(() => {
+        if (!token) return;
+
         const fetchItem = async () => {
             const decoded = jwtDecode(token);
             const counterId = decoded?.counterId;
@@ -82,7 +108,7 @@ export default function VendorDashboard(props) {
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-number-item-by-date?countId=${counterId}&startDate=${startDate}&endDate=${endDate}`,
                     {
                         headers: {
-                            Authorization: "Bearer " + token, //the token is a variable which holds the token
+                            Authorization: "Bearer " + token,
                         },
                     }
                 );
@@ -92,31 +118,34 @@ export default function VendorDashboard(props) {
             }
         };
         fetchItem();
-    }, []);
-    const [outOfStock, setOutOfStock] = useState(); //Items Yesterday
+    }, [token, startDate, endDate]);
+
     useEffect(() => {
+        if (!token) return;
+
         const fetchOutStock = async () => {
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
-                const decoded = jwtDecode(token);
-                const counterId = decoded?.counterId;
                 const resOutStock = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/product/get-product-out-of-stock?countId=${counterId}`,
                     {
                         headers: {
-                            Authorization: "Bearer " + token, //the token is a variable which holds the token
+                            Authorization: "Bearer " + token,
                         },
                     }
                 );
-
                 setOutOfStock(resOutStock.data.data);
             } catch (e) {
                 console.log(e);
             }
         };
         fetchOutStock();
-    }, []);
-    const [itemsY, setItemsY] = useState(); //Items Yesterday
+    }, [token]);
+
     useEffect(() => {
+        if (!token) return;
+
         const fetchItemY = async () => {
             const decoded = jwtDecode(token);
             const counterId = decoded?.counterId;
@@ -125,20 +154,21 @@ export default function VendorDashboard(props) {
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-number-item-by-date?countId=${counterId}&startDate=${yesStartDate}&endDate=${yesEndDate}`,
                     {
                         headers: {
-                            Authorization: "Bearer " + token, //the token is a variable which holds the token
+                            Authorization: "Bearer " + token,
                         },
                     }
                 );
-
                 setItemsY(resItemsY.data.data);
             } catch (e) {
                 console.log(e);
             }
         };
         fetchItemY();
-    }, []);
-    const [kpiStaff, setKpiStaff] = useState();
+    }, [token, yesStartDate, yesEndDate]);
+
     useEffect(() => {
+        if (!token) return;
+
         const fetchKpiStaff = async () => {
             const decoded = jwtDecode(token);
             const counterId = decoded?.counterId;
@@ -147,7 +177,7 @@ export default function VendorDashboard(props) {
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/user/get-top-5?countId=${counterId}`,
                     {
                         headers: {
-                            Authorization: "Bearer " + token, //the token is a variable which holds the token
+                            Authorization: "Bearer " + token,
                         },
                     }
                 );
@@ -158,7 +188,10 @@ export default function VendorDashboard(props) {
             }
         };
         fetchKpiStaff();
-    }, []);
+    }, [token]);
+
+    if (loading) return null;
+
     return (
         <Box py={4}>
             <Grid container spacing={3}>
@@ -208,6 +241,7 @@ export default function VendorDashboard(props) {
         </Box>
     );
 }
+
 export const getStaticProps = async () => {
     const cardList = await api.getAllCard();
     const recentPurchase = await api.recentPurchase();

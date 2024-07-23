@@ -40,32 +40,18 @@ export default function ProductList({ initialProducts }) {
     const [products, setProducts] = useState(initialProducts);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const [token, setToken] = useState("");
 
-    const handleNav = () => {
-        router.push("/admin/products/create");
-    };
-
-    let token = "";
-    if (typeof localStorage !== "undefined") {
-        token = localStorage.getItem("token");
-    } else if (typeof sessionStorage !== "undefined") {
-        token = sessionStorage.getItem("token");
-    } else {
-    }
-
-    const {
-        order,
-        orderBy,
-        selected,
-        rowsPerPage,
-        filteredList,
-        handleChangePage,
-        handleRequestSort,
-        page,
-        handleChangeRowsPerPage,
-    } = useMuiTable({
-        listData: products,
-    });
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const storedToken = localStorage.getItem("token");
+            if (storedToken) {
+                setToken(storedToken);
+            } else {
+                router.push("/login");
+            }
+        }
+    }, [router]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -76,7 +62,7 @@ export default function ProductList({ initialProducts }) {
                         `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-all-product-from-warehouse?pageSize=300&page=0&sortKeyword=productId&sortType=DESC&categoryName= &searchKeyword=`,
                         {
                             headers: {
-                                Authorization: `Bearer ` + token,
+                                Authorization: `Bearer ${token}`,
                             },
                         }
                     );
@@ -92,8 +78,28 @@ export default function ProductList({ initialProducts }) {
                 setLoading(false);
             }
         };
-        fetchData();
-    }, [products]);
+        if (token) {
+            fetchData();
+        }
+    }, [token]);
+
+    const handleNav = () => {
+        router.push("/admin/products/create");
+    };
+
+    const {
+        order,
+        orderBy,
+        selected,
+        rowsPerPage,
+        filteredList,
+        handleChangePage,
+        handleRequestSort,
+        page,
+        handleChangeRowsPerPage,
+    } = useMuiTable({
+        listData: products,
+    });
 
     return (
         <Box py={4}>

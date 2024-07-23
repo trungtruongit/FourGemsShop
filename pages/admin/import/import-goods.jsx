@@ -21,8 +21,9 @@ import SEO from "components/SEO";
 import { useAppContext } from "contexts/AppContext";
 import Card1 from "../../../src/components/Card1";
 import { H5 } from "../../../src/components/Typography";
-import { jwtDecode } from "jwt-decode";
+import jwtDecode from "jwt-decode";
 import { useSnackbar } from "notistack";
+import { useRouter } from 'next/router'; // Import useRouter
 
 const ImportGoods = () => {
     const { state } = useAppContext();
@@ -37,15 +38,26 @@ const ImportGoods = () => {
     const [counters, setCounters] = useState([]);
     const [refreshData, setRefreshData] = useState(false); // State to trigger API call
     const { enqueueSnackbar } = useSnackbar();
+    const router = useRouter(); // Initialize useRouter
+    const [token, setToken] = useState("");
 
-    let token = "";
-
-    if (typeof localStorage !== "undefined") {
-        token = localStorage.getItem("token");
-    } else if (typeof sessionStorage !== "undefined") {
-        token = sessionStorage.getItem("token");
-    } else {
-    }
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const storedToken = localStorage.getItem("token");
+            if (!storedToken) {
+                router.push("/login");
+            } else {
+                setToken(storedToken);
+                try {
+                    const decoded = jwtDecode(storedToken);
+                    // Perform any additional role or permission checks here if needed
+                } catch (error) {
+                    console.error("Invalid token:", error);
+                    router.push("/login");
+                }
+            }
+        }
+    }, [router]);
 
     useEffect(() => {
         const fetchCounters = async () => {
@@ -64,7 +76,9 @@ const ImportGoods = () => {
             }
         };
 
-        fetchCounters();
+        if (token) {
+            fetchCounters();
+        }
     }, [token]);
 
     useEffect(() => {
@@ -86,10 +100,10 @@ const ImportGoods = () => {
             }
         };
 
-        if (rotateId.counterId) {
+        if (rotateId.counterId && token) {
             fetchProductRotate();
         }
-    }, [rotateId.counterId, refreshData]); // Re-fetch when rotateId.counterId or refreshData changes
+    }, [rotateId.counterId, refreshData, token]); // Re-fetch when rotateId.counterId or refreshData changes
 
     const handleFormSubmit = async (values) => {
         setRotateId(values);
@@ -118,7 +132,7 @@ const ImportGoods = () => {
         };
 
         try {
-            const createImportRequest = await axios.put(
+            await axios.put(
                 `https://four-gems-system-790aeec3afd8.herokuapp.com/product/import-list-product-from-warehouse`,
                 ImportRequest,
                 {
@@ -176,13 +190,13 @@ const ImportGoods = () => {
                         onSubmit={handleFormSubmit}
                     >
                         {({
-                            values,
-                            errors,
-                            touched,
-                            handleChange,
-                            handleBlur,
-                            handleSubmit,
-                        }) => (
+                              values,
+                              errors,
+                              touched,
+                              handleChange,
+                              handleBlur,
+                              handleSubmit,
+                          }) => (
                             <form onSubmit={handleSubmit}>
                                 <Card1 sx={{ mb: 4 }}>
                                     <Grid item sm={12} xs={12} mb={3}>
@@ -310,9 +324,7 @@ const ImportGoods = () => {
                         Cancel
                     </Button>
                     <Button
-                        onClick={() => {
-                            handleConfirmRotate(rotateId);
-                        }}
+                        onClick={() => handleConfirmRotate(rotateId)}
                         color="primary"
                         autoFocus
                     >

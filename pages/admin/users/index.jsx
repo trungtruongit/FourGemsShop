@@ -10,6 +10,8 @@ import Scrollbar from "components/Scrollbar";
 import { ProductRow } from "pages-sections/admin";
 import api from "utils/__api__/dashboard";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import jwtDecode from "jwt-decode";
 
 // TABLE HEADING DATA LIST
 const tableHeading = [
@@ -43,22 +45,26 @@ const tableHeading = [
         label: "Action",
         align: "center",
     },
-]; // =============================================================================
+];
 
 ProductList.getLayout = function getLayout(page) {
     return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
-}; // =============================================================================
+};
 
-// =============================================================================
 export default function ProductList(props) {
-    const { products } = props; // RESHAPE THE PRODUCT LIST BASED TABLE HEAD CELL ID
+    const { products } = props;
     const router = useRouter();
-    const hadleNav = () => {
+    const [token, setToken] = useState("");
+    const [loading, setLoading] = useState(true);
+
+    const handleNav = () => {
         router.push("/admin/products/create");
     };
-    const hadleNav1 = () => {
+
+    const handleNav1 = () => {
         router.push("/admin/categories");
     };
+
     const filteredProducts = products.map((item) => ({
         id: item.id,
         name: item.title,
@@ -68,6 +74,7 @@ export default function ProductList(props) {
         published: item.published,
         category: item.categories[0],
     }));
+
     const {
         order,
         orderBy,
@@ -81,6 +88,34 @@ export default function ProductList(props) {
     } = useMuiTable({
         listData: filteredProducts,
     });
+
+    useEffect(() => {
+        const checkToken = () => {
+            if (typeof window !== "undefined") {
+                const storedToken = localStorage.getItem("token") || sessionStorage.getItem("token");
+                if (!storedToken) {
+                    router.push("/login");
+                } else {
+                    setToken(storedToken);
+                    try {
+                        const decoded = jwtDecode(storedToken);
+                        // You can also add additional checks for roles or permissions here if needed
+                    } catch (error) {
+                        console.error("Invalid token:", error);
+                        router.push("/login");
+                    }
+                }
+                setLoading(false);
+            }
+        };
+
+        checkToken();
+    }, [router]);
+
+    if (loading) {
+        return <Box py={4}>Loading...</Box>;
+    }
+
     return (
         <Box py={4}>
             <H3>Product List</H3>
@@ -97,14 +132,14 @@ export default function ProductList(props) {
                     color: "#FFFFFF",
                     backgroundColor: "#4E97FD",
                 }}
-                onClick={hadleNav1}
+                onClick={handleNav1}
             >
                 All Categories
             </Button>
             <SearchArea
                 handleSearch={() => {}}
                 buttonText="Add Product"
-                handleBtnClick={hadleNav}
+                handleBtnClick={handleNav}
                 searchPlaceholder="Search Product..."
             />
             <Card>
@@ -148,12 +183,21 @@ export default function ProductList(props) {
         </Box>
     );
 }
+
 export const getStaticProps = async () => {
-    // const products = await api.products();
-    const products = await api.products();
-    return {
-        props: {
-            products,
-        },
-    };
+    try {
+        const products = await api.products();
+        return {
+            props: {
+                products,
+            },
+        };
+    } catch (error) {
+        console.error("Failed to fetch products:", error);
+        return {
+            props: {
+                products: [],
+            },
+        };
+    }
 };

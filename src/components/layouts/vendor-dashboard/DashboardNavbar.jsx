@@ -11,7 +11,7 @@ import { FlexBox, FlexRowCenter } from "components/flex-box";
 import { H3 } from "components/Typography";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
+import jwtDecode from "jwt-decode";
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
     zIndex: 11,
@@ -21,6 +21,7 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
     boxShadow: theme.shadows[2],
     color: theme.palette.text.primary,
 }));
+
 const StyledToolBar = styled(Toolbar)(() => ({
     "@media (min-width: 0px)": {
         paddingLeft: 0,
@@ -28,6 +29,7 @@ const StyledToolBar = styled(Toolbar)(() => ({
         minHeight: "auto",
     },
 }));
+
 const ToggleWrapper = styled(FlexRowCenter)(({ theme }) => ({
     width: 40,
     height: 40,
@@ -36,6 +38,7 @@ const ToggleWrapper = styled(FlexRowCenter)(({ theme }) => ({
     borderRadius: "8px",
     backgroundColor: theme.palette.grey[100],
 }));
+
 const CustomButton = styled(Button)(({ theme }) => ({
     minHeight: 40,
     flexShrink: 0,
@@ -47,6 +50,7 @@ const CustomButton = styled(Button)(({ theme }) => ({
         display: "none",
     },
 }));
+
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
     width: 500,
     padding: "5px 10px",
@@ -56,42 +60,53 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     [theme.breakpoints.down("md")]: {
         display: "none",
     },
-})); // ===================================================================
+}));
 
-// ===================================================================
 const DashboardNavbar = ({ handleDrawerToggle }) => {
     const router = useRouter();
     const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
-    const [name, setName] = useState();
-    let token = "";
-    if (typeof localStorage !== "undefined") {
-        token = localStorage.getItem("token");
-    } else if (typeof sessionStorage !== "undefined") {
-        // Fallback to sessionStorage if localStorage is not supported
-        token = localStorage.getItem("token");
-    } else {
-        // If neither localStorage nor sessionStorage is supported
-    }
+    const [name, setName] = useState("");
+    const [token, setToken] = useState(null);
+
     useEffect(() => {
-        const decoded = jwtDecode(token);
-        const fetchDataName = async () => {
-            try {
-                const resName = await axios.post(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/user/get-info-by-token?token=${token}`,
-                    {},
-                    {
-                        headers: {
-                            Authorization: "Bearer " + token, //the token is a variable which holds the token
-                        },
-                    }
-                );
-                setName(decoded.name);
-            } catch (e) {
-                console.log(e);
+        if (typeof window !== "undefined") {
+            const storedToken = localStorage.getItem("token");
+            if (storedToken) {
+                setToken(storedToken);
+            } else {
+                router.push("/login");
             }
-        };
-        fetchDataName();
-    }, []);
+        }
+    }, [router]);
+
+    useEffect(() => {
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+                const fetchDataName = async () => {
+                    try {
+                        const resName = await axios.post(
+                            `https://four-gems-system-790aeec3afd8.herokuapp.com/user/get-info-by-token?token=${token}`,
+                            {},
+                            {
+                                headers: {
+                                    Authorization: "Bearer " + token,
+                                },
+                            }
+                        );
+                        setName(decoded.name);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                };
+                fetchDataName();
+            } catch (error) {
+                console.error("Invalid token:", error);
+                router.push("/login");
+            }
+        }
+    }, [token, router]);
+
     return (
         <DashboardNavbarRoot position="sticky">
             <Container maxWidth="xl">
@@ -101,19 +116,6 @@ const DashboardNavbar = ({ handleDrawerToggle }) => {
                             <Toggle />
                         </ToggleWrapper>
                     )}
-
-                    {/* <CustomButton
-            onClick={() => router.push("/")}
-            startIcon={
-              <Globe
-                sx={{
-                  color: "grey.900",
-                }}
-              />
-            }
-          >
-            Browse Website
-          </CustomButton> */}
 
                     <Box flexGrow={1} sx={{}} />
 

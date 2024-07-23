@@ -28,19 +28,50 @@ export default function CategoryList({ initialCategories }) {
     const [categories, setCategories] = useState(initialCategories);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const [token, setToken] = useState("");
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const storedToken = localStorage.getItem("token");
+            if (storedToken) {
+                setToken(storedToken);
+            } else {
+                router.push("/login");
+            }
+        }
+    }, [router]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                if (token) {
+                    const response = await axios.get(
+                        `https://four-gems-system-790aeec3afd8.herokuapp.com/product-type`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        }
+                    );
+                    setCategories(response?.data?.data);
+                } else {
+                    console.warn("Token is missing. Please ensure it's properly set.");
+                }
+            } catch (error) {
+                console.error("Failed to fetch product types:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        if (token) {
+            fetchData();
+        }
+    }, [token]);
 
     const handleNav = () => {
         router.push("/admin/categories/create");
     };
-
-    let token = "";
-    if (typeof localStorage !== "undefined") {
-        token = localStorage.getItem("token");
-    } else if (typeof sessionStorage !== "undefined") {
-        token = sessionStorage.getItem("token");
-    } else {
-        
-    }
 
     const {
         order,
@@ -55,34 +86,6 @@ export default function CategoryList({ initialCategories }) {
     } = useMuiTable({
         listData: categories,
     });
-
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                if (token) {
-                    const response = await axios.get(
-                        `https://four-gems-system-790aeec3afd8.herokuapp.com/product-type`,
-                        {
-                            headers: {
-                                Authorization: `Bearer ` + token,
-                            },
-                        }
-                    );
-                    setCategories(response?.data?.data);
-                } else {
-                    console.warn(
-                        "Token is missing. Please ensure it's properly set."
-                    );
-                }
-            } catch (error) {
-                console.error("Failed to fetch product types:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, [categories]);
 
     return (
         <Box py={4}>
