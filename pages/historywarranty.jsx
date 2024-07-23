@@ -12,6 +12,14 @@ import QCDashboardLayout from "../src/components/layouts/customer-dashboard/QCPa
 import { SearchOutlinedIcon } from "../src/components/search-box/styled";
 import { jwtDecode } from "jwt-decode";
 
+function convertDate(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const formattedDate = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
+    return formattedDate;
+}
 const WarrantyHistory = () => {
     const [loading, setLoading] = useState(false);
     const [buybackCus, setBuybackCus] = useState([]);
@@ -112,14 +120,14 @@ const WarrantyHistory = () => {
                         mb: 2,
                         padding: "6px 18px",
                     }}
-                    key={order.orderId}
+                    key={order.id}
                 >
                     <Typography
                         whiteSpace="pre"
                         m={0.75}
                         textAlign="left"
                     >
-                        {order.orderId}
+                        {order.id}
                     </Typography>
 
                     <Typography
@@ -127,22 +135,7 @@ const WarrantyHistory = () => {
                         m={0.75}
                         textAlign="left"
                     >
-                        {order.customerName}
-                    </Typography>
-
-                    <Typography
-                        whiteSpace="pre"
-                        m={0.75}
-                        textAlign="left"
-                    >
-                        {order.orderDate}
-                    </Typography>
-
-                    <Typography
-                        whiteSpace="pre"
-                        textAlign="center"
-                        color="grey.600"
-                    >
+                        {convertDate(order.date)}
                     </Typography>
                 </TableRow>
             ))}
