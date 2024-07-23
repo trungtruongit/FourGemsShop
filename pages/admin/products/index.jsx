@@ -12,7 +12,6 @@ import api from "utils/__api__/dashboard";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
 // TABLE HEADING DATA LIST
 const tableHeading = [
     { id: "id", label: "ID", align: "left" },
@@ -31,61 +30,25 @@ const tableHeading = [
     { id: "active", label: "Publish", align: "left" },
     { id: "action", label: "Edit", align: "center" },
 ];
-
 ProductList.getLayout = function getLayout(page) {
     return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
 };
-
 export default function ProductList({ initialProducts }) {
     const [products, setProducts] = useState(initialProducts);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
-    const [token, setToken] = useState("");
-
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-            const storedToken = localStorage.getItem("token");
-            if (storedToken) {
-                setToken(storedToken);
-            } else {
-                router.push("/login");
-            }
-        }
-    }, [router]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                if (token) {
-                    const response = await axios.get(
-                        `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-all-product-from-warehouse?pageSize=300&page=0&sortKeyword=productId&sortType=DESC&categoryName= &searchKeyword=`,
-                        {
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                            },
-                        }
-                    );
-                    setProducts(response?.data?.data);
-                } else {
-                    console.warn(
-                        "Token is missing. Please ensure it's properly set."
-                    );
-                }
-            } catch (error) {
-                console.error("Failed to fetch products:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        if (token) {
-            fetchData();
-        }
-    }, [token]);
 
     const handleNav = () => {
         router.push("/admin/products/create");
     };
+
+    let token = "";
+    if (typeof localStorage !== "undefined") {
+        token = localStorage.getItem("token");
+    } else if (typeof sessionStorage !== "undefined") {
+        token = sessionStorage.getItem("token");
+    } else {
+    }
 
     const {
         order,
@@ -101,10 +64,37 @@ export default function ProductList({ initialProducts }) {
         listData: products,
     });
 
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                if (token) {
+                    const response = await axios.get(
+                        `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-all-product-from-warehouse?pageSize=300&page=0&sortKeyword=productId&sortType=DESC&categoryName= &searchKeyword=`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ` + token,
+                            },
+                        }
+                    );
+                    setProducts(response?.data?.data);
+                } else {
+                    console.warn(
+                        "Token is missing. Please ensure it's properly set."
+                    );
+                }
+            } catch (error) {
+                console.error("Failed to fetch products:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, [products]);
+
     return (
         <Box py={4}>
             <H3>Product List</H3>
-
             <SearchArea
                 handleSearch={() => {}}
                 buttonText="Add Product"
@@ -134,7 +124,6 @@ export default function ProductList({ initialProducts }) {
                                     },
                                 }}
                             />
-
                             <TableBody>
                                 {filteredList.map((product) => (
                                     <ProductRow
@@ -146,7 +135,6 @@ export default function ProductList({ initialProducts }) {
                         </Table>
                     </TableContainer>
                 </Scrollbar>
-
                 <Stack alignItems="center" my={4}>
                     <TablePagination
                         onChange={handleChangePage}
@@ -161,7 +149,6 @@ export default function ProductList({ initialProducts }) {
         </Box>
     );
 }
-
 export const getStaticProps = async () => {
     try {
         const products = await api.products();

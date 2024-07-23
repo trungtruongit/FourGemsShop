@@ -19,7 +19,7 @@ import {
     ListIconWrapper,
 } from "./LayoutStyledComponents";
 import { navigations } from "./NavigationList";
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const TOP_HEADER_AREA = 70;
 
@@ -35,42 +35,34 @@ const DashboardSidebar = (props) => {
     const [onHover, setOnHover] = useState(false);
     const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
     const [role, setRole] = useState(null);
-    const [loading, setLoading] = useState(true); // Add loading state
-
+    let token = "";
+    if (typeof localStorage !== "undefined") {
+        token = localStorage.getItem("token");
+    } else if (typeof sessionStorage !== "undefined") {
+        // Fallback to sessionStorage if localStorage is not supported
+        token = localStorage.getItem("token");
+    } else {
+        // If neither localStorage nor sessionStorage is supported
+    }
     useEffect(() => {
-        let token = "";
-        if (typeof window !== "undefined") {
-            token = localStorage.getItem("token");
-        }
+        // Assume the role is stored in localStorage
+        const decoded = jwtDecode(token);
+        const userRole = decoded?.role;
 
-        if (token) {
-            try {
-                const decoded = jwtDecode(token);
-                const userRole = decoded?.role;
-                setRole(userRole);
+        setRole(userRole);
 
-                // Redirect based on role
-                if (userRole === "manager" && router.pathname === "/vendor/dashboard") {
-                    router.push("/manager/products");
-                }
-            } catch (error) {
-                console.error("Invalid token:", error);
-                router.push("/login");
-            }
-        } else {
-            router.push("/login");
+        // Redirect based on role
+        if (userRole === "manager" && router.pathname === "/vendor/dashboard") {
+            router.push("/manager/products");
         }
-        setLoading(false);
     }, [router]);
 
     const COMPACT = sidebarCompact && !onHover ? 1 : 0;
     const activeRoute = (path) => (router.pathname === path ? 1 : 0);
-
     const handleNavigation = (path) => {
         router.push(path);
         setShowMobileSideBar();
     };
-
     const filterNavigations = () => {
         return navigations.filter((item) => {
             if (item.withAdmin && role !== "admin") return false;
@@ -78,7 +70,6 @@ const DashboardSidebar = (props) => {
             return true;
         });
     };
-
     const renderLevels = (data) => {
         return data.map((item, index) => {
             if (item.type === "label")
@@ -87,7 +78,6 @@ const DashboardSidebar = (props) => {
                         {item.label}
                     </ListLabel>
                 );
-
             if (item.children) {
                 return (
                     <SidebarAccordion
@@ -116,11 +106,9 @@ const DashboardSidebar = (props) => {
                                     {item.iconText}
                                 </span>
                             )}
-
                             <StyledText compact={COMPACT}>
                                 {item.name}
                             </StyledText>
-
                             {item.badge && (
                                 <BadgeValue compact={COMPACT}>
                                     {item.badge.value}
@@ -145,11 +133,9 @@ const DashboardSidebar = (props) => {
                             ) : (
                                 <BulletIcon active={activeRoute(item.path)} />
                             )}
-
                             <StyledText compact={COMPACT}>
                                 {item.name}
                             </StyledText>
-
                             {item.badge && (
                                 <BadgeValue compact={COMPACT}>
                                     {item.badge.value}
@@ -161,7 +147,6 @@ const DashboardSidebar = (props) => {
             }
         });
     };
-
     const content = (
         <Scrollbar
             autoHide
@@ -176,8 +161,6 @@ const DashboardSidebar = (props) => {
             </NavWrapper>
         </Scrollbar>
     );
-
-    if (loading) return null; // Render nothing or a loading spinner while checking token
 
     if (downLg) {
         return (
@@ -196,12 +179,10 @@ const DashboardSidebar = (props) => {
                         }}
                     />
                 </Box>
-
                 {content}
             </LayoutDrawer>
         );
     }
-
     return (
         <SidebarWrapper
             compact={sidebarCompact ? 1 : 0}
@@ -222,7 +203,6 @@ const DashboardSidebar = (props) => {
                         height: COMPACT ? "50px" : "80px", // Increased size for non-compact mode
                     }}
                 />
-
                 <ChevronLeftIcon
                     color="disabled"
                     compact={COMPACT}
@@ -231,10 +211,8 @@ const DashboardSidebar = (props) => {
                     sx={{ ml: 7 }}
                 />
             </FlexBetween>
-
             {content}
         </SidebarWrapper>
     );
 };
-
 export default DashboardSidebar;

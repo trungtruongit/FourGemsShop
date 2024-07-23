@@ -1,17 +1,9 @@
-import { useState, useEffect } from "react";
-import { Button, Box, Card, Stack, Table, TableContainer } from "@mui/material";
-import TableBody from "@mui/material/TableBody";
-import SearchArea from "components/dashboard/SearchArea";
-import TableHeader from "components/data-table/TableHeader";
-import TablePagination from "components/data-table/TablePagination";
-import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import { H3 } from "components/Typography";
 import useMuiTable from "hooks/useMuiTable";
 import Scrollbar from "components/Scrollbar";
 import { CategoryRow } from "pages-sections/admin";
 import axios from "axios";
 import { useRouter } from "next/router";
-
 // TABLE HEADING DATA LIST
 const tableHeading = [
     { id: "id", label: "ID", align: "left" },
@@ -19,59 +11,26 @@ const tableHeading = [
     { id: "createdDate", label: "Created Date", align: "left" },
     { id: "action", label: "Edit", align: "center" },
 ];
-
 CategoryList.getLayout = function getLayout(page) {
     return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
 };
-
 export default function CategoryList({ initialCategories }) {
     const [categories, setCategories] = useState(initialCategories);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
-    const [token, setToken] = useState("");
-
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-            const storedToken = localStorage.getItem("token");
-            if (storedToken) {
-                setToken(storedToken);
-            } else {
-                router.push("/login");
-            }
-        }
-    }, [router]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                if (token) {
-                    const response = await axios.get(
-                        `https://four-gems-system-790aeec3afd8.herokuapp.com/product-type`,
-                        {
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                            },
-                        }
-                    );
-                    setCategories(response?.data?.data);
-                } else {
-                    console.warn("Token is missing. Please ensure it's properly set.");
-                }
-            } catch (error) {
-                console.error("Failed to fetch product types:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        if (token) {
-            fetchData();
-        }
-    }, [token]);
 
     const handleNav = () => {
         router.push("/admin/categories/create");
     };
+
+    let token = "";
+    if (typeof localStorage !== "undefined") {
+        token = localStorage.getItem("token");
+    } else if (typeof sessionStorage !== "undefined") {
+        token = sessionStorage.getItem("token");
+    } else {
+
+    }
 
     const {
         order,
@@ -87,10 +46,37 @@ export default function CategoryList({ initialCategories }) {
         listData: categories,
     });
 
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                if (token) {
+                    const response = await axios.get(
+                        `https://four-gems-system-790aeec3afd8.herokuapp.com/product-type`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ` + token,
+                            },
+                        }
+                    );
+                    setCategories(response?.data?.data);
+                } else {
+                    console.warn(
+                        "Token is missing. Please ensure it's properly set."
+                    );
+                }
+            } catch (error) {
+                console.error("Failed to fetch product types:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, [categories]);
+
     return (
         <Box py={4}>
             <H3>Product Type List</H3>
-
             <SearchArea
                 handleSearch={() => {}}
                 buttonText="Add Product Type"
@@ -120,7 +106,6 @@ export default function CategoryList({ initialCategories }) {
                                     },
                                 }}
                             />
-
                             <TableBody>
                                 {filteredList.map((category) => (
                                     <CategoryRow
@@ -132,7 +117,6 @@ export default function CategoryList({ initialCategories }) {
                         </Table>
                     </TableContainer>
                 </Scrollbar>
-
                 <Stack alignItems="center" my={4}>
                     <TablePagination
                         onChange={handleChangePage}
@@ -147,7 +131,6 @@ export default function CategoryList({ initialCategories }) {
         </Box>
     );
 }
-
 export const getStaticProps = async () => {
     try {
         const response = await axios.get(

@@ -6,11 +6,11 @@ import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import { H3 } from "components/Typography";
 import useMuiTable from "hooks/useMuiTable";
 import Scrollbar from "components/Scrollbar";
-import axios from "axios";
+import api from "utils/__api__/dashboard";
 import { useRouter } from "next/router";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { ProductRowImport } from "pages-sections/admin/products/ProductRowImport";
-
 // TABLE HEADING DATA LIST
 const tableHeading = [
     { id: "id", label: "ID", align: "left" },
@@ -20,16 +20,26 @@ const tableHeading = [
     { id: "counter2", label: "CounterTwo", align: "left" },
     { id: "counter3", label: "CounterThree", align: "left" },
 ];
-
 ProductList.getLayout = function getLayout(page) {
     return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
 };
-
 export default function ProductList({ initialProducts }) {
     const [products, setProducts] = useState(initialProducts);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
-    const [token, setToken] = useState("");
+
+    const handleNav = () => {
+        router.push("/admin/products/create");
+    };
+
+    let token = "";
+    if (typeof localStorage !== "undefined") {
+        token = localStorage.getItem("token");
+    } else if (typeof sessionStorage !== "undefined") {
+        token = sessionStorage.getItem("token");
+    } else {
+
+    }
 
     const {
         order,
@@ -46,24 +56,6 @@ export default function ProductList({ initialProducts }) {
     });
 
     useEffect(() => {
-        if (typeof window !== "undefined") {
-            const storedToken = localStorage.getItem("token") || sessionStorage.getItem("token");
-            if (!storedToken) {
-                router.push("/login");
-            } else {
-                setToken(storedToken);
-                try {
-                    const decoded = jwtDecode(storedToken);
-                    // Perform any additional role or permission checks here if needed
-                } catch (error) {
-                    console.error("Invalid token:", error);
-                    router.push("/login");
-                }
-            }
-        }
-    }, [router]);
-
-    useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
@@ -72,13 +64,16 @@ export default function ProductList({ initialProducts }) {
                         `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-all-product-with-quantity-counter`,
                         {
                             headers: {
-                                Authorization: `Bearer ${token}`,
+                                Authorization: `Bearer ` + token,
                             },
                         }
                     );
+
                     setProducts(response?.data?.data);
                 } else {
-                    console.warn("Token is missing. Please ensure it's properly set.");
+                    console.warn(
+                        "Token is missing. Please ensure it's properly set."
+                    );
                 }
             } catch (error) {
                 console.error("Failed to fetch products:", error);
@@ -87,18 +82,16 @@ export default function ProductList({ initialProducts }) {
             }
         };
         fetchData();
-    }, [token]);
-
+    }, []);
     return (
         <Box py={4}>
             <H3 sx={{ mb: 2 }}>Product Quantity List</H3>
-
             <Card>
                 <Scrollbar autoHide={false}>
                     <TableContainer
                         sx={{
-                            minWidth: 1200,
-                            width: 1200,
+                            minWidth: 1200, // Double the width
+                            width: 1200, // Double the width
                         }}
                     >
                         <Table>
@@ -112,10 +105,11 @@ export default function ProductList({ initialProducts }) {
                                 onRequestSort={handleRequestSort}
                                 sx={{
                                     "& th": {
-                                        minWidth: 200,
+                                        minWidth: 200, // Adjust the min-width of table header cells
                                     },
                                 }}
                             />
+
                             <TableBody>
                                 {filteredList &&
                                     filteredList?.map((product) => (
@@ -131,7 +125,6 @@ export default function ProductList({ initialProducts }) {
                         </Table>
                     </TableContainer>
                 </Scrollbar>
-
                 <Stack alignItems="center" my={4}>
                     <TablePagination
                         onChange={handleChangePage}
@@ -146,7 +139,6 @@ export default function ProductList({ initialProducts }) {
         </Box>
     );
 }
-
 export const getStaticProps = async () => {
     try {
         const products = await api.products();

@@ -1,6 +1,12 @@
 import { Box, useTheme } from "@mui/material";
 import SEO from "components/SEO";
 import Setting from "components/Setting";
+import Section5 from "pages-sections/market-2/Section5";
+import Section6 from "pages-sections/market-2/Section6";
+import Section7 from "pages-sections/market-2/Section7";
+import Section8 from "pages-sections/market-2/Section8";
+import Section9 from "pages-sections/market-2/Section9";
+import ProductSection from "pages-sections/market-2/ProductSection";
 import ProductFetchApi from "pages-sections/market-2/ProductFetchApi";
 import ShopLayout1 from "components/layouts/ShopLayout1";
 import api from "utils/__api__/market-2";
@@ -9,7 +15,6 @@ import { H1 } from "components/Typography";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
-
 // =======================================================
 const Market = (props) => {
     const theme = useTheme();
@@ -32,7 +37,6 @@ const Market = (props) => {
             }
         }
     }, []);
-
     useEffect(() => {
         const fetchProductType = async () => {
             const token = localStorage.getItem("token");
@@ -52,7 +56,6 @@ const Market = (props) => {
         };
         fetchProductType();
     }, []);
-
     return (
         <ShopLayout1 topbarBgColor={theme.palette.grey[900]}>
             <SEO title="FourGemsShop" />
@@ -76,7 +79,6 @@ const Market = (props) => {
         </ShopLayout1>
     );
 };
-
 export const getStaticProps = async () => {
     const products = await api?.getProducts();
     const serviceList = await api?.getServices();

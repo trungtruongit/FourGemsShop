@@ -21,9 +21,8 @@ import SEO from "components/SEO";
 import { useAppContext } from "contexts/AppContext";
 import Card1 from "../../../src/components/Card1";
 import { H5 } from "../../../src/components/Typography";
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { useSnackbar } from "notistack";
-import { useRouter } from 'next/router'; // Import useRouter
 
 const ImportGoods = () => {
     const { state } = useAppContext();
@@ -38,26 +37,15 @@ const ImportGoods = () => {
     const [counters, setCounters] = useState([]);
     const [refreshData, setRefreshData] = useState(false); // State to trigger API call
     const { enqueueSnackbar } = useSnackbar();
-    const router = useRouter(); // Initialize useRouter
-    const [token, setToken] = useState("");
 
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-            const storedToken = localStorage.getItem("token");
-            if (!storedToken) {
-                router.push("/login");
-            } else {
-                setToken(storedToken);
-                try {
-                    const decoded = jwtDecode(storedToken);
-                    // Perform any additional role or permission checks here if needed
-                } catch (error) {
-                    console.error("Invalid token:", error);
-                    router.push("/login");
-                }
-            }
-        }
-    }, [router]);
+    let token = "";
+
+    if (typeof localStorage !== "undefined") {
+        token = localStorage.getItem("token");
+    } else if (typeof sessionStorage !== "undefined") {
+        token = sessionStorage.getItem("token");
+    } else {
+    }
 
     useEffect(() => {
         const fetchCounters = async () => {
@@ -76,9 +64,7 @@ const ImportGoods = () => {
             }
         };
 
-        if (token) {
-            fetchCounters();
-        }
+        fetchCounters();
     }, [token]);
 
     useEffect(() => {
@@ -100,10 +86,10 @@ const ImportGoods = () => {
             }
         };
 
-        if (rotateId.counterId && token) {
+        if (rotateId.counterId) {
             fetchProductRotate();
         }
-    }, [rotateId.counterId, refreshData, token]); // Re-fetch when rotateId.counterId or refreshData changes
+    }, [rotateId.counterId, refreshData]); // Re-fetch when rotateId.counterId or refreshData changes
 
     const handleFormSubmit = async (values) => {
         setRotateId(values);
@@ -115,11 +101,9 @@ const ImportGoods = () => {
             setConfirmPopup(true);
         }
     };
-
     const validationSchema = yup.object().shape({
         counterId: yup.string().required("Counter ID is required"),
     });
-
     const handleConfirmRotate = async (values) => {
         setRotateRequestPopup(false);
         const ImportRequest = {
@@ -132,7 +116,7 @@ const ImportGoods = () => {
         };
 
         try {
-            await axios.put(
+            const createImportRequest = await axios.put(
                 `https://four-gems-system-790aeec3afd8.herokuapp.com/product/import-list-product-from-warehouse`,
                 ImportRequest,
                 {
@@ -141,7 +125,6 @@ const ImportGoods = () => {
                     },
                 }
             );
-
             enqueueSnackbar("Import product to counter successfully", {
                 variant: "success",
             });
@@ -153,15 +136,12 @@ const ImportGoods = () => {
             console.error("Failed to create import request:", error);
         }
     };
-
     const handleOpenRotateRequestPopup = () => {
         setRotateRequestPopup(true);
     };
-
     const handleCloseRotateRequestPopup = () => {
         setRotateRequestPopup(false);
     };
-
     return (
         <VendorDashboardLayout>
             <SEO title="Rotate Goods" />
@@ -301,7 +281,6 @@ const ImportGoods = () => {
                     </Formik>
                 </Grid>
             </Grid>
-
             <Dialog
                 open={rotateRequestPopup}
                 onClose={handleCloseRotateRequestPopup}
@@ -324,7 +303,9 @@ const ImportGoods = () => {
                         Cancel
                     </Button>
                     <Button
-                        onClick={() => handleConfirmRotate(rotateId)}
+                        onClick={() => {
+                            handleConfirmRotate(rotateId);
+                        }}
                         color="primary"
                         autoFocus
                     >
@@ -335,7 +316,6 @@ const ImportGoods = () => {
         </VendorDashboardLayout>
     );
 };
-
 const styles = {
     gridContainer: {
         display: "grid",
@@ -343,5 +323,4 @@ const styles = {
         gap: "16px",
     },
 };
-
 export default ImportGoods;

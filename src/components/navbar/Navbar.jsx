@@ -1,6 +1,11 @@
 import { Box, Button, Container, MenuItem, styled } from "@mui/material";
 import ArrowRight from "@mui/icons-material/ArrowRight";
-import { ArrowLeft, ChevronLeft, ChevronRight, KeyboardArrowDown } from "@mui/icons-material";
+import {
+    ArrowLeft,
+    ChevronLeft,
+    ChevronRight,
+    KeyboardArrowDown,
+} from "@mui/icons-material";
 import BazaarCard from "components/BazaarCard";
 import { FlexBox } from "components/flex-box";
 import Category from "components/icons/Category";
@@ -13,7 +18,7 @@ import useSettings from "hooks/useSettings";
 import navbarNavigations from "data/navbarNavigations";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const navLinkStyle = {
     cursor: "pointer",
@@ -26,7 +31,6 @@ const navLinkStyle = {
         marginRight: 0,
     },
 };
-
 const StyledNavLink = styled(NavLink)(() => ({ ...navLinkStyle }));
 const ParentNav = styled(Box)(({ theme }) => ({
     "&:hover": {
@@ -85,7 +89,6 @@ const ChildNavsWrapper = styled(Box)(() => ({
     position: "absolute",
     transform: "translate(-50%, 0%)",
 }));
-
 const LogoutButton = styled("div")(({ theme }) => ({
     color: "white",
     cursor: "pointer",
@@ -95,27 +98,27 @@ const LogoutButton = styled("div")(({ theme }) => ({
 }));
 
 const Navbar = ({ navListOpen, hideCategories, elevation, border }) => {
+    let token = "";
+    if (typeof localStorage !== "undefined") {
+        token = localStorage.getItem("token");
+    } else if (typeof sessionStorage !== "undefined") {
+        // Fallback to sessionStorage if localStorage is not supported
+        token = localStorage.getItem("token");
+    } else {
+        // If neither localStorage nor sessionStorage is supported
+    }
     const router = useRouter();
     const { settings } = useSettings();
     const [role, setRole] = useState("");
-    const [token, setToken] = useState("");
-
     useEffect(() => {
-        const storedToken = localStorage.getItem("token");
-        if (!storedToken) {
-            router.push("/login");
-        } else {
-            setToken(storedToken);
-            const decoded = jwtDecode(storedToken);
-            setRole(decoded?.role);
-        }
-    }, [router]);
-
+        const decoded = jwtDecode(token);
+        const role = decoded?.role;
+        setRole(role);
+    }, []);
     const handleLogOut = () => {
         localStorage.clear();
         router.push("/login");
     };
-
     const renderNestedNav = (list = [], isRoot = false) => {
         return list.map((nav) => {
             if (isRoot) {
@@ -245,7 +248,6 @@ const Navbar = ({ navListOpen, hideCategories, elevation, border }) => {
             }
         });
     };
-
     return (
         <NavBarWrapper
             hoverEffect={false}
@@ -299,7 +301,6 @@ const Navbar = ({ navListOpen, hideCategories, elevation, border }) => {
         </NavBarWrapper>
     );
 };
-
 Navbar.defaultProps = {
     elevation: 2,
     navListOpen: false,
